@@ -30,3 +30,15 @@ h3{
   .button__input{
   
   }
+  .btn_remove{
+	margin-left: auto;
+  }
+  ul{
+	padding-left: 0px;
+
+  }
+  ul > li{
+	gap: 10px;
+	margin-bottom: 5px;
+	display: flex;
+  }
