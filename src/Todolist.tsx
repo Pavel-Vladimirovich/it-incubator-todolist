@@ -1,4 +1,6 @@
 import React from "react";
+import style from './App.module.scss';
+
 import { FilterValuesType } from "./App";
 
 export type TaskType = {

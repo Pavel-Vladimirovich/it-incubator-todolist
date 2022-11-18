@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import './App.css';
-import './App.scss';
+import style from './App.module.scss';
 import Todolist, { TaskType } from './Todolist';
 
 
@@ -20,15 +19,13 @@ function App() {
         { id: 1, title: "HTML&CSS", isDone: true },
         { id: 2, title: "JS", isDone: true },
         { id: 3, title: "ReactJS", isDone: false },
-        { id: 4, title: "ReactJS", isDone: false },
-        { id: 5, title: "ReactJS", isDone: false },
-        { id: 6, title: "ReactJS", isDone: false },
-        { id: 7, title: "ReactJS", isDone: false },
-        { id: 8, title: "ReactJS", isDone: false },
-        { id: 9, title: "ReactJS", isDone: false },
-        { id: 10, title: "ReactJS", isDone: false },
-    ]);
-    let [filter, setFilter] = useState<FilterValuesType>("all");
+        { id: 4, title: "ReactJS", isDone: false }
+    ]
+    const tasks2 = [
+        { id: 1, title: "Im not happy", isDone: true },
+        { id: 2, title: "because", isDone: true },
+        { id: 3, title: "I dont have good salary", isDone: false },
+    ]
 
 
     function removeTask(id: number) {
@@ -50,10 +47,23 @@ function App() {
             tasksForTodolist = tasks.filter(t => t.isDone === false);
         }
     
+    let taskForTodolist = tasks
 
+    function filterForTask(item: string){
+        setFilter(item)
+    }
+
+    if(filter === "completed"){
+        taskForTodolist = taskForTodolist.filter(t => t.isDone === true)
+
+    }
+    if(filter === "active"){
+        taskForTodolist = taskForTodolist.filter(t => t.isDone === false)
+    }
+   
 
     return (
-        <div className='App'>
+        <div className={style.App}>
             <Todolist
                 title="What to learn"
                 tasks={tasksForTodolist}
