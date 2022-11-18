@@ -1,0 +1,54 @@
+h3 {
+	color: rgb(189, 63, 206);
+	text-decoration: underline;
+}
+
+.App {
+	padding: 30px;
+	display: flex;
+	flex-wrap: wrap;
+
+	&>div {
+		margin-right: 50px;
+		border-radius: .3rem;
+		padding: 10px;
+		background-color: rgb(129, 206, 206);
+		-webkit-box-shadow: 4px 4px 8px 9px rgba(34, 60, 80, 0.2);
+		-moz-box-shadow: 4px 4px 8px 9px rgba(34, 60, 80, 0.2);
+		box-shadow: 4px 4px 8px 9px rgba(34, 60, 80, 0.2);
+	}
+}
+
+.btn {
+	padding: 5px 10px;
+	background-color: rgb(219, 208, 47);
+	border-style: none;
+	border-radius: .3rem;
+	cursor: pointer;
+	transition: all .3s;
+}
+
+.btn:hover {
+	filter: brightness(110%);
+	color: #fff;
+}
+
+.block__buttons_input {
+	display: flex;
+	justify-content: space-between;
+}
+
+.btn_remove {
+	margin-left: auto;
+}
+
+ul {
+	padding-left: 0px;
+
+}
+
+ul>li {
+	gap: 10px;
+	margin-bottom: 5px;
+	display: flex;
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './App.css';
-import './App.scss';
+// import './App.css';
+import style from './App.module.scss';
 import Todolist from './Todolist';
 
 
@@ -10,28 +10,20 @@ import Todolist from './Todolist';
 //     let arr = useState(5)
 //     let data = arr[0];
 //     let setData = arr[1]
-   
+
 //     return <div onClick={() => {setData(data + 1)}}>{data}</div>
 // }
 
 
 function App() {
-    let initTasks = [
+
+    let [tasks, setTasks] = useState([
         { id: 1, title: "HTML&CSS", isDone: true },
         { id: 2, title: "JS", isDone: true },
         { id: 3, title: "ReactJS", isDone: false },
-        { id: 4, title: "ReactJS", isDone: false }
-    ]
-    const tasks2 = [
-        { id: 1, title: "Im not happy", isDone: true },
-        { id: 2, title: "because", isDone: true },
-        { id: 3, title: "I dont have good salary", isDone: false },
-    ]
+    ])
 
-        let arr = useState(initTasks)
-        let tasks = arr[0];
-        let setTasks = arr[1];
-        console.log(tasks)
+    let[filter, setFilter] = useState('all')
 
     function removeTask(id: number) {
         let filteredTask = tasks.filter(t => t.id !== id)
@@ -39,17 +31,27 @@ function App() {
         console.log(filteredTask);
     }
     
+    let taskForTodolist = tasks
 
+    function filterForTask(item: string){
+        setFilter(item)
+    }
+
+    if(filter === "completed"){
+        taskForTodolist = taskForTodolist.filter(t => t.isDone === true)
+
+    }
+    if(filter === "active"){
+        taskForTodolist = taskForTodolist.filter(t => t.isDone === false)
+    }
+   
     return (
-        <div className='App'>
-            <Todolist 
-            title="What to learn" 
-            tasks={tasks} 
-            removeTask={removeTask}/>
-            <Todolist 
-            title="How do you feel ?" 
-            tasks={tasks2} 
-            removeTask={removeTask}/>
+        <div className={style.App}>
+            <Todolist
+                title="What to learn"
+                tasks={taskForTodolist}
+                removeTask={removeTask}
+                filterForTask={filterForTask}/>
         </div>
     )
 }
