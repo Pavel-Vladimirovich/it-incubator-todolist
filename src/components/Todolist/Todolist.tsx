@@ -1,7 +1,7 @@
 import React from "react";
-import style from './App.module.scss';
+import style from './Todolist.module.scss';
 
-import { FilterValuesType } from "./App";
+import { FilterValuesType } from "../../App";
 
 export type TaskType = {
   id: number
@@ -22,12 +22,12 @@ function Todolist(props: PropsType) {
       <h3>{props.title}</h3>
       <div>
         <input />
-        <button>+</button>
+        <button className={style.btn}>+</button>
       </div>
       <ul>
         {
           props.tasks.map(item =>
-            <li><input type="checkbox" checked={item.isDone} /> <span>{item.title}</span><button className="btn btn_remove" onClick={() => { props.removeTask(item.id) }}>close task</button>
+            <li><input type="checkbox" checked={item.isDone} /> <span>{item.title}</span><button className={`${style.btn} ${style.btn_remove}`} onClick={() => { props.removeTask(item.id) }}>close task</button>
             </li>)
         }
         {/* <li><input type="checkbox" checked={props.tasks[0].isDone} /> <span>{props.tasks[0].title}</span></li>
@@ -35,10 +35,10 @@ function Todolist(props: PropsType) {
 				<li><input type="checkbox" checked={props.tasks[2].isDone} /> <span>{props.tasks[2].title}</span></li> */}
 
       </ul>
-      <div className='block__buttons-input'>
-        <button className='btn btn__input' onClick={() => { props.changeFilter("all") }}>All</button>
-        <button className='btn btn__input' onClick={() => { props.changeFilter("active") }}>Active</button>
-        <button className='btn btn__input' onClick={() => { props.changeFilter("completed") }}>Completed</button>
+      <div className={style.block__buttons}>
+        <button className={style.btn} onClick={() => { props.changeFilter("all") }}>All</button>
+        <button className={style.btn} onClick={() => { props.changeFilter("active") }}>Active</button>
+        <button className={style.btn} onClick={() => { props.changeFilter("completed") }}>Completed</button>
       </div>
     </div>
   );

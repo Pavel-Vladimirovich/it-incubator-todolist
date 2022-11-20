@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 import style from './App.module.scss';
-import Todolist, { TaskType } from './Todolist';
+import state from './components/social';
+import Todolist, { TaskType } from './components/Todolist/Todolist';
 
 
-
-
-//  function Counter(){
-//     let arr = useState(5)
-//     let data = arr[0];
-//     let setData = arr[1]
-
-//     return <div onClick={() => {setData(data + 1)}}>{data}</div>
-// }
 export type FilterValuesType = "all" | "completed" | "active";
 
 function App() {
@@ -19,14 +11,11 @@ function App() {
         { id: 1, title: "HTML&CSS", isDone: true },
         { id: 2, title: "JS", isDone: true },
         { id: 3, title: "ReactJS", isDone: false },
-        { id: 4, title: "ReactJS", isDone: false }
-    ]
-    const tasks2 = [
-        { id: 1, title: "Im not happy", isDone: true },
-        { id: 2, title: "because", isDone: true },
-        { id: 3, title: "I dont have good salary", isDone: false },
-    ]
+        { id: 4, title: "VueJS", isDone: false },
+        { id: 5, title: "TypeScript", isDone: false }
+    ])
 
+    let [filter, setFilter] = useState('all');
 
     function removeTask(id: number) {
         let filteredTask = tasks.filter(t => t.id !== id);
@@ -47,21 +36,9 @@ function App() {
             tasksForTodolist = tasks.filter(t => t.isDone === false);
         }
     
-    let taskForTodolist = tasks
-
-    function filterForTask(item: string){
-        setFilter(item)
-    }
-
-    if(filter === "completed"){
-        taskForTodolist = taskForTodolist.filter(t => t.isDone === true)
-
-    }
-    if(filter === "active"){
-        taskForTodolist = taskForTodolist.filter(t => t.isDone === false)
-    }
    
-
+let yee = state.dialogPage.dialogs[0]
+console.log(yee)
     return (
         <div className={style.App}>
             <Todolist
@@ -74,3 +51,4 @@ function App() {
 }
 
 export default App;
+
