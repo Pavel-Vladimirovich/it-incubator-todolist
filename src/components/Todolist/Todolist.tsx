@@ -1,6 +1,5 @@
 import React from "react";
 import style from './Todolist.module.scss';
-
 import { FilterValuesType } from "../../App";
 
 export type TaskType = {

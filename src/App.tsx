@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import style from './App.module.scss';
+import { FullInput } from './components/FullInput/FullInput';
 import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
-
 
 export type FilterValuesType = "all" | "completed" | "active";
 
@@ -27,18 +28,28 @@ function App() {
         setFilter(value);
     }
 
-        let tasksForTodolist = tasks;
+    let tasksForTodolist = tasks;
 
-        if (filter === "completed") {
-            tasksForTodolist = tasks.filter(t => t.isDone === true);
-        }
-        if (filter === "active") {
-            tasksForTodolist = tasks.filter(t => t.isDone === false);
-        }
-    
-   
-let yee = state.dialogPage.dialogs[0]
-console.log(yee)
+    if (filter === "completed") {
+        tasksForTodolist = tasks.filter(t => t.isDone === true);
+    }
+    if (filter === "active") {
+        tasksForTodolist = tasks.filter(t => t.isDone === false);
+    }
+    // ==========================================================
+    let [message, setMessage] = useState
+        ([
+            { message: '' },
+        ])
+
+    function addMessage(title:string) {
+        setMessage([{message: title}, ...message]);
+        
+    }
+
+    // =================задание по инпутам=======================
+    // console.log(state.dialogPage.dialogs[2]);
+
     return (
         <div className={style.App}>
             <Todolist
@@ -46,6 +57,16 @@ console.log(yee)
                 tasks={tasksForTodolist}
                 removeTask={removeTask}
                 changeFilter={changeFilter} />
+            {/*======================================================  */}
+            <div className={style.fullInput}>
+                <FullInput addMessage={addMessage}/>
+                {message.map((el, index) => {
+                    return (
+                        <div key={index}>{el.message}</div>
+                    )
+                })}
+            </div>
+            {/* =========================задание по инпутам============ */}
         </div>
     )
 }
