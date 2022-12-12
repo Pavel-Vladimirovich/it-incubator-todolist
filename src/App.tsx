@@ -1,6 +1,8 @@
 
+import { title } from 'process';
 import React, { useState } from 'react';
 import style from './App.module.scss';
+import { Counter } from './components/Counter';
 import { FullInput } from './components/FullInput/FullInput';
 import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
@@ -37,16 +39,12 @@ function App() {
         tasksForTodolist = tasks.filter(t => t.isDone === false);
     }
     // ==========================================================
-    let [message, setMessage] = useState
-        ([
-            { message: '' },
-        ])
-
-    function addMessage(title:string) {
-        setMessage([{message: title}, ...message]);
-        
-    }
-
+    let [message, setMessage] = useState([
+        { message: '' },
+    ])
+        function addTitleMessge (title: string) {
+            setMessage([{message: title}, ...message]);
+        }
     // =================задание по инпутам=======================
     // console.log(state.dialogPage.dialogs[2]);
 
@@ -59,13 +57,14 @@ function App() {
                 changeFilter={changeFilter} />
             {/*======================================================  */}
             <div className={style.fullInput}>
-                <FullInput addMessage={addMessage}/>
+                <FullInput addTitleMessge = {addTitleMessge}/>
                 {message.map((el, index) => {
                     return (
                         <div key={index}>{el.message}</div>
                     )
                 })}
             </div>
+            <Counter/>
             {/* =========================задание по инпутам============ */}
         </div>
     )

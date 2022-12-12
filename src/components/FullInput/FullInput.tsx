@@ -1,42 +1,29 @@
+
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 import s from "./FullInput.module.scss";
 
 
-
-
-type InputPropsType = {
-    addMessage: (titles: string) => void;
+type titleType = {
+    addTitleMessge: (title: string) => void
 }
 
-export const FullInput = (props: InputPropsType) => {
 
+export const FullInput = (props: titleType) => {
 
-    let [title, setTitle] = useState('');
+    let [title, setTitle] = useState('')
 
-    function onChangeInputHandler(event: ChangeEvent<HTMLInputElement>) {
-        setTitle(event.currentTarget.value);
+    const onHundlerChangeMessage = (event: ChangeEvent<HTMLInputElement>) =>{
+            setTitle(event.currentTarget.value);
     }
-
-
-    function onChangeButtonHandler() {
-        props.addMessage(title);
+    const onHundlerSendMessage = () =>{
+        props.addTitleMessge(title);
         setTitle('');
     }
 
-    const onChangeKeyboardHandler = (keyPress: KeyboardEvent<HTMLInputElement>) => {
-        if (keyPress.keyCode == 13) {
-            props.addMessage(title);
-            setTitle('');
-        }
-    };
-
     return (
         <div className={s.container}>
-            <form action="#">
-                <input value={title} onChange={onChangeInputHandler} onKeyDown={onChangeKeyboardHandler} />
-                <input onClick={onChangeButtonHandler} type="button" value="send" />
-            </form>
-
+            <input value={title} onChange={onHundlerChangeMessage}/>
+            <button onClick={onHundlerSendMessage}>send meesage</button>
         </div>
-    );
+    )
 }
