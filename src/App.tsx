@@ -2,7 +2,7 @@
 import { title } from 'process';
 import React, { useState } from 'react';
 import style from './App.module.scss';
-import { Counter } from './components/Counter';
+// import { Counter } from './components/Counter';
 import { FullInput } from './components/FullInput/FullInput';
 import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
@@ -64,7 +64,7 @@ function App() {
                     )
                 })}
             </div>
-            <Counter/>
+            {/* <Counter/> */}
             {/* =========================задание по инпутам============ */}
         </div>
     )

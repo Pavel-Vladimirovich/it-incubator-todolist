@@ -1,5 +1,6 @@
 
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ClassElement } from "typescript";
 import s from "./FullInput.module.scss";
 
 
@@ -12,17 +13,27 @@ export const FullInput = (props: titleType) => {
 
     let [title, setTitle] = useState('')
 
-    const onHundlerChangeMessage = (event: ChangeEvent<HTMLInputElement>) =>{
-            setTitle(event.currentTarget.value);
+    const onHundlerChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.currentTarget.value);
     }
-    const onHundlerSendMessage = () =>{
+    
+    
+    function onHundlerSendMessageButton(event: any) {
+        if (event.keyCode == '13') {
+            props.addTitleMessge(title);
+            setTitle('');
+        }
+    }
+
+
+    const onHundlerSendMessage = () => {
         props.addTitleMessge(title);
         setTitle('');
     }
 
     return (
         <div className={s.container}>
-            <input value={title} onChange={onHundlerChangeMessage}/>
+            <input value={title} onChange={onHundlerChangeMessage} onKeyDown={onHundlerSendMessageButton} />
             <button onClick={onHundlerSendMessage}>send meesage</button>
         </div>
     )
