@@ -2,8 +2,10 @@
 import { title } from 'process';
 import React, { useState } from 'react';
 import style from './App.module.scss';
+import { Button } from './components/Button/Button';
 // import { Counter } from './components/Counter';
 import { FullInput } from './components/FullInput/FullInput';
+import { Input } from './components/Input/input';
 import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
 
@@ -42,7 +44,7 @@ function App() {
     let [message, setMessage] = useState([
         { message: '' },
     ])
-        function addTitleMessge (title: string) {
+        function addMessge (title: string) {
             setMessage([{message: title}, ...message]);
         }
     // =================задание по инпутам=======================
@@ -57,10 +59,12 @@ function App() {
                 changeFilter={changeFilter} />
             {/*======================================================  */}
             <div className={style.fullInput}>
-                <FullInput addTitleMessge = {addTitleMessge}/>
-                {message.map((el, index) => {
+                {/* <FullInput addTitleMessge = {addMessge}/> */}
+                <Input/>
+                <Button/>
+                {message.map((element, index) => {
                     return (
-                        <div key={index}>{el.message}</div>
+                        <div key={index}>{element.message}</div>
                     )
                 })}
             </div>

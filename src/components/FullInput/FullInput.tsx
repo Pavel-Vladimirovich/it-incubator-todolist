@@ -13,12 +13,12 @@ export const FullInput = (props: titleType) => {
 
     let [title, setTitle] = useState('')
 
-    const onHundlerChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
+    const onHandlerChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.currentTarget.value);
     }
     
     
-    function onHundlerSendMessageButton(event: any) {
+    function onHandlerSendMessageButton(event: any) {
         if (event.keyCode == '13') {
             props.addTitleMessge(title);
             setTitle('');
@@ -26,15 +26,15 @@ export const FullInput = (props: titleType) => {
     }
 
 
-    const onHundlerSendMessage = () => {
+    const onHandlerSendMessage = () => {
         props.addTitleMessge(title);
         setTitle('');
     }
 
     return (
         <div className={s.container}>
-            <input value={title} onChange={onHundlerChangeMessage} onKeyDown={onHundlerSendMessageButton} />
-            <button onClick={onHundlerSendMessage}>send meesage</button>
+            <input value={title} onChange={onHandlerChangeMessage} onKeyDown={onHandlerSendMessageButton} />
+            <button onClick={onHandlerSendMessage}>send meesage</button>
         </div>
     )
 }
