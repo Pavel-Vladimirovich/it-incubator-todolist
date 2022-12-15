@@ -1,9 +1,21 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 
-export const Input = () =>{
+type propsInputType = {
+	title: string
+	setTitle: (title:string) => void
+}
+
+
+
+export const Input = (props: propsInputType) =>{
+
+	const onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+		props.setTitle(event.currentTarget.value);
+	}
+
 	return(
 		<div>
-			<input/>
+			<input value={props.title} onChange={onChangeInputHandler}/>
 		</div>
 	)
-}
+} 

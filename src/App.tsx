@@ -43,10 +43,19 @@ function App() {
     // ==========================================================
     let [message, setMessage] = useState([
         { message: '' },
-    ])
-        function addMessge (title: string) {
-            setMessage([{message: title}, ...message]);
-        }
+    ]);
+
+    let [title, setTitle] = useState('');
+    
+
+    function sendMessege(title: string) {
+        setMessage([{ message: title }, ...message]);
+        
+    }
+    const callBackButtonHandler = () => {
+        sendMessege(title);
+        setTitle('');
+    }
     // =================задание по инпутам=======================
     // console.log(state.dialogPage.dialogs[2]);
 
@@ -59,9 +68,9 @@ function App() {
                 changeFilter={changeFilter} />
             {/*======================================================  */}
             <div className={style.fullInput}>
-                {/* <FullInput addTitleMessge = {addMessge}/> */}
-                <Input/>
-                <Button/>
+                {/* <FullInput addTitleMessge = {sendMessege}/> */}
+                <Input title={title} setTitle={setTitle} />
+                <Button name={'send message'} callBack={callBackButtonHandler}/>
                 {message.map((element, index) => {
                     return (
                         <div key={index}>{element.message}</div>

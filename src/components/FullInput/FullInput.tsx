@@ -1,6 +1,5 @@
 
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
-import { ClassElement } from "typescript";
 import s from "./FullInput.module.scss";
 
 
@@ -11,15 +10,15 @@ type titleType = {
 
 export const FullInput = (props: titleType) => {
 
-    let [title, setTitle] = useState('')
+    let [title, setTitle] = useState('');
 
     const onHandlerChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.currentTarget.value);
     }
     
     
-    function onHandlerSendMessageButton(event: any) {
-        if (event.keyCode == '13') {
+    function onHandlerSendMessageButton(event: any){
+        if (event.keyCode === '13') {
             props.addTitleMessge(title);
             setTitle('');
         }
