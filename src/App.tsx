@@ -1,12 +1,10 @@
-
-import { title } from 'process';
 import React, { useState } from 'react';
 import style from './App.module.scss';
 import { Button } from './components/Button/Button';
 // import { Counter } from './components/Counter';
 import { FullInput } from './components/FullInput/FullInput';
-import { Input } from './components/Input/input';
-import state from './components/social';
+import { Input } from './components/Input/Input';
+// import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
 
 export type FilterValuesType = "all" | "completed" | "active";
@@ -45,19 +43,23 @@ function App() {
         { message: '' },
     ]);
 
-    let [title, setTitle] = useState('');
-    
-
     function sendMessege(title: string) {
         setMessage([{ message: title }, ...message]);
-        
     }
-    const callBackButtonHandler = () => {
+
+    let [title, setTitle] = useState('');
+    
+    function onChangeTitleHandler(title: string) {
+        setTitle(title);
+    }
+
+    function addTitle(){
         sendMessege(title);
         setTitle('');
     }
+    
+
     // =================задание по инпутам=======================
-    // console.log(state.dialogPage.dialogs[2]);
 
     return (
         <div className={style.App}>
@@ -69,8 +71,8 @@ function App() {
             {/*======================================================  */}
             <div className={style.fullInput}>
                 {/* <FullInput addTitleMessge = {sendMessege}/> */}
-                <Input title={title} setTitle={setTitle} />
-                <Button name={'send message'} callBack={callBackButtonHandler}/>
+                <Input title={title} setTitle={onChangeTitleHandler}/>
+                <Button name={'send message'} callBack={addTitle}/>
                 {message.map((element, index) => {
                     return (
                         <div key={index}>{element.message}</div>

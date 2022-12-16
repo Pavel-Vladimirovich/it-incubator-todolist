@@ -1,0 +1,19 @@
+.btn {
+	margin: 5px 0px 15px 0px;
+	padding: 5px 8px;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-weight: 600;
+	border-style: none;
+	border-radius: 3px;
+	background-color: rgb(127, 187, 255);
+	cursor: pointer;
+	-webkit-box-shadow: 5px 6px 8px 1px rgba(34, 60, 80, 0.2);
+	-moz-box-shadow: 5px 6px 8px 1px rgba(34, 60, 80, 0.2);
+	box-shadow: 5px 6px 8px 1px rgba(34, 60, 80, 0.2);
+
+	&:active {
+		transform: translateY(1px);
+		box-shadow: none;
+	}
+}
