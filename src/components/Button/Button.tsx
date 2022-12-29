@@ -10,7 +10,7 @@ export const Button = (props: propsButtonType) => {
 
 	return (
 		<div>
-			<button className={s.btn} onClick={props.callBack}>{props.name}</button>
+			<button className={s.btn} onClick={props.callBack}> {props.name} </button>
 		</div>
 	)
 }

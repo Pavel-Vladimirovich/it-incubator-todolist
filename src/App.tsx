@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import style from './App.module.scss';
-import { Button } from './components/Button/Button';
+// import { Button } from './components/Button/Button';
 // import { Counter } from './components/Counter';
-import { FullInput } from './components/FullInput/FullInput';
-import { Input } from './components/Input/Input';
+// import { FullInput } from './components/FullInput/FullInput';
+// import { Input } from './components/Input/Input';
+import { Input2 } from './components/Input/Input2';
+import { Button2 } from './components/Button/Button2';
+
 // import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
 
@@ -47,17 +50,26 @@ function App() {
         setMessage([{ message: title }, ...message]);
     }
 
-    let [title, setTitle] = useState('');
+    // let [title, setTitle] = useState('');
     
-    function onChangeTitleHandler(title: string) {
-        setTitle(title);
-    }
+    // function onChangeTitleHandler(title: string) {
+    //     setTitle(title);
+    // }
 
-    function addTitle(){
+    // function addTitle(){
+    //     sendMessege(title);
+    //     setTitle('');
+    // }
+    let [title, setTitle] = useState('')
+
+    const changetitleHandler = (title: string) =>{
+        setTitle(title);
+        console.log(title);
+    }
+    const addMessage = () => {
         sendMessege(title);
         setTitle('');
     }
-    
 
     // =================задание по инпутам=======================
 
@@ -68,11 +80,15 @@ function App() {
                 tasks={tasksForTodolist}
                 removeTask={removeTask}
                 changeFilter={changeFilter} />
+
+
             {/*======================================================  */}
             <div className={style.fullInput}>
                 {/* <FullInput addTitleMessge = {sendMessege}/> */}
-                <Input title={title} setTitle={onChangeTitleHandler}/>
-                <Button name={'send message'} callBack={addTitle}/>
+                {/* <Input title={title} setTitle={onChangeTitleHandler}/>
+                <Button name={'send message'} callBack={addTitle}/> */}
+                <Input2 title={title} setTitle={changetitleHandler}/>
+                <Button2 name='send text' callback={addMessage}/>
                 {message.map((element, index) => {
                     return (
                         <div key={index}>{element.message}</div>
