@@ -1,31 +1,47 @@
 import React, { useState } from 'react';
 import style from './App.module.scss';
+import { v1 } from 'uuid';
 // import { Button } from './components/Button/Button';
 // import { Counter } from './components/Counter';
 // import { FullInput } from './components/FullInput/FullInput';
 // import { Input } from './components/Input/Input';
 import { Input2 } from './components/Input/Input2';
 import { Button2 } from './components/Button/Button2';
-
-// import state from './components/social';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
+
 
 export type FilterValuesType = "all" | "completed" | "active";
 
 function App() {
     let [tasks, setTasks] = useState<Array<TaskType>>([
-        { id: 1, title: "HTML&CSS", isDone: true },
-        { id: 2, title: "JS", isDone: true },
-        { id: 3, title: "ReactJS", isDone: false },
-        { id: 4, title: "VueJS", isDone: false },
-        { id: 5, title: "TypeScript", isDone: false }
+        { id: v1(), title: "HTML&CSS", isDone: false },
+        { id: v1(), title: "JS", isDone: false },
+        { id: v1(), title: "ReactJS", isDone: false },
+        { id: v1(), title: "VueJS", isDone: false },
+        { id: v1(), title: "TypeScript", isDone: false }
     ])
 
-    let [filter, setFilter] = useState('all');
+    let [filter, setFilter] = useState<FilterValuesType>('all'); // фильтрация тасок
 
-    function removeTask(id: number) {
+
+    function removeTask(id: string) {
         let filteredTask = tasks.filter(t => t.id !== id);
         setTasks(filteredTask);
+    }
+
+    function addTask(title: string) {
+        let task = { id: v1(), title: title, isDone: false };
+        let newTasks = [task, ...tasks];
+        setTasks(newTasks);
+
+    }
+
+    function changeStatus(taskId: string, isDone: boolean) {
+        let task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.isDone = isDone;
+        }
+        setTasks([...tasks]);
     }
 
 
@@ -41,7 +57,7 @@ function App() {
     if (filter === "active") {
         tasksForTodolist = tasks.filter(t => t.isDone === false);
     }
-    // ==========================================================
+    // =================задание по инпутам=======================
     let [message, setMessage] = useState([
         { message: '' },
     ]);
@@ -50,23 +66,12 @@ function App() {
         setMessage([{ message: title }, ...message]);
     }
 
-    // let [title, setTitle] = useState('');
-    
-    // function onChangeTitleHandler(title: string) {
-    //     setTitle(title);
-    // }
-
-    // function addTitle(){
-    //     sendMessege(title);
-    //     setTitle('');
-    // }
     let [title, setTitle] = useState('')
 
-    const changetitleHandler = (title: string) =>{
+    function onChangeTitleHandler(title: string) {
         setTitle(title);
-        console.log(title);
     }
-    const addMessage = () => {
+    function addMessage() {
         sendMessege(title);
         setTitle('');
     }
@@ -76,26 +81,23 @@ function App() {
     return (
         <div className={style.App}>
             <Todolist
-                title="What to learn"
+                title="What are we studying"
                 tasks={tasksForTodolist}
+                addTask={addTask}
                 removeTask={removeTask}
-                changeFilter={changeFilter} />
-
-
+                changeTaskStatus={changeStatus}
+                changeFilter={changeFilter} 
+                filter={filter}/>
             {/*======================================================  */}
-            <div className={style.fullInput}>
-                {/* <FullInput addTitleMessge = {sendMessege}/> */}
-                {/* <Input title={title} setTitle={onChangeTitleHandler}/>
-                <Button name={'send message'} callBack={addTitle}/> */}
-                <Input2 title={title} setTitle={changetitleHandler}/>
-                <Button2 name='send text' callback={addMessage}/>
-                {message.map((element, index) => {
+            <div>
+                <Input2 title={title} setTitle={onChangeTitleHandler} />
+                <Button2 name='send text' callback={addMessage} />
+                {message.map((el, i) => {
                     return (
-                        <div key={index}>{element.message}</div>
+                        <div key={i}>{el.message}</div>
                     )
                 })}
             </div>
-            {/* <Counter/> */}
             {/* =========================задание по инпутам============ */}
         </div>
     )

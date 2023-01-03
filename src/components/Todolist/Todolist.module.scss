@@ -2,6 +2,7 @@ h3 {
 	color: rgb(189, 63, 206);
 	text-decoration: underline;
 }
+
 ul {
 	padding-left: 0px;
 
@@ -11,6 +12,19 @@ ul>li {
 	gap: 10px;
 	margin-bottom: 10px;
 	display: flex;
+}
+
+.input_task {
+	width: 200px;
+	padding: 5px;
+	border-radius: .3rem;
+	border: transparent solid 1px;
+	margin-right: 5px;
+	outline: none;
+
+	&:focus {
+		border: rgb(189, 63, 206) solid 1px;
+	}
 }
 
 .btn {
@@ -35,3 +49,22 @@ ul>li {
 .btn_remove {
 	margin-left: auto;
 }
+
+
+.error {
+	border: red 1px solid;
+	&:focus {
+		border: red solid 1px;
+	}
+}
+
+.error_message {
+	color: red;
+}
+
+
+.active_filter {
+	background-color: rgb(189, 63, 206);
+}
+  
+  
