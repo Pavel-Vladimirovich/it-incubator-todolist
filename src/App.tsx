@@ -12,6 +12,12 @@ import Todolist, { TaskType } from './components/Todolist/Todolist';
 
 export type FilterValuesType = "all" | "completed" | "active";
 
+type TodolistType = {
+    id: string
+    title: string
+    filter: FilterValuesType
+}
+
 function App() {
     let [tasks, setTasks] = useState<Array<TaskType>>([
         { id: v1(), title: "HTML&CSS", isDone: false },
@@ -21,8 +27,21 @@ function App() {
         { id: v1(), title: "TypeScript", isDone: false }
     ])
 
-    let [filter, setFilter] = useState<FilterValuesType>('all'); // фильтрация тасок
+    let [filter, setFilter] = useState<FilterValuesType>('all');
+    // фильтрация тасок
 
+    let [todolists, setTodolists] = useState<Array<TodolistType>>([
+        {
+            id: v1(),
+            title: 'What are we studying',
+            filter: 'all'
+        },
+        {
+            id: v1(),
+            title: 'What are we buying',
+            filter: 'all'
+        },
+    ])
 
     function removeTask(id: string) {
         let filteredTask = tasks.filter(t => t.id !== id);
@@ -80,14 +99,20 @@ function App() {
 
     return (
         <div className={style.App}>
-            <Todolist
-                title="What are we studying"
-                tasks={tasksForTodolist}
-                addTask={addTask}
-                removeTask={removeTask}
-                changeTaskStatus={changeStatus}
-                changeFilter={changeFilter} 
-                filter={filter}/>
+            {todolists.map(tl => {
+                return (
+                    <Todolist
+                        title={tl.title}
+                        key={tl.id}
+                        tasks={tasksForTodolist}
+                        addTask={addTask}
+                        removeTask={removeTask}
+                        changeTaskStatus={changeStatus}
+                        changeFilter={changeFilter}
+                        filter={tl.filter} />
+                )
+            })}
+
             {/*======================================================  */}
             <div>
                 <Input2 title={title} setTitle={onChangeTitleHandler} />
