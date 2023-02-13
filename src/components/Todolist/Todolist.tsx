@@ -12,10 +12,10 @@ type PropsType = {
   id: string
   title: string
   tasks: Array<TaskType>
-  addTask: (title: string) => void
+  addTask: (title: string, todolistId: string) => void
   removeTask: (id: string, todolistId: string) => void
   changeFilter: (value: FilterValuesType, todolistId: string) => void
-  changeTaskStatus: (taskId: string, isDone: boolean) => void
+  changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
   filter: FilterValuesType
 }
 
@@ -47,7 +47,7 @@ function Todolist(props: PropsType) {
       setError('Task name cannot be more than 10 letters')
       return
     }
-    props.addTask(title.trim());
+    props.addTask(title.trim(), props.id);
     setTitle('');
   }
 
@@ -74,9 +74,9 @@ function Todolist(props: PropsType) {
       <ul>
         {
           props.tasks.map(t => {
-            const onClickHandler = () => props.removeTask(t.id, t.todolistId);
+            const onClickHandler = () => props.removeTask(t.id, props.id);
             const onChangeHadler = (event: ChangeEvent<HTMLInputElement>) => {
-              props.changeTaskStatus(t.id, event.currentTarget.checked)
+              props.changeTaskStatus(t.id, event.currentTarget.checked, props.id)
             }
             return (
               <li>
