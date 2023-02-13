@@ -9,12 +9,13 @@ export type TaskType = {
 }
 
 type PropsType = {
-  title: string,
-  tasks: Array<TaskType>,
-  addTask: (title: string) => void,
-  removeTask: (id: string) => void,
-  changeFilter: (value: FilterValuesType) => void,
-  changeTaskStatus: (taskId: string, isDone: boolean) => void,
+  id: string
+  title: string
+  tasks: Array<TaskType>
+  addTask: (title: string) => void
+  removeTask: (id: string, todolistId: string) => void
+  changeFilter: (value: FilterValuesType, todolistId: string) => void
+  changeTaskStatus: (taskId: string, isDone: boolean) => void
   filter: FilterValuesType
 }
 
@@ -52,13 +53,13 @@ function Todolist(props: PropsType) {
 
   
   const onAllClickHandler = () => {
-    props.changeFilter('all');
+    props.changeFilter('all', props.id);
   }
   const onActiveClickHandler = () => {
-    props.changeFilter('active');
+    props.changeFilter('active', props.id);
   }
   const onCompletedClickHandler = () => {
-    props.changeFilter('completed');
+    props.changeFilter('completed', props.id);
   }
 
 
@@ -73,7 +74,7 @@ function Todolist(props: PropsType) {
       <ul>
         {
           props.tasks.map(t => {
-            const onClickHandler = () => props.removeTask(t.id);
+            const onClickHandler = () => props.removeTask(t.id, t.todolistId);
             const onChangeHadler = (event: ChangeEvent<HTMLInputElement>) => {
               props.changeTaskStatus(t.id, event.currentTarget.checked)
             }
