@@ -1,10 +1,14 @@
 .App {
-	padding: 70px;
+	font-size: 16px;
+	padding: 20px;
 	display: flex;
-	// flex-wrap: wrap;
-
+	justify-content: center;
+	gap: 30px;
+	flex-wrap: wrap;
+	
 	&>div {
-		margin-right: 30px;
+		max-width: 200px;
+		width: 100%;
 		padding: 30px;
 		min-height: 300px;
 		max-height: 100%;

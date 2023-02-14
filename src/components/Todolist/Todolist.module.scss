@@ -13,13 +13,26 @@ ul>li {
 	margin-bottom: 10px;
 	display: flex;
 }
+.todolist{
+	
+}
+
+.header_todolist {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	// border: rgb(189, 63, 206) 1px solid;
+
+}
 
 .input_task {
-	width: 200px;
+	max-width: 200px;
+	width: 100%;
 	padding: 5px;
 	border-radius: .3rem;
 	border: transparent solid 1px;
-	margin-right: 5px;
+	margin-bottom: 10px;
 	outline: none;
 
 	&:focus {
@@ -53,6 +66,7 @@ ul>li {
 
 .error {
 	border: red 1px solid;
+
 	&:focus {
 		border: red solid 1px;
 	}
@@ -66,5 +80,3 @@ ul>li {
 .active_filter {
 	background-color: rgb(189, 63, 206);
 }
-  
-  

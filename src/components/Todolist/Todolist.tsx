@@ -13,10 +13,11 @@ type PropsType = {
   title: string
   tasks: Array<TaskType>
   addTask: (title: string, todolistId: string) => void
-  removeTask: (id: string, todolistId: string) => void
   changeFilter: (value: FilterValuesType, todolistId: string) => void
   changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
   filter: FilterValuesType
+  removeTask: (id: string, todolistId: string) => void
+  removeTodolist: (id: string) => void
 }
 
 
@@ -40,18 +41,20 @@ function Todolist(props: PropsType) {
 
   const addTasksHandler = () => {
     if (title.trim() === '') {
-      setError('The field cannot be empty')
+      setError('field cannot be empty')
       return
     }
-    if(title.length > 10){
+    if (title.length > 10) {
       setError('Task name cannot be more than 10 letters')
       return
     }
     props.addTask(title.trim(), props.id);
     setTitle('');
   }
+  function removeTodolistHandler() {
+    props.removeTodolist(props.id)
+  }
 
-  
   const onAllClickHandler = () => {
     props.changeFilter('all', props.id);
   }
@@ -64,11 +67,15 @@ function Todolist(props: PropsType) {
 
 
   return (
-    <div>
-      <h3>{props.title}</h3>
+    <div className={style.todolist}>
+      <div className={style.header_todolist}>
+        <h3>{props.title}</h3>
+        <button className={style.btn} onClick={removeTodolistHandler}>X</button>
+      </div>
       <div>
         <input value={title} className={`${style.input_task} ${error ? style.error : ""}`} onChange={onChangeHandler} onKeyPress={onKeyPressHandler} />
         <button className={style.btn} onClick={addTasksHandler}>add task</button>
+
         {error && <div className={style.error_message}>{error}</div>}
       </div>
       <ul>

@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import style from './App.module.scss';
 import { v1 } from 'uuid';
-// import { Button } from './components/Button/Button';
-// import { Counter } from './components/Counter';
-// import { FullInput } from './components/FullInput/FullInput';
-// import { Input } from './components/Input/Input';
-import { Input2 } from './components/Input/Input2';
-import { Button2 } from './components/Button/Button2';
 import Todolist, { TaskType } from './components/Todolist/Todolist';
 
 
@@ -17,33 +11,35 @@ type TodolistType = {
     title: string
     filter: FilterValuesType
 }
-
+type TasksObjType = {
+    [key: string]: Array<TaskType>
+}
 function App() {
-    // let [tasks, setTasks] = useState<Array<TaskType>>([
-    //     { id: v1(), title: "HTML&CSS", isDone: false },
-    //     { id: v1(), title: "JS", isDone: false },
-    //     { id: v1(), title: "ReactJS", isDone: false },
-    //     { id: v1(), title: "VueJS", isDone: false },
-    //     { id: v1(), title: "TypeScript", isDone: false }
-    // ])
-
+    
     const todolistId1 = v1()
     const todolistId2 = v1()
+    const todolistId3 = v1()
+   
 
     let [todolists, setTodolists] = useState<Array<TodolistType>>([
         {
             id: todolistId1,
-            title: 'What are we studying',
+            title: 'What to learn',
             filter: 'all'
         },
         {
             id: todolistId2,
-            title: 'What are we buying',
+            title: 'What to buy',
             filter: 'all'
         },
+        {
+            id: todolistId3,
+            title: 'fo fresh breath',
+            filter: 'completed'
+        }
     ])
 
-    let [tasksObj, setTasks] = useState({
+    let [tasksObj, setTasks] = useState<TasksObjType>({
         [todolistId1]: [
             { id: v1(), title: 'HTML & CSS', isDone: false },
             { id: v1(), title: 'JavaScript', isDone: false },
@@ -54,66 +50,45 @@ function App() {
             { id: v1(), title: 'Milk', isDone: false },
             { id: v1(), title: 'Meet', isDone: false },
             { id: v1(), title: 'Fish', isDone: false },
-        ]
+        ],
+        [todolistId3]: [
+            { id: v1(), title: 'Onion', isDone: false },
+            { id: v1(), title: 'Garlik', isDone: false },
+        ],
     })
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
-        let todolist = todolists.find(tl => tl.id === todolistId)
+        const todolist = todolists.find(tl => tl.id === todolistId)
         if (todolist) {
             todolist.filter = value
             setTodolists([...todolists]);
         }
-
     }
 
     function removeTask(id: string, todolistId: string) {
-        let todolistTask = tasksObj[todolistId]
-        let filteredTask = todolistTask.filter(t => t.id !== id);
-        tasksObj[todolistId] = filteredTask
+        tasksObj[todolistId] = tasksObj[todolistId].filter(t => t.id !== id);
         setTasks({ ...tasksObj });
     }
 
     function addTask(title: string, todolistId: string) {
-        let task = { id: v1(), title: title, isDone: false }
-        let todolistTasks = tasksObj[todolistId]
-        tasksObj[todolistId] = [task, ...todolistTasks];
+        const task = { id: v1(), title: title, isDone: false }
+        tasksObj[todolistId] = [task, ...tasksObj[todolistId]];
         setTasks({ ...tasksObj });
 
     }
 
     function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
-        let todolistTask = tasksObj[todolistId]
-        let task = todolistTask.find(t => t.id === taskId);
+        const task = tasksObj[todolistId].find(t => t.id === taskId);
         if (task) {
             task.isDone = isDone;
         }
         setTasks({ ...tasksObj });
     }
-
-
-
-
-
-    // =================задание по инпутам=======================
-    let [message, setMessage] = useState([
-        { message: '' },
-    ]);
-
-    function sendMessege(title: string) {
-        setMessage([{ message: title }, ...message]);
+    function removeTodolist(id: string) {
+        todolists = todolists.filter(tl => tl.id !== id)
+        delete tasksObj[id]
+        setTodolists([...todolists])
     }
-
-    let [title, setTitle] = useState('')
-
-    function onChangeTitleHandler(title: string) {
-        setTitle(title);
-    }
-    function addMessage() {
-        sendMessege(title);
-        setTitle('');
-    }
-
-    // =================задание по инпутам=======================
 
     return (
         <div className={style.App}>
@@ -133,24 +108,13 @@ function App() {
                         title={tl.title}
                         tasks={tasksForTodolist}
                         addTask={addTask}
-                        removeTask={removeTask}
                         changeTaskStatus={changeStatus}
                         changeFilter={changeFilter}
-                        filter={tl.filter} />
+                        filter={tl.filter}
+                        removeTask={removeTask}
+                        removeTodolist={removeTodolist} />
                 )
             })}
-
-            {/*======================================================  */}
-            <div>
-                <Input2 title={title} setTitle={onChangeTitleHandler} />
-                <Button2 name='send text' callback={addMessage} />
-                {message.map((el, i) => {
-                    return (
-                        <div key={i}>{el.message}</div>
-                    )
-                })}
-            </div>
-            {/* =========================задание по инпутам============ */}
         </div>
     )
 }
