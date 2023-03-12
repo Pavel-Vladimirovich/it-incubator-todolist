@@ -5,16 +5,5 @@
 	justify-content: center;
 	gap: 30px;
 	flex-wrap: wrap;
-	
-	&>div {
-		max-width: 200px;
-		width: 100%;
-		padding: 30px;
-		min-height: 300px;
-		max-height: 100%;
-		border-radius: 15px;
-		background: #e0e0e0;
-		box-shadow: 20px 20px 60px #bebebe,
-			-20px -20px 60px #ffffff;
-	}
+
 }
