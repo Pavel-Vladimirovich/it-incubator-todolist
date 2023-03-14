@@ -44,23 +44,18 @@ h3 {
 
 }
 .btn_header{
-  border-radius: .3rem;
+  border-radius: 50%;
 }
 
 // todolist_input
 
 .todolist_input {
-  //border: gray 1px solid;
   display: flex;
-  //border-radius: .3rem;
-  //overflow: hidden;
   border: transparent solid 1px;
 
 }
 
 .input {
-  //max-width: 500px;
-  //display: inline-block;
   border-bottom-left-radius: .3rem;
   border-top-left-radius: .3rem;
   width: 100%;
