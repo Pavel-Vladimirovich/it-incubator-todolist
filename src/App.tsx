@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import style from './App.module.scss';
 import {v1} from 'uuid';
 import Todolist, {TaskType} from './components/Todolist/Todolist';
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 
-
-export type FilterValuesType = "all" | "completed" | "active";
+export enum FilterValuesType {all = "all", completed = "completed", active = "active" }
+// export type FilterValuesType = "all" | "completed" | "active";
 
 type TodolistType = {
     id: string
@@ -19,43 +20,32 @@ function App() {
 
     const todolistId1 = v1()
     const todolistId2 = v1()
-    const todolistId3 = v1()
-
 
     let [todolists, setTodolists] = useState<Array<TodolistType>>([
-        {
-            id: todolistId1,
-            title: 'What to learn',
-            filter: 'all'
-        },
-        {
-            id: todolistId2,
-            title: 'What to buy',
-            filter: 'all'
-        },
-        {
-            id: todolistId3,
-            title: 'fo fresh breath',
-            filter: 'completed'
-        }
+        // {
+        //     id: todolistId1,
+        //     title: 'What to learn',
+        //     filter: FilterValuesType.all
+        // },
+        // {
+        //     id: todolistId2,
+        //     title: 'What to buy',
+        //     filter: FilterValuesType.all
+        // }
     ])
 
     let [tasksObj, setTasks] = useState<TasksObjType>({
-        [todolistId1]: [
-            {id: v1(), title: 'HTML & CSS', isDone: false},
-            {id: v1(), title: 'JavaScript', isDone: false},
-            {id: v1(), title: 'React', isDone: false},
-        ],
-        [todolistId2]: [
-            {id: v1(), title: 'Bread', isDone: false},
-            {id: v1(), title: 'Milk', isDone: false},
-            {id: v1(), title: 'Meet', isDone: false},
-            {id: v1(), title: 'Fish', isDone: false},
-        ],
-        [todolistId3]: [
-            {id: v1(), title: 'Onion', isDone: false},
-            {id: v1(), title: 'Garlik', isDone: false},
-        ],
+        // [todolistId1]: [
+        //     {id: v1(), title: 'HTML & CSS', isDone: false},
+        //     {id: v1(), title: 'JavaScript', isDone: false},
+        //     {id: v1(), title: 'React', isDone: false},
+        // ],
+        // [todolistId2]: [
+        //     {id: v1(), title: 'Bread', isDone: false},
+        //     {id: v1(), title: 'Milk', isDone: false},
+        //     {id: v1(), title: 'Meet', isDone: false},
+        //     {id: v1(), title: 'Fish', isDone: false},
+        // ]
     })
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
@@ -86,6 +76,12 @@ function App() {
         setTasks({...tasksObj});
     }
 
+    function addTodolist(title: string) {
+        const todolist: TodolistType = {id: v1(), title: title, filter: FilterValuesType.all}
+        setTodolists([...todolists, todolist])
+        setTasks({...tasksObj,[todolist.id]: []})
+    }
+
     function removeTodolist(id: string) {
         todolists = todolists.filter(tl => tl.id !== id)
         delete tasksObj[id]
@@ -94,12 +90,15 @@ function App() {
 
     return (
         <div className={style.App}>
+            <div>
+                <AddItemForm addItem={addTodolist}/>
+            </div>
             {todolists.map(tl => {
                 let tasksForTodolist = tasksObj[tl.id];
-                if (tl.filter === "completed") {
+                if (tl.filter === FilterValuesType.completed) {
                     tasksForTodolist = tasksForTodolist.filter(t => t.isDone === true);
                 }
-                if (tl.filter === "active") {
+                if (tl.filter === FilterValuesType.active) {
                     tasksForTodolist = tasksForTodolist.filter(t => t.isDone === false);
                 }
                 return (

@@ -1,0 +1,57 @@
+
+.btn {
+  padding: 5px 10px;
+  color: #fff;
+  font-size: 14px;
+  background-color: rgb(180, 180, 180);
+  border-style: none;
+  cursor: pointer;
+  transition: all .3s;
+
+  &:hover {
+    background-color: rgb(44, 130, 213);
+  }
+}
+
+// todolist_input
+
+.todolist_input {
+  display: flex;
+  border: transparent solid 1px;
+
+}
+
+.input {
+  border-bottom-left-radius: .3rem;
+  border-top-left-radius: .3rem;
+  width: 100%;
+  padding: 10px;
+  border: transparent solid 1px;
+  outline: none;
+
+  &:focus {
+    border: rgb(44, 130, 213) solid 1px;
+  }
+
+}
+
+.btn_input {
+  border-bottom-right-radius: .3rem;
+  border-top-right-radius: .3rem;
+}
+
+.error {
+  border: #e04949 1px solid;
+
+  &:focus {
+    border: red solid 1px;
+  }
+}
+
+.error_message {
+  color: red;
+}
+
+.active_filter {
+  background-color: rgb(44, 130, 213);
+}
