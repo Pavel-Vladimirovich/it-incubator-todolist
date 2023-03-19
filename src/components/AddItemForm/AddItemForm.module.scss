@@ -15,24 +15,30 @@
 
 // todolist_input
 
-.todolist_input {
+.input_wrapper {
   display: flex;
-  border: transparent solid 1px;
+  width: 100%;
+}
 
+.input_wrapper > span {
+  display: block;
 }
 
 .input {
   border-bottom-left-radius: .3rem;
   border-top-left-radius: .3rem;
   width: 100%;
-  padding: 10px;
+  padding: 8px;
   border: transparent solid 1px;
   outline: none;
 
-  &:focus {
-    border: rgb(44, 130, 213) solid 1px;
-  }
+  &::placeholder {
+    color: red;
 
+    &:focus {
+      border: rgb(44, 130, 213) solid 1px;
+    }
+  }
 }
 
 .btn_input {
@@ -41,7 +47,7 @@
 }
 
 .error {
-  border: #e04949 1px solid;
+  border: red 1px solid;
 
   &:focus {
     border: red solid 1px;

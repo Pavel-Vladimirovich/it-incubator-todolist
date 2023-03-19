@@ -1,8 +1,24 @@
 .App {
 	font-size: 16px;
 	padding: 20px;
+}
+.todolist_body{
 	display: flex;
-	justify-content: center;
-	gap: 30px;
-	flex-wrap: wrap;
+	align-items: center;
+	flex-direction: column;
+	max-width: 600px;
+	width: 100%;
+	gap: 20px;
+	padding: 10px;
+	border-radius: .3rem;
+	border: #bebebe 1px solid;
+	background: #e0e0e0;
+	box-shadow: 20px 20px 60px #bebebe,
+	-20px -20px 60px #ffffff;
+}
+.todolist_title{
+	padding: 0;
+	margin: 0;
+	text-transform: uppercase;
+	color: gray;
 }

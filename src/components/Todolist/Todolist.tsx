@@ -3,6 +3,7 @@ import style from "./Todolist.module.scss";
 import {FilterValuesType} from "../../App";
 import {v1} from "uuid";
 import {AddItemForm} from "../AddItemForm/AddItemForm";
+import {EditableSpan} from "../EditableSpan/EditableSpan";
 
 export type TaskType = {
     id: string;
@@ -24,15 +25,19 @@ type PropsType = {
     filter: FilterValuesType;
     removeTask: (id: string, todolistId: string) => void;
     removeTodolist: (id: string) => void;
+    changeTitleTask: (title: string, id: string, todolistId: string) => void
+    changeTitleTodolist: (title: string, todolistId: string) => void
 };
 
-function Todolist(props: PropsType) {
+export const Todolist = (props: PropsType) => {
 
     const addTasksHandler = (title: string) => {
         props.addTask(title.trim(), props.id);
     }
-
-    function removeTodolistHandler() {
+    const changeTitleTodolistHandler = (title: string) => {
+        props.changeTitleTodolist(title, props.id)
+    }
+    const removeTodolistHandler = () => {
         props.removeTodolist(props.id);
     }
 
@@ -49,7 +54,9 @@ function Todolist(props: PropsType) {
     return (
         <div className={style.todolist}>
             <div className={style.todolist_header}>
-                <h3>{props.title}</h3>
+                <h3>
+                    <EditableSpan title={props.title} onChangeTitle={changeTitleTodolistHandler}/>
+                </h3>
                 <button
                     className={`${style.btn} ${style.btn_header}`}
                     onClick={removeTodolistHandler}>x
@@ -87,23 +94,23 @@ function Todolist(props: PropsType) {
                     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
                         props.changeTaskStatus(t.id, event.currentTarget.checked, props.id);
                     };
+                    const changeTitleTaskHandler = (title: string) => {
+                        props.changeTitleTask(title, t.id, props.id)
+                    }
                     const keyForLabel = v1();
                     return (
-                        <li className={`${style.task_item}`}>
-                            <label htmlFor={keyForLabel}>
-                                <input
-                                    id={keyForLabel}
-                                    type="checkbox"
-                                    checked={t.isDone}
-                                    onChange={onChangeHandler}
-                                />
-                                <span
-                                    className={`${t.isDone ? style.task_isDone : ""}`}>
-                                    {t.title}
-                                </span>
+                        <li key={t.id} className={`${style.task_item}`}>
+                            <input className={style.input_checkbox}
+                                   id={keyForLabel}
+                                   type="checkbox"
+                                   checked={t.isDone}
+                                   onChange={onChangeHandler}
+                            />
+                            <label htmlFor={keyForLabel} className={`${t.isDone ? style.task_isDone : ""} ${style.item}`}>
+                                <EditableSpan title={t.title} onChangeTitle={changeTitleTaskHandler}/>
                             </label>
                             <button
-                                className={`${style.btn} ${style.btn_remove}`}
+                                className={`${style.btn} ${style.btn_task_remove}`}
                                 onClick={onClickHandler}>x
                             </button>
                         </li>
@@ -114,4 +121,3 @@ function Todolist(props: PropsType) {
     );
 }
 
-export default Todolist;

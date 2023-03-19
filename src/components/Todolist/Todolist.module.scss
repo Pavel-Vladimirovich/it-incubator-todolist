@@ -22,7 +22,7 @@ h3 {
 .todolist {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: 25px 40px 25px auto;
   gap: 10px;
   max-width: 500px;
   width: 100%;
@@ -41,37 +41,16 @@ h3 {
   align-items: center;
   justify-content: space-between;
   //border: gray 1px solid;
-
 }
-.btn_header{
+
+.btn_header {
   border-radius: 50%;
 }
 
 // todolist_input
 
 .todolist_input {
-  display: flex;
-  border: transparent solid 1px;
-
-}
-
-.input {
-  border-bottom-left-radius: .3rem;
-  border-top-left-radius: .3rem;
-  width: 100%;
-  padding: 10px;
-  border: transparent solid 1px;
-  outline: none;
-
-  &:focus {
-    border: rgb(44, 130, 213) solid 1px;
-  }
-
-}
-
-.btn_input {
-  border-bottom-right-radius: .3rem;
-  border-top-right-radius: .3rem;
+  //border: gray 1px solid;
 }
 
 // todolist_filter
@@ -86,11 +65,12 @@ h3 {
 .btn_filter {
   border-radius: .3rem;
 }
+
 // todolist_tasks
 
 .todolist_tasks {
   //border:1px solid black;
-  //min-height: 100px;
+  //min-height: 10px;
 }
 
 .task_item:not(:last-child) {
@@ -99,46 +79,50 @@ h3 {
 
 .task_item {
   display: flex;
-  align-items: center;
+  align-items: start;
   list-style: none;
-  padding: 0 5px;
+  padding: 5px;
   font-size: .9rem;
   border-radius: .3rem;
   border: #bebebe .3px solid;
   background: #ffffff;
+  user-select: none;
+  word-break: break-word;
   box-shadow: 0.1px 0.1px 0.1px rgba(0, 0, 0, 0.062),
   0.3px 0.3px 0.3px rgba(0, 0, 0, 0.089),
   0.6px 0.6px 0.5px rgba(0, 0, 0, 0.11),
   1.1px 1.1px 0.9px rgba(0, 0, 0, 0.131),
   2.1px 2.1px 1.7px rgba(0, 0, 0, 0.158),
   5px 5px 4px rgba(0, 0, 0, 0.22);
+  width: 100%;
 
 
-  & input {
+  & .input_checkbox {
     //cursor: pointer;
+    //display: inline-block;
   }
 
   & label {
-
     width: 100%;
     cursor: pointer;
-    display: block;
-    padding: 10px;
+    //padding: 10px;
   }
 
   & span {
-    margin-left: 10px;
+    padding: 0 5px;
     display: inline-block;
   }
 }
 
-.btn_remove {
+.btn_task_remove {
   margin-left: auto;
   border-radius: 50%;
 }
-.task_isDone{
+
+.task_isDone span {
   opacity: 0.5;
   text-decoration: line-through;
+
 }
 
 .error {
