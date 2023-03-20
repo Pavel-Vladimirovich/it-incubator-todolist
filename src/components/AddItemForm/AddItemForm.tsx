@@ -34,15 +34,16 @@ export const AddItemForm = ({addItem}: AddItemFormType) => {
         setTitle("");
     };
     return (
-        <div className={style.input_wrapper}>
+        <div className={style.text_field}>
             {/*{error ? (<span className={style.error_message}>{error}</span>) : ''}*/}
             <input
-                placeholder={`${error ? `${error}` : '' }`}
+                id='input'
                 value={title}
-                className={`${style.input} ${error ? style.error : ""}`}
+                className={`${style.text_field__input} ${error ? style.error : ""}`}
                 onChange={onChangeHandler}
                 onKeyDown={onKeyPressHandler}
             />
+            <label htmlFor='input' className={style.text_field__label}>enter text </label>
             <button
                 className={`${style.btn} ${style.btn_input}`}
                 onClick={addTasksHandler}>add
@@ -50,3 +51,4 @@ export const AddItemForm = ({addItem}: AddItemFormType) => {
         </div>
     )
 }
+//https://itchief.ru/html-and-css/styling-text-input#with-floating-label

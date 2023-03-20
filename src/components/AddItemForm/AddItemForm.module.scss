@@ -15,30 +15,35 @@
 
 // todolist_input
 
-.input_wrapper {
+.text_field {
   display: flex;
   width: 100%;
 }
 
-.input_wrapper > span {
+.text_field > span {
   display: block;
 }
 
-.input {
+.text_field__input {
   border-bottom-left-radius: .3rem;
   border-top-left-radius: .3rem;
   width: 100%;
-  padding: 8px;
+  padding: 15px 5px;
   border: transparent solid 1px;
   outline: none;
+  position: relative;
+  transition: all .5s ease;
 
-  &::placeholder {
-    color: red;
 
-    &:focus {
-      border: rgb(44, 130, 213) solid 1px;
-    }
+  &:focus {
+    border: rgb(44, 130, 213) solid 1px;
   }
+}
+
+.text_field__input .text_field__label {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .btn_input {
@@ -55,7 +60,7 @@
 }
 
 .error_message {
-  color: red;
+  //color: gray;
 }
 
 .active_filter {
