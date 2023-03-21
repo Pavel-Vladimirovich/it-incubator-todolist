@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import style from "./AddItemForm.module.scss";
+import { v1 } from "uuid";
 
 type AddItemFormType = {
     addItem: (title: string) => void
@@ -23,27 +24,29 @@ export const AddItemForm = ({addItem}: AddItemFormType) => {
 
     const addTasksHandler = () => {
         if (title.trim() === "") {
-            setError("enter text please");
+            setError("Field can't be empty");
             return;
         }
-        if (title.length > 100) {
-            setError("name cannot be more than 100 letters");
+        if (title.length > 15) {
+            setError("No more than 10 letters");
             return;
         }
         addItem(title.trim());
         setTitle("");
     };
+    const htmlForm = v1();
     return (
-        <div className={style.text_field}>
+        <div className={`${style.text_field} ${style.text_field_floating_2}`}>
             {/*{error ? (<span className={style.error_message}>{error}</span>) : ''}*/}
             <input
-                id='input'
+                id={htmlForm}
+                placeholder='Enter text'
                 value={title}
                 className={`${style.text_field__input} ${error ? style.error : ""}`}
                 onChange={onChangeHandler}
                 onKeyDown={onKeyPressHandler}
             />
-            <label htmlFor='input' className={style.text_field__label}>enter text </label>
+            <label htmlFor={htmlForm} className={`${style.text_field__label} ${error ? style.error : ""}`}>{error ? `${error}` : 'Enter text'}</label>
             <button
                 className={`${style.btn} ${style.btn_input}`}
                 onClick={addTasksHandler}>add
@@ -51,4 +54,3 @@ export const AddItemForm = ({addItem}: AddItemFormType) => {
         </div>
     )
 }
-//https://itchief.ru/html-and-css/styling-text-input#with-floating-label
