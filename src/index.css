@@ -1,10 +1,11 @@
 /* @import-normalize; */
- /* bring in normalize.css styles */
+/* bring in normalize.css styles */
 
 /* rest of app styles */
-html{
+html {
   font-size: 16px;
 }
+
 body {
   margin: 0;
   font-size: 1rem;
@@ -21,15 +22,34 @@ code {
     monospace;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
 input[type="text"] {
-  font-family: inherit; /* 1 */
-  font-size: inherit; /* 1 */
-  line-height: inherit; /* 1 */
-  margin: 0; /* 2 */
+  font-family: inherit;
+  /* 1 */
+  font-size: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
 }
+
 ul {
   padding-left: 0;
   margin: 0;

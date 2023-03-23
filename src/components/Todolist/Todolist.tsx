@@ -2,7 +2,7 @@ import React, {ChangeEvent} from "react";
 import style from "./Todolist.module.scss";
 import {FilterValuesType} from "../../App";
 import {v1} from "uuid";
-import {AddItemForm} from "../AddItemForm/AddItemForm";
+import { AddItemForm} from "../AddItemForm/AddItemForm";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 
 export type TaskType = {
@@ -40,7 +40,6 @@ export const Todolist = (props: PropsType) => {
     const removeTodolistHandler = () => {
         props.removeTodolist(props.id);
     }
-
     const onAllClickHandler = () => {
         props.changeFilter(FilterValuesType.all, props.id);
     };
@@ -51,10 +50,12 @@ export const Todolist = (props: PropsType) => {
         props.changeFilter(FilterValuesType.completed, props.id);
     };
 
+   
+
     return (
         <div className={style.todolist}>
             <div className={style.todolist_header}>
-                <h3>
+                <h3 className={style.header_title}>
                     <EditableSpan title={props.title} onChangeTitle={changeTitleTodolistHandler}/>
                 </h3>
                 <button
@@ -63,7 +64,7 @@ export const Todolist = (props: PropsType) => {
                 </button>
             </div>
             <div className={style.todolist_input}>
-                <AddItemForm addItem={addTasksHandler}/>
+                <AddItemForm addItem={addTasksHandler} placeholderText={'Add a new task...'}/>
             </div>
             <div className={style.todolist_filter}>
                 <button

@@ -1,24 +1,31 @@
-.App {
+.container{
 	padding: 20px;
 }
-.todolist_body{
+.todolist_header {
+	text-align: center;
+	width: 100%;
+	& .header_title {
+		font-size: 2rem;
+		text-transform: uppercase;
+		letter-spacing: .15rem;
+		color: gray;
+		margin-bottom: 5px;
+	}
+}
+
+.todolist_wrapper {
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	max-width: 900px;
+	max-width: 600px;
 	width: 100%;
 	gap: 20px;
 	padding: 10px;
 	border-radius: .3rem;
-	border: #bebebe 1px solid;
 	background: #e0e0e0;
 	box-shadow: 20px 20px 60px #bebebe,
-	-20px -20px 60px #ffffff;
-}
-.todolist_title{
-	padding: 0;
-	margin: 0;
-	text-transform: uppercase;
-	color: gray;
+		-20px -20px 60px #ffffff;
+		border: #bebebe 1px solid;
+
 }

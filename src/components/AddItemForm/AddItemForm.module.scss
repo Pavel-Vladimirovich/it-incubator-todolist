@@ -5,7 +5,7 @@
   background-color: rgb(180, 180, 180);
   border-style: none;
   cursor: pointer;
-  transition: all .3s;
+  transition: all .3s ease;
 
   &:hover {
     background-color: rgb(44, 130, 213);
@@ -17,12 +17,12 @@
 /* text field */
 .text_field {
   display: flex;
-  margin-bottom: 1rem;
+  
 }
 
 .text_field__label {
   display: block;
-  margin-bottom: 0.25rem;
+  // margin-bottom: 0.25rem;
 }
 
 .text_field__input {
