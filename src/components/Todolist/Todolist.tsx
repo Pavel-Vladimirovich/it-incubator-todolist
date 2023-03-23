@@ -2,8 +2,8 @@ import React, {ChangeEvent} from "react";
 import style from "./Todolist.module.scss";
 import {FilterValuesType} from "../../App";
 import {v1} from "uuid";
-import { AddItemForm} from "../AddItemForm/AddItemForm";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
+import AddItemForm from "../AddItemForm/AddItemForm";
 
 export type TaskType = {
     id: string;
@@ -107,7 +107,7 @@ export const Todolist = (props: PropsType) => {
                                    checked={t.isDone}
                                    onChange={onChangeHandler}
                             />
-                            <label htmlFor={keyForLabel} className={`${t.isDone ? style.task_isDone : ""} ${style.item}`}>
+                            <label htmlFor={keyForLabel} className={`${t.isDone ? style.task_isDone : ""} `}>
                                 <EditableSpan title={t.title} onChangeTitle={changeTitleTaskHandler}/>
                             </label>
                             <button

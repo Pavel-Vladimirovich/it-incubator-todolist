@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import style from "./App.module.scss";
 import { v1 } from "uuid";
 import { TaskType, Todolist } from "./components/Todolist/Todolist";
-import { AddItemForm } from "./components/AddItemForm/AddItemForm";
+import AddItemForm from "./components/AddItemForm/AddItemForm";
 
 export enum FilterValuesType {
   all = "all",
@@ -38,9 +38,9 @@ function App() {
 
   let [tasksObj, setTasks] = useState<TasksObjType>({
     [todolistId1]: [
-      { id: v1(), title: "HTML & CSS", isDone: false },
-      { id: v1(), title: "JavaScript", isDone: false },
-      { id: v1(), title: "React", isDone: false },
+      { id: v1(), title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo", isDone: false },
+      { id: v1(), title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo", isDone: false },
+      { id: v1(), title: "React, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo", isDone: false },
       {
         id: v1(),
         title:
