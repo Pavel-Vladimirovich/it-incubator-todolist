@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState, useReducer} from "react";
 import style from "./AddItemForm.module.scss";
-import {v1} from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
 type AddItemFormType = {
     addItem: (title: string) => void;
@@ -87,7 +87,7 @@ const AddItemForm = ({addItem, placeholderText}: AddItemFormType) => {
         addItem(state.title.trim());
         dispatch({type: CURRENT_TARGET_VALUE})
     };
-    const htmlForm = v1();
+    const htmlForm = uuidv4();
     return (
         <div className={`${style.text_field} ${style.text_field_floating_2}`}>
             <input

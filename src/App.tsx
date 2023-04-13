@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "./App.module.scss";
-import { v1 } from "uuid";
+import { v1 } from 'uuid';
 import { TaskType, Todolist } from "./components/Todolist/Todolist";
 import AddItemForm from "./components/AddItemForm/AddItemForm";
 
@@ -41,12 +41,7 @@ function App() {
       { id: v1(), title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo", isDone: false },
       { id: v1(), title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo", isDone: false },
       { id: v1(), title: "React, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo", isDone: false },
-      {
-        id: v1(),
-        title:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo ipsa, laborum minus modi non nulla omnis perferendis possimus quam quasi, quidem quod rem reprehenderit repudiandae saepe tenetur. At distinctio eum laudantium, natus perspiciatis quam quod?",
-        isDone: false,
-      },
+      { id: v1(), title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo ipsa, laborum minus modi non nulla omnis perferendis possimus quam quasi, quidem quod rem reprehenderit repudiandae saepe tenetur. At distinctio eum laudantium, natus perspiciatis quam quod?", isDone: false,},
     ],
     // [todolistId2]: [
     //     {id: v1(), title: 'Bread', isDone: false},
