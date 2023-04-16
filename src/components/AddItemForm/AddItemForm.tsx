@@ -1,6 +1,9 @@
 import React, {ChangeEvent, KeyboardEvent, useState, useReducer} from "react";
 import style from "./AddItemForm.module.scss";
 import { v4 as uuidv4 } from 'uuid';
+import {Button} from "@material-ui/core";
+import AddToPhotosTwoToneIcon from '@material-ui/icons/AddToPhotosTwoTone';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 type AddItemFormType = {
     addItem: (title: string) => void;
@@ -89,7 +92,7 @@ const AddItemForm = ({addItem, placeholderText}: AddItemFormType) => {
     };
     const htmlForm = uuidv4();
     return (
-        <div className={`${style.text_field} ${style.text_field_floating_2}`}>
+        <form className={`${style.text_field} ${style.text_field_floating_2}`}>
             <input
                 id={htmlForm}
                 placeholder={placeholderText}
@@ -108,13 +111,16 @@ const AddItemForm = ({addItem, placeholderText}: AddItemFormType) => {
             >
                 {state.error ? `${state.error}` : `${placeholderText}`}
             </label>
-            <button
+            <Button
+                startIcon={<AddBoxIcon/>}
+                style={{borderBottomLeftRadius: "0px", borderTopLeftRadius: "0px", padding:'0px, 5px'}}
+                color="primary"
+                variant="contained"
                 className={`${style.btn} ${style.btn_input}`}
-                onClick={addTasksHandler}
-            >
-                add
-            </button>
-        </div>
+                onClick={addTasksHandler}>
+               create
+            </Button>
+        </form>
     );
 };
 

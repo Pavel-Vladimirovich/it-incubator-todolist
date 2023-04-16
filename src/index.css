@@ -26,18 +26,11 @@ code {
 *::before,
 *::after {
   box-sizing: border-box;
-
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
   margin: 0;
   padding: 0;
 }
+
+
 
 input[type="text"] {
   font-family: inherit;
@@ -51,6 +44,6 @@ input[type="text"] {
 }
 
 ul {
-  padding-left: 0;
+  /*padding-left: 0;*/
   margin: 0;
 }
