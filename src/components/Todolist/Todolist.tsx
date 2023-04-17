@@ -79,7 +79,6 @@ export const Todolist = (props: PropsType) => {
             <div className={style.todolist_input}>
                 <AddItemForm
                     addItem={addTasksHandler}
-                    placeholderText={"Add a new task..."}
                 />
             </div>
             <div className={style.todolist_filter_btn}>

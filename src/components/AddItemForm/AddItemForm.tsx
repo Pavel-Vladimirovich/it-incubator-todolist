@@ -1,13 +1,11 @@
 import React, {ChangeEvent, KeyboardEvent, useState, useReducer} from "react";
 import style from "./AddItemForm.module.scss";
 import { v4 as uuidv4 } from 'uuid';
-import {Button} from "@material-ui/core";
-import AddToPhotosTwoToneIcon from '@material-ui/icons/AddToPhotosTwoTone';
+import {Button, TextField} from "@material-ui/core";
 import AddBoxIcon from '@material-ui/icons/AddBox';
 
 type AddItemFormType = {
     addItem: (title: string) => void;
-    placeholderText?: string;
 };
 
 type ActionType = {
@@ -39,11 +37,6 @@ const reducer = (state: StateType, action: ActionType): StateType => {
                 ...state,
                 error: state.error = "Field can't be empty"
             };
-        case ERROR_LETTERS_MORE_THAN:
-            return {
-                ...state,
-                error: state.error = "No more than 15 letters",
-            };
         case CURRENT_TARGET_VALUE:
             if (action.titleText) {
                 return {
@@ -62,7 +55,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 };
 
 
-const AddItemForm = ({addItem, placeholderText}: AddItemFormType) => {
+const AddItemForm = ({addItem}: AddItemFormType) => {
 
     const [state, dispatch] = useReducer(reducer, {error: '', title: ''});
 
@@ -74,7 +67,6 @@ const AddItemForm = ({addItem, placeholderText}: AddItemFormType) => {
         dispatch({type: TOGGLE_ERROR});
         if (event.key === "Enter") {
             addTasksHandler();
-            dispatch({type: CURRENT_TARGET_VALUE})
         }
     };
 
@@ -83,37 +75,26 @@ const AddItemForm = ({addItem, placeholderText}: AddItemFormType) => {
             dispatch({type: ERROR_FIELD_IS_EMPTY});
             return;
         }
-        if (state.title.length > 15) {
-            dispatch({type: ERROR_LETTERS_MORE_THAN});
-            return;
-        }
         addItem(state.title.trim());
         dispatch({type: CURRENT_TARGET_VALUE})
     };
-    const htmlForm = uuidv4();
     return (
-        <form className={`${style.text_field} ${style.text_field_floating_2}`}>
-            <input
-                id={htmlForm}
-                placeholder={placeholderText}
+        <form noValidate autoComplete="off" className={`${style.text_field} ${style.text_field_floating_2}`}>
+            <TextField 
+                style={{width: '100%'}}
+                //error={error}
+                variant="outlined"
+                id="standard-multiline-flexible" 
+                multiline
+                maxRows={4}
+                label={ state.error ? state.error : "Add a new to-do list..."} 
                 value={state.title}
-                className={`${style.text_field__input} ${
-                    state.error ? style.error : ""
-                }`}
                 onChange={onChangeHandler}
                 onKeyDown={onKeyPressHandler}
-            />
-            <label
-                htmlFor={htmlForm}
-                className={`${style.text_field__label} ${
-                    state.error ? style.error : ""
-                }`}
-            >
-                {state.error ? `${state.error}` : `${placeholderText}`}
-            </label>
+                 />
             <Button
                 startIcon={<AddBoxIcon/>}
-                style={{borderBottomLeftRadius: "0px", borderTopLeftRadius: "0px", padding:'0px, 5px'}}
+                style={{marginLeft: '5px'}}
                 color="primary"
                 variant="contained"
                 className={`${style.btn} ${style.btn_input}`}

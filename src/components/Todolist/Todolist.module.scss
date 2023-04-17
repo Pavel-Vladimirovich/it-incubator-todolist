@@ -21,7 +21,7 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 25px auto auto auto;
-  gap: 10px;
+  gap: 25px;
   padding: 10px;
   //border-radius: .3rem;
   //border: #bebebe 1px solid;
@@ -75,7 +75,7 @@
 }
 
 .task_item:not(:last-child) {
-  margin-bottom: 10px;
+  margin-bottom: 25px;
 }
 
 .task_item {

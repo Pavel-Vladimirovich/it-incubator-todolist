@@ -30,11 +30,11 @@ function App() {
             title: "What to learn",
             filter: FilterValuesType.all,
         },
-        // {
-        //     id: todolistId2,
-        //     title: 'What to buy',
-        //     filter: FilterValuesType.all
-        // }
+        {
+            id: todolistId2,
+            title: 'What to buy',
+            filter: FilterValuesType.all
+        }
     ]);
 
     let [tasksObj, setTasks] = useState<TasksObjType>({
@@ -60,12 +60,12 @@ function App() {
                 isDone: false,
             },
         ],
-        // [todolistId2]: [
-        //     {id: v1(), title: 'Bread', isDone: false},
-        //     {id: v1(), title: 'Milk', isDone: false},
-        //     {id: v1(), title: 'Meet', isDone: false},
-        //     {id: v1(), title: 'Fish', isDone: false},
-        // ]
+        [todolistId2]: [
+            {id: v1(), title: 'Bread', isDone: false},
+            {id: v1(), title: 'Milk', isDone: false},
+            {id: v1(), title: 'Meet', isDone: false},
+            {id: v1(), title: 'Fish', isDone: false},
+        ]
     });
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
@@ -132,11 +132,7 @@ function App() {
                 <h1 className={style.header_title}>Todolist</h1>
                 <AddItemForm
                     addItem={addTodolist}
-                    placeholderText={"Add a new to-do list..."}
                 />
-                <form noValidate autoComplete="off">
-                    <TextField id="outlined-basic" label="Add a new to-do list..." variant="outlined" />
-                </form>
             </Grid>
             {todolists.map((tl) => {
                 let tasksForTodolist = tasksObj[tl.id];
