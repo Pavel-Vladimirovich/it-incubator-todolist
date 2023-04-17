@@ -82,7 +82,7 @@ const AddItemForm = ({addItem}: AddItemFormType) => {
         <form noValidate autoComplete="off" className={`${style.text_field} ${style.text_field_floating_2}`}>
             <TextField 
                 style={{width: '100%'}}
-                //error={error}
+                error={!!state.error}
                 variant="outlined"
                 id="standard-multiline-flexible" 
                 multiline
@@ -90,8 +90,7 @@ const AddItemForm = ({addItem}: AddItemFormType) => {
                 label={ state.error ? state.error : "Add a new to-do list..."} 
                 value={state.title}
                 onChange={onChangeHandler}
-                onKeyDown={onKeyPressHandler}
-                 />
+                onKeyDown={onKeyPressHandler}/>
             <Button
                 startIcon={<AddBoxIcon/>}
                 style={{marginLeft: '5px'}}

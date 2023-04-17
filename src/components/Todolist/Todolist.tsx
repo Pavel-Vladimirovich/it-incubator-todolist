@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useState} from "react";
 import style from "./Todolist.module.scss";
 import {FilterValuesType} from "../../App";
 import {v1} from "uuid";
@@ -10,6 +10,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import BallotIcon from '@material-ui/icons/Ballot';
 import BackspaceIcon from '@material-ui/icons/Backspace';
+import EditIcon from "@material-ui/icons/Edit";
 
 
 export type TaskType = {
@@ -55,7 +56,8 @@ export const Todolist = (props: PropsType) => {
     const onCompletedClickHandler = () => {
         props.changeFilter(FilterValuesType.completed, props.id);
     };
-
+    //установить значение setValueEditMode
+    const [valueEditMode, setValueEditMode] = useState<boolean>()
     return (
 
 
@@ -140,19 +142,25 @@ export const Todolist = (props: PropsType) => {
                                     onChange={onChangeHandler}
                                 />
                             </Tooltip>
-
                             <label
                                 htmlFor={keyForLabel}
-                                className={`${t.isDone ? style.task_isDone : ""} `}
-                            >
+                                className={`${t.isDone ? style.task_isDone : ""} `}>
                                 <EditableSpan
                                     title={t.title}
                                     onChangeTitle={changeTitleTaskHandler}
+                                    toggleEditMode={valueEditMode}
                                 />
                             </label>
+                            <Tooltip title="Edit">
+                                <IconButton onClick={() => {setValueEditMode(true)}}
+                                            color="primary"
+                                            size="small">
+                                    <EditIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Delete">
                                 <IconButton aria-label="delete"
-                                            size="medium"
+                                            size="small"
                                             onClick={onClickHandler}>
                                     <DeleteIcon color="primary"/>
                                 </IconButton>
