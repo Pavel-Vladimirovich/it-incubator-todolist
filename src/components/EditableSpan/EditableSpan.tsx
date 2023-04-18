@@ -1,6 +1,7 @@
-import {TextField } from "@material-ui/core";
+import {IconButton, TextField, Tooltip} from "@material-ui/core";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import style from "./EditableSpan.module.scss";
+import EditIcon from "@material-ui/icons/Edit";
 
 type EditableSpanPropsType = {
   title: string;
@@ -11,12 +12,6 @@ export const EditableSpan = ({title, onChangeTitle, toggleEditMode}: EditableSpa
 
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState("");
-
-  useEffect(() => {
-    if(toggleEditMode)
-    setEditMode(toggleEditMode)
-  }, [])
-
 
   const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setNewTitle(event.currentTarget.value);
@@ -37,15 +32,23 @@ export const EditableSpan = ({title, onChangeTitle, toggleEditMode}: EditableSpa
             id="standard-multiline-flexible"
             multiline
             maxRows={5}
-            className={style.input}
             value={newTitle}
             onChange={onChangeHandler}
             onBlur={deactivateActivateEditMode}
             autoFocus
+            className={style.input}
           />
         ) : (
           <span onDoubleClick={activateEditMode}>{title}</span>
         )}
+        <Tooltip title="Edit">
+          <IconButton onClick={activateEditMode}
+                      color="primary"
+                      size="small">
+            <EditIcon color="primary" />
+          </IconButton>
+        </Tooltip>
+
       </div>
   );
 };

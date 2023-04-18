@@ -42,29 +42,33 @@ function App() {
             {
                 id: v1(),
                 title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo",
-                isDone: false
+                isDone: false,
+                editMode: false
             },
             {
                 id: v1(),
                 title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo",
-                isDone: false
+                isDone: false,
+                editMode: false
             },
             {
                 id: v1(),
                 title: "React, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo",
-                isDone: false
+                isDone: false,
+                editMode: false
             },
             {
                 id: v1(),
                 title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi illo mollitia obcaecati quae qui. Accusamus at commodi consequatur corporis, debitis dolorem est fugit illo ipsa, laborum minus modi non nulla omnis perferendis possimus quam quasi, quidem quod rem reprehenderit repudiandae saepe tenetur. At distinctio eum laudantium, natus perspiciatis quam quod?",
                 isDone: false,
+                editMode: false
             },
         ],
         [todolistId2]: [
-            {id: v1(), title: 'Bread', isDone: false},
-            {id: v1(), title: 'Milk', isDone: false},
-            {id: v1(), title: 'Meet', isDone: false},
-            {id: v1(), title: 'Fish', isDone: false},
+            {id: v1(), title: 'Bread', isDone: false, editMode: false},
+            {id: v1(), title: 'Milk', isDone: false, editMode: false},
+            {id: v1(), title: 'Meet', isDone: false, editMode: false},
+            {id: v1(), title: 'Fish', isDone: false, editMode: false},
         ]
     });
 
@@ -96,7 +100,7 @@ function App() {
     }
 
     function addTask(title: string, todolistId: string) {
-        const task = {id: v1(), title: title, isDone: false};
+        const task = {id: v1(), title: title, isDone: false, editMode: false};
         tasksObj[todolistId] = [task, ...tasksObj[todolistId]];
         setTasks({...tasksObj});
     }
@@ -123,6 +127,13 @@ function App() {
         todolists = todolists.filter((tl) => tl.id !== id);
         delete tasksObj[id];
         setTodolists([...todolists]);
+    }
+    function toggleEditMode(taskId: string, editMode: boolean, todolistId: string){
+        const task = tasksObj[todolistId].find((t) => t.id === taskId);
+        if (task) {
+            task.editMode = editMode;
+        }
+        setTasks({...tasksObj});
     }
 
     return (
@@ -163,6 +174,7 @@ function App() {
                                 removeTask={removeTask}
                                 changeTitleTodolist={changeTitleTodolist}
                                 removeTodolist={removeTodolist}
+                                toggleEditMode={toggleEditMode}
                             />
                         </Paper>
                     </Grid>
