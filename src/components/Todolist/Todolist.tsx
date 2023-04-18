@@ -124,8 +124,9 @@ export const Todolist = (props: PropsType) => {
             </div>
             <ul className={style.todolist_tasks}>
                 {props.tasks.map((t) => {
+
                     const toggleEditModeHandler = () => {
-                        props.toggleEditMode(t.id, true, props.id)
+                         props.toggleEditMode(t.id, true, props.id)
                     }
                     const onClickHandler = () => props.removeTask(t.id, props.id);
                     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +157,13 @@ export const Todolist = (props: PropsType) => {
                                     toggleEditMode={t.editMode}
                                 />
                             </label>
+                            <Tooltip title="Edit">
+                                <IconButton onClick={toggleEditModeHandler}
+                                            color="primary"
+                                            size="small">
+                                    <EditIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Delete">
                                 <IconButton aria-label="delete"
                                             size="small"
