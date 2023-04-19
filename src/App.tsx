@@ -3,7 +3,7 @@ import style from "./App.module.scss";
 import {v1} from 'uuid';
 import {TaskType, Todolist} from "./components/Todolist/Todolist";
 import AddItemForm from "./components/AddItemForm/AddItemForm";
-import {Grid, Paper, TextField, Typography} from "@material-ui/core";
+import {Grid, Paper} from "@material-ui/core";
 
 export enum FilterValuesType {
     all = "all",

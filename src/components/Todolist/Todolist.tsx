@@ -60,7 +60,6 @@ export const Todolist = (props: PropsType) => {
     };
 
     const [newTitle, setNewTitle] = useState("");
-    console.log(newTitle);
 
     return (
 
@@ -68,16 +67,15 @@ export const Todolist = (props: PropsType) => {
         <div className={style.todolist}>
             <div className={style.todolist_header}>
                 <h3 className={style.header_title}>
-                    <EditableSpan
-                        title={props.title}
-                        onChangeTitle={changeTitleTodolistHandler}
-                    />
+                    {/*<EditableSpan*/}
+                    {/*    title={props.title}*/}
+                    {/*    onChangeTitle={changeTitleTodolistHandler}*/}
+                    {/*/>*/}
                 </h3>
                 <Button
                     variant="contained"
                     color="primary"
                     startIcon={<DeleteIcon/>}
-                    className={`${style.btn} ${style.btn_header}`}
                     onClick={removeTodolistHandler}>
                     DELETE
                 </Button>
@@ -87,15 +85,14 @@ export const Todolist = (props: PropsType) => {
                     addItem={addTasksHandler}
                 />
             </div>
-            <div className={style.todolist_filter_btn}>
-                <Grid container spacing={1} >
+            <div className={style.todolist_filter}>
+                <Grid container spacing={1}>
                     <Grid item xs={12} sm={4}>
                         <Button
-                            style={{width: "100%", overflow: "hidden"}}
+                            style={{width: "100%"}}
                             startIcon={<ReceiptIcon/>}
                             variant="contained"
                             color={props.filter === FilterValuesType.all ? "primary" : "default"}
-                            className={`${style.btn} ${style.btn_filter}`}
                             onClick={onAllClickHandler}>
                             All
                         </Button>
@@ -106,7 +103,6 @@ export const Todolist = (props: PropsType) => {
                             startIcon={<BallotIcon/>}
                             variant="contained"
                             color={props.filter === FilterValuesType.active ? "primary" : "default"}
-                            className={`${style.btn} ${style.btn_filter}`}
                             onClick={onActiveClickHandler}>
                             Active
                         </Button>
@@ -117,7 +113,6 @@ export const Todolist = (props: PropsType) => {
                             color={props.filter === FilterValuesType.completed ? "primary" : "default"}
                             startIcon={<AssignmentTurnedInIcon/>}
                             variant="contained"
-                            className={`${style.btn} ${style.btn_filter}`}
                             onClick={onCompletedClickHandler}>
                             Completed
                         </Button>
@@ -125,27 +120,18 @@ export const Todolist = (props: PropsType) => {
                 </Grid>
             </div>
             <ul className={style.todolist_tasks}>
-
                 {props.tasks.map((t) => {
-
-                  const activateEditMode = () => {
-                    props.toggleEditMode(t.id, true, props.id)
-                    setNewTitle(t.title);
-                  };
-                  const deactivateActivateEditMode = () => {
-                    props.toggleEditMode(t.id, false, props.id)
-                    //onChangeTitle(newTitle);
-                  };
-
-            
-                     //=============================================================
-
-                    const onClickHandler = () => props.removeTask(t.id, props.id);
+                    const activateEditMode = () => {
+                        props.toggleEditMode(t.id, true, props.id)
+                        setNewTitle(t.title);
+                    };
+                    const deactivateActivateEditMode = () => {
+                        props.toggleEditMode(t.id, false, props.id)
+                        props.changeTitleTask(newTitle, t.id, props.id);
+                    };
+                    const removeTaskHandler = () => props.removeTask(t.id, props.id);
                     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
                         props.changeTaskStatus(t.id, event.currentTarget.checked, props.id);
-                    };
-                    const changeTitleTaskHandler = (title: string) => {
-                        props.changeTitleTask(title, t.id, props.id);
                     };
                     const keyForLabel = v1();
                     return (
@@ -154,7 +140,6 @@ export const Todolist = (props: PropsType) => {
                                 <Checkbox
                                     color="primary"
                                     size="small"
-                                    className={style.input_checkbox}
                                     id={keyForLabel}
                                     checked={t.isDone}
                                     onChange={onChangeHandler}
@@ -165,27 +150,36 @@ export const Todolist = (props: PropsType) => {
                                 className={`${t.isDone ? style.task_isDone : ""} `}>
                                 <EditableSpan
                                     title={t.title}
-                                    newTitle={}
-                                    onChangeTitle={changeTitleTaskHandler}
+                                    newTitle={newTitle}
+                                    setNewTitle={setNewTitle}
                                     toggleEditMode={t.editMode}
-                                    activateEditMode={activateEditMode}                           
+                                    activateEditMode={activateEditMode}
                                     deactivateActivateEditMode={deactivateActivateEditMode}
                                 />
                             </label>
-                            <Tooltip title="Edit">
-                                <IconButton onClick={activateEditMode}
-                                            color="primary"
-                                            size="small">
-                                    <EditIcon color="primary" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Delete">
-                                <IconButton aria-label="delete"
-                                            size="small"
-                                            onClick={onClickHandler}>
-                                    <DeleteIcon color="primary"/>
-                                </IconButton>
-                            </Tooltip>
+                            <div className={style.item_btn_container}>
+                                <Tooltip title="Edit">
+                                    <IconButton style={{
+                                        backgroundColor: "#3f51b5",
+                                        color: "white"
+                                    }}
+                                                onClick={activateEditMode}
+                                                color="primary"
+                                                size="small">
+                                        <EditIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Delete">
+                                    <IconButton style={{
+                                        backgroundColor: "#3f51b5",
+                                        color: "white"
+                                    }}
+                                                size="small"
+                                                onClick={removeTaskHandler}>
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
                         </li>
                     );
                 })}

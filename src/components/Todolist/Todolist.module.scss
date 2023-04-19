@@ -1,33 +1,12 @@
-.btn {
-  padding: 5px 10px;
-  max-height: 50px;
-  color: #fff;
-  font-size: 14px;
-  background-color: rgb(180, 180, 180);
-  border-style: none;
-  cursor: pointer;
-  transition: all .3s;
-
-  &:hover {
-    background-color: rgb(44, 130, 213);
-  }
-}
 
 //todolist
 
 .todolist {
-  //max-width: 800px;
-  //width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 25px auto auto auto;
   gap: 25px;
   padding: 10px;
-  //border-radius: .3rem;
-  //border: #bebebe 1px solid;
-  //background: #e0e0e0;
-  //box-shadow: 20px 20px 60px #bebebe,
-  //  -20px -20px 60px #ffffff;
 }
 
 //todolist_header
@@ -43,35 +22,21 @@
   }
 }
 
-.btn_header {
-  border-radius: .3rem;
-}
-
 // todolist_input
 
 .todolist_input {
-  //border: gray 1px solid;
+ // border: gray 1px solid;
 }
-
 // todolist_filter
 
-.todolist_filter_btn {
-  //display: flex;
-  //justify-content: end;
-  //flex-wrap: wrap;
-  //gap: 5px;
-  //border: gray 1px solid;
-}
-
-.btn_filter {
-  border-radius: .3rem;
+.todolist_filter{
+  margin-bottom: 20px;
 }
 
 // todolist_tasks
 
 .todolist_tasks {
   //border:1px solid black;
-  //min-height: 10px;
 }
 
 .task_item:not(:last-child) {
@@ -79,10 +44,11 @@
 }
 
 .task_item {
+  position: relative;
   display: flex;
   align-items: start;
   list-style: none;
-  padding: 5px;
+  padding: 15px;
   font-size: .9rem;
   border-radius: .3rem;
   border: #bebebe .3px solid;
@@ -97,15 +63,9 @@
     5px 5px 4px rgba(0, 0, 0, 0.22);
   width: 100%;
 
-
-  & .input_checkbox {
-   border: #e04949 ;
-  }
-
   & label {
     width: 100%;
     cursor: pointer;
-    //padding: 10px;
   }
 
   & span {
@@ -114,30 +74,15 @@
   }
 }
 
-.btn_task_remove {
-  margin-left: auto;
-  border-radius: .3rem;
-}
-
 .task_isDone span {
   opacity: 0.5;
   text-decoration: line-through;
 
 }
-
-.error {
-  border: #e04949 1px solid;
-
-  &:focus {
-    border: red solid 1px;
-  }
-}
-
-.error_message {
-  color: red;
-}
-
-
-.active_filter {
-  background-color: rgb(44, 130, 213);
+.item_btn_container{
+  position: absolute;
+  right: 10px;
+  top: -21px;
+  display: flex;
+  gap: 10px;
 }
