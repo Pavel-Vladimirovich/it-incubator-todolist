@@ -59,6 +59,8 @@ export const Todolist = (props: PropsType) => {
         props.changeFilter(FilterValuesType.completed, props.id);
     };
 
+    const [newTitle, setNewTitle] = useState("");
+    console.log(newTitle);
 
     return (
 
@@ -123,11 +125,21 @@ export const Todolist = (props: PropsType) => {
                 </Grid>
             </div>
             <ul className={style.todolist_tasks}>
+
                 {props.tasks.map((t) => {
 
-                    const toggleEditModeHandler = () => {
-                         props.toggleEditMode(t.id, true, props.id)
-                    }
+                  const activateEditMode = () => {
+                    props.toggleEditMode(t.id, true, props.id)
+                    setNewTitle(t.title);
+                  };
+                  const deactivateActivateEditMode = () => {
+                    props.toggleEditMode(t.id, false, props.id)
+                    //onChangeTitle(newTitle);
+                  };
+
+            
+                     //=============================================================
+
                     const onClickHandler = () => props.removeTask(t.id, props.id);
                     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
                         props.changeTaskStatus(t.id, event.currentTarget.checked, props.id);
@@ -153,12 +165,15 @@ export const Todolist = (props: PropsType) => {
                                 className={`${t.isDone ? style.task_isDone : ""} `}>
                                 <EditableSpan
                                     title={t.title}
+                                    newTitle={}
                                     onChangeTitle={changeTitleTaskHandler}
                                     toggleEditMode={t.editMode}
+                                    activateEditMode={activateEditMode}                           
+                                    deactivateActivateEditMode={deactivateActivateEditMode}
                                 />
                             </label>
                             <Tooltip title="Edit">
-                                <IconButton onClick={toggleEditModeHandler}
+                                <IconButton onClick={activateEditMode}
                                             color="primary"
                                             size="small">
                                     <EditIcon color="primary" />
