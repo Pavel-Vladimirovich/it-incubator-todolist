@@ -1,137 +1,160 @@
-import React, { ChangeEvent, KeyboardEvent, useState, useReducer } from "react";
+import React, {ChangeEvent, KeyboardEvent, useState, useReducer} from "react";
 import style from "./AddItemForm.module.scss";
-import { v4 as uuidv4 } from "uuid";
-import { Button, Snackbar, TextField } from "@material-ui/core";
+import {Button, Grid, Snackbar, TextField} from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
 
-type AddItemFormType = {
-  addItem: (title: string) => void;
+const TEXT_ERROR_MESSAGE = "Field can't be empty"
+const REMOVE_TEXT_ERROR = "REMOVE-TEXT-ERROR";
+const ERROR_FIELD_IS_EMPTY = "ERROR-FIELD-IS-EMPTY";
+const ERROR = "ERROR";
+const REMOVE_ERROR = "REMOVE_ERROR";
+const CURRENT_TARGET_VALUE = "CURRENT_TARGET_VALUE";
+
+type AddItemFormPropsType = {
+    addItem: (title: string) => void;
+    textMessage: string
 };
 
 type ActionType = {
-  type: string;
-  titleText?: string;
+    type: string;
+    titleText?: string;
 };
 
 type StateType = {
-  error: string;
-  title: string;
+    error: boolean
+    errorMessage: string;
+    title: string;
 };
 
-const TOGGLE_ERROR = "TOGGLE-ERROR";
-const ERROR_FIELD_IS_EMPTY = "ERROR-FIELD-IS-EMPTY";
-const ERROR_LETTERS_MORE_THAN = "ERROR-LETTERS-MORE-THAN";
-const CURRENT_TARGET_VALUE = "CURRENT_TARGET_VALUE";
-
-const reducer = (state: StateType, action: ActionType): StateType => {
-  switch (action.type) {
-    case TOGGLE_ERROR:
-      return {
-        ...state,
-        error: (state.error = ""),
-      };
-    case ERROR_FIELD_IS_EMPTY:
-      return {
-        ...state,
-        error: (state.error = "Field can't be empty"),
-      };
-    case CURRENT_TARGET_VALUE:
-      if (action.titleText) {
-        return {
-          ...state,
-          title: (state.title = action.titleText),
-        };
-      } else {
-        return {
-          ...state,
-          title: (state.title = ""),
-        };
-      }
-    default:
-      throw new Error("Bad action type");
-  }
-};
 function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
+}
 
-const AddItemForm = ({ addItem }: AddItemFormType) => {
 
-  const [state, dispatch] = useReducer(reducer, { error: "", title: "" });
-
-  const [open, setOpen] = useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
+const reducer = (state: StateType, action: ActionType): StateType => {
+    switch (action.type) {
+        case ERROR:
+            return {
+                ...state,
+                error: true
+            };
+        case REMOVE_ERROR:
+            return {
+                ...state,
+                error: false
+            }
+        case REMOVE_TEXT_ERROR:
+            return {
+                ...state,
+                errorMessage: (state.errorMessage = ""),
+            };
+        case ERROR_FIELD_IS_EMPTY:
+            return {
+                ...state,
+                errorMessage: (state.errorMessage = TEXT_ERROR_MESSAGE),
+            };
+        case CURRENT_TARGET_VALUE:
+            if (action.titleText) {
+                return {
+                    ...state,
+                    title: (state.title = action.titleText),
+                };
+            } else {
+                return {
+                    ...state,
+                    title: (state.title = ""),
+                };
+            }
+        default:
+            throw new Error("Bad action type");
     }
+};
 
-    setOpen(false);
-  };
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: CURRENT_TARGET_VALUE,
-      titleText: event.currentTarget.value,
-    });
-  };
 
-  const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    // dispatch({ type: TOGGLE_ERROR });
-    if (event.key === "Enter") {
-      addTasksHandler();
-    }
-  };
+const AddItemForm = ({addItem, textMessage}: AddItemFormPropsType) => {
 
-  const addTasksHandler = () => {
-    if (state.title.trim() === "") {
-      dispatch({ type: ERROR_FIELD_IS_EMPTY });
-      handleClick();
-      return;
-    }
-    addItem(state.title.trim());
-    dispatch({ type: TOGGLE_ERROR });
-    dispatch({ type: CURRENT_TARGET_VALUE });
-    handleClick();
-  };
-  return (
-    <form
-      noValidate
-      autoComplete="off"
-      className={`${style.text_field} ${style.text_field_floating_2}`}
-    >
-      <TextField
-        style={{ width: "100%" }}
-        error={!!state.error}
-        variant="outlined"
-        id="standard-multiline-flexible"
-        multiline
-        maxRows={4}
-        label={state.error ? state.error : "Add a new to-do list..."}
-        value={state.title}
-        onChange={onChangeHandler}
-        onKeyDown={onKeyPressHandler}
-      />
-      <Button
-        startIcon={<AddBoxIcon />}
-        style={{ marginLeft: "5px" }}
-        color="primary"
-        variant="contained"
-        className={`${style.btn} ${style.btn_input}`}
-        onClick={addTasksHandler}>
-        create
-      </Button>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={!!state.error ? "error" : "success"}>
-        Todolist created successfully!
-        </Alert>
-      </Snackbar>
-    </form>
-  );
+    const [state, dispatch] = useReducer(reducer, {error: false, errorMessage: "", title: ""});
+    const [open, setOpen] = useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        setOpen(false);
+    };
+    const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        dispatch({
+            type: CURRENT_TARGET_VALUE,
+            titleText: event.currentTarget.value,
+        });
+    };
+
+    const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        dispatch({type: REMOVE_TEXT_ERROR});
+        if (event.key === "Enter") {
+            addTasksHandler();
+        }
+    };
+
+    const addTasksHandler = () => {
+        if (state.title.trim() === "") {
+            dispatch({type: ERROR_FIELD_IS_EMPTY});
+            dispatch({type: ERROR})
+            handleClick();
+            return;
+        }
+        addItem(state.title.trim());
+        dispatch({type: REMOVE_TEXT_ERROR});
+        dispatch({type: REMOVE_ERROR})
+        dispatch({type: CURRENT_TARGET_VALUE});
+        handleClick();
+    };
+    return (
+        <form
+            noValidate
+            autoComplete="off"
+            className={`${style.text_field} ${style.text_field_floating_2}`}
+        >
+            <Grid container>
+                <Grid item xs={12} sm={10}>
+                    <TextField
+                        style={{width: "100%"}}
+                        error={!!state.errorMessage}
+                        variant="outlined"
+                        id="standard-multiline-flexible"
+                        multiline
+                        maxRows={4}
+                        label={state.errorMessage ? state.errorMessage : "Add a new to-do list..."}
+                        value={state.title}
+                        onChange={onChangeHandler}
+                        onKeyDown={onKeyPressHandler}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Button
+                        startIcon={<AddBoxIcon/>}
+                        style={{marginLeft: "5px", width: "100%", height: "100%"}}
+                        color="primary"
+                        variant="contained"
+                        className={`${style.btn} ${style.btn_input}`}
+                        onClick={addTasksHandler}>
+                        create
+                    </Button>
+                </Grid>
+            </Grid>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={!!state.error ? "error" : "success"}>
+                    {!!state.error ? TEXT_ERROR_MESSAGE : textMessage}
+                </Alert>
+            </Snackbar>
+        </form>
+    );
 };
 
 export default React.memo(AddItemForm);

@@ -149,9 +149,9 @@ function App() {
   return (
     <>
       <Grid container spacing={3} >
-        <Grid item xs={12} style={{ textAlign: "center" }}>
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }}>
           <h1 className={style.header_title}></h1>
-          <AddItemForm addItem={addTodolist} />
+          <AddItemForm addItem={addTodolist} textMessage="Todolist created successfully!"/>
         </Grid>
         {todolists.map((tl) => {
           let tasksForTodolist = tasksObj[tl.id];

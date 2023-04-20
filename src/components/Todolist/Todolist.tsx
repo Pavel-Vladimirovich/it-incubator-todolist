@@ -84,11 +84,11 @@ export const Todolist = (props: PropsType) => {
           startIcon={<DeleteIcon />}
           onClick={removeTodolistHandler}
         >
-          DELETE
+          remove
         </Button>
       </div>
       <div className={style.todolist_input}>
-        <AddItemForm addItem={addTasksHandler} />
+        <AddItemForm addItem={addTasksHandler} textMessage="Note created successfully!"/>
       </div>
       <div className={style.todolist_filter}>
         <Grid container spacing={1}>
