@@ -3,8 +3,8 @@ import style from "./App.module.scss";
 import { v1 } from "uuid";
 import { TaskType, Todolist } from "./components/Todolist/Todolist";
 import AddItemForm from "./components/AddItemForm/AddItemForm";
-import { Grid, Paper } from "@material-ui/core";
-import MenuAppBar from "./components/MenuAppBar/MenuAppBar";
+import { Container, Grid, Paper } from "@material-ui/core";
+import HideAppBar from "./components/MenuAppBar/HideAppBar";
 
 export enum FilterValuesType {
   all = "all",
@@ -17,7 +17,7 @@ type TodolistType = {
   title: string;
   filter: FilterValuesType;
 };
-type TasksObjType = {
+export type TasksObjType = {
   [key: string]: Array<TaskType>;
 };
 
@@ -144,50 +144,55 @@ function App() {
     }
     setTasks({ ...tasksObj });
   }
-  
 
   return (
     <>
-      <Grid container spacing={3} >
-        <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }}>
-          <h1 className={style.header_title}></h1>
-          <AddItemForm addItem={addTodolist} textMessage="Todolist created successfully!"/>
+    <HideAppBar/>
+      <Container maxWidth="xl">
+        <Grid container spacing={3}>
+          <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }}>
+            <h1 className={style.header_title}></h1>
+            <AddItemForm
+              addItem={addTodolist}
+              textMessage="Todolist created successfully!"
+            />
+          </Grid>
+          {todolists.map((tl) => {
+            let tasksForTodolist = tasksObj[tl.id];
+            if (tl.filter === FilterValuesType.completed) {
+              tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
+            }
+            if (tl.filter === FilterValuesType.active) {
+              tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
+            }
+            return (
+              <Grid item xs={12} md={6}>
+                <Paper
+                  elevation={3}
+                  variant="outlined"
+                  style={{ padding: "10px" }}
+                >
+                  <Todolist
+                    id={tl.id}
+                    key={tl.id}
+                    title={tl.title}
+                    tasks={tasksForTodolist}
+                    addTask={addTask}
+                    changeTaskStatus={changeStatus}
+                    changeFilter={changeFilter}
+                    filter={tl.filter}
+                    changeTitleTask={changeTitleTask}
+                    removeTask={removeTask}
+                    changeTitleTodolist={changeTitleTodolist}
+                    removeTodolist={removeTodolist}
+                    toggleEditMode={toggleEditMode}
+                  />
+                </Paper>
+              </Grid>
+            );
+          })}
         </Grid>
-        {todolists.map((tl) => {
-          let tasksForTodolist = tasksObj[tl.id];
-          if (tl.filter === FilterValuesType.completed) {
-            tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
-          }
-          if (tl.filter === FilterValuesType.active) {
-            tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
-          }
-          return (
-            <Grid item xs={12} md={6}>
-              <Paper
-                elevation={3}
-                variant="outlined"
-                style={{ padding: "10px" }}
-              >
-                <Todolist
-                  id={tl.id}
-                  key={tl.id}
-                  title={tl.title}
-                  tasks={tasksForTodolist}
-                  addTask={addTask}
-                  changeTaskStatus={changeStatus}
-                  changeFilter={changeFilter}
-                  filter={tl.filter}
-                  changeTitleTask={changeTitleTask}
-                  removeTask={removeTask}
-                  changeTitleTodolist={changeTitleTodolist}
-                  removeTodolist={removeTodolist}
-                  toggleEditMode={toggleEditMode}
-                />
-              </Paper>
-            </Grid>
-          );
-        })}
-      </Grid>
+      </Container>
     </>
   );
 }
