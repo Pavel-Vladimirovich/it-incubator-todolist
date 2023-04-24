@@ -6,7 +6,7 @@ import AddItemForm from "./components/AddItemForm/AddItemForm";
 import { Container, Grid, Paper } from "@material-ui/core";
 import HideAppBar from "./components/MenuAppBar/HideAppBar";
 
-export enum FilterValuesType {
+enum FilterValuesType {
   all = "all",
   completed = "completed",
   active = "active",

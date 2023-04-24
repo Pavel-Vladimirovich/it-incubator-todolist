@@ -1,21 +1,15 @@
 import React, { ChangeEvent, useState } from "react";
 import style from "./Todolist.module.scss";
-import { FilterValuesType } from "../../App";
 import { v1 } from "uuid";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
 import AddItemForm from "../AddItemForm/AddItemForm";
-import {Button, Checkbox,
-  Grid,
-  IconButton,
-  Tooltip,
-  Fab, 
-} from "@material-ui/core";
+import {Button, Checkbox, Grid, IconButton, Tooltip} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
-import BackspaceIcon from "@material-ui/icons/Backspace";
 import EditIcon from "@material-ui/icons/Edit";
+import {FilterValuesType} from "../../state/todolist-reducer";
 
 export type TaskType = {
   id: string;
@@ -73,10 +67,10 @@ export const Todolist = (props: PropsType) => {
     <div className={style.todolist}>
       <div className={style.todolist_header}>
         <h3 className={style.header_title}>
-          {/*<EditableSpan*/}
-          {/*    title={props.title}*/}
-          {/*    onChangeTitle={changeTitleTodolistHandler}*/}
-          {/*/>*/}
+          <EditableSpan
+              title={props.title}
+              onChangeTitle={changeTitleTodolistHandler}
+          />
         </h3>
         <Button
           variant="contained"
@@ -190,8 +184,7 @@ export const Todolist = (props: PropsType) => {
                       color: "white",
                     }}
                     size="small"
-                    onClick={removeTaskHandler}
-                  >
+                    onClick={removeTaskHandler}>
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>

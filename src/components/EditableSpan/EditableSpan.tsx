@@ -12,6 +12,7 @@ type EditableSpanPropsType = {
     deactivateActivateEditMode: () => void;
 };
 export const EditableSpan = ({title, toggleEditMode, activateEditMode, deactivateActivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
+
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
     };
