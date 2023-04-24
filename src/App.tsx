@@ -76,6 +76,7 @@ function App() {
       { id: v1(), title: "Fish", isDone: false, editMode: false },
     ],
   });
+  console.log(tasksObj[todolistId1][0].title)
 
   function changeFilter(value: FilterValuesType, todolistId: string) {
     const todolist = todolists.find((tl) => tl.id === todolistId);
