@@ -17,7 +17,7 @@ type TodolistType = {
   title: string;
   filter: FilterValuesType;
 };
-export type TasksObjType = {
+export type TasksType = {
   [key: string]: Array<TaskType>;
 };
 
@@ -38,7 +38,7 @@ function App() {
     },
   ]);
 
-  let [tasksObj, setTasks] = useState<TasksObjType>({
+  let [tasks, setTasks] = useState<TasksType>({
     [todolistId1]: [
       {
         id: v1(),
@@ -76,7 +76,7 @@ function App() {
       { id: v1(), title: "Fish", isDone: false, editMode: false },
     ],
   });
-  console.log(tasksObj[todolistId1][0].title)
+  console.log(tasks[todolistId1][0].title)
 
   function changeFilter(value: FilterValuesType, todolistId: string) {
     const todolist = todolists.find((tl) => tl.id === todolistId);
@@ -95,28 +95,28 @@ function App() {
   }
 
   function changeTitleTask(title: string, taskId: string, todolistId: string) {
-    const task = tasksObj[todolistId].find((t) => t.id === taskId);
+    const task = tasks[todolistId].find((t) => t.id === taskId);
     if (task) task.title = title;
-    setTasks({ ...tasksObj });
+    setTasks({ ...tasks });
   }
 
   function removeTask(id: string, todolistId: string) {
-    tasksObj[todolistId] = tasksObj[todolistId].filter((t) => t.id !== id);
-    setTasks({ ...tasksObj });
+    tasks[todolistId] = tasks[todolistId].filter((t) => t.id !== id);
+    setTasks({ ...tasks });
   }
 
   function addTask(title: string, todolistId: string) {
     const task = { id: v1(), title: title, isDone: false, editMode: false };
-    tasksObj[todolistId] = [task, ...tasksObj[todolistId]];
-    setTasks({ ...tasksObj });
+    tasks[todolistId] = [task, ...tasks[todolistId]];
+    setTasks({ ...tasks });
   }
 
-  function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
-    const task = tasksObj[todolistId].find((t) => t.id === taskId);
+  function changeTaskStatus(taskId: string, isDone: boolean, todolistId: string) {
+    const task = tasks[todolistId].find((t) => t.id === taskId);
     if (task) {
       task.isDone = isDone;
     }
-    setTasks({ ...tasksObj });
+    setTasks({ ...tasks });
   }
 
   function addTodolist(title: string) {
@@ -126,12 +126,12 @@ function App() {
       filter: FilterValuesType.all,
     };
     setTodolists([...todolists, todolist]);
-    setTasks({ ...tasksObj, [todolist.id]: [] });
+    setTasks({ ...tasks, [todolist.id]: [] });
   }
 
   function removeTodolist(id: string) {
     todolists = todolists.filter((tl) => tl.id !== id);
-    delete tasksObj[id];
+    delete tasks[id];
     setTodolists([...todolists]);
   }
   function toggleEditMode(
@@ -139,11 +139,11 @@ function App() {
     editMode: boolean,
     todolistId: string
   ) {
-    const task = tasksObj[todolistId].find((t) => t.id === taskId);
+    const task = tasks[todolistId].find((t) => t.id === taskId);
     if (task) {
       task.editMode = editMode;
     }
-    setTasks({ ...tasksObj });
+    setTasks({ ...tasks });
   }
 
   return (
@@ -159,7 +159,7 @@ function App() {
             />
           </Grid>
           {todolists.map((tl) => {
-            let tasksForTodolist = tasksObj[tl.id];
+            let tasksForTodolist = tasks[tl.id];
             if (tl.filter === FilterValuesType.completed) {
               tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
             }
@@ -179,7 +179,7 @@ function App() {
                     title={tl.title}
                     tasks={tasksForTodolist}
                     addTask={addTask}
-                    changeTaskStatus={changeStatus}
+                    changeTaskStatus={changeTaskStatus}
                     changeFilter={changeFilter}
                     filter={tl.filter}
                     changeTitleTask={changeTitleTask}
