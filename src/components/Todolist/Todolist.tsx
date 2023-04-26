@@ -9,7 +9,7 @@ import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import EditIcon from "@material-ui/icons/Edit";
-import {FilterValuesType} from "../../state/todolist-reducer";
+import {FilterValuesType} from "../../state/todolists-reducer";
 
 export type TaskType = {
   id: string;

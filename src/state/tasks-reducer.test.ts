@@ -1,7 +1,13 @@
 import {v1} from "uuid";
-import {TasksType} from "../App";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
-import { AddTodolistAC } from "./todolist-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer,
+    TasksStateType
+} from "./tasks-reducer";
+import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
 
 test("correct task should be added", () => {
     const todolistId1 = v1();
@@ -12,7 +18,7 @@ test("correct task should be added", () => {
 
     const newTitleTask = 'Chocolate'
 
-    const startState: TasksType = {
+    const startState: TasksStateType = {
         [todolistId1]: [
             {id: taskId1, title: "Bread", isDone: false, editMode: false},
             {id: taskId2, title: "Milk", isDone: false, editMode: false},
@@ -39,7 +45,7 @@ test("correct task should be removed", () => {
     const taskId2 = v1();
     const taskId3 = v1();
 
-    const startState: TasksType = {
+    const startState: TasksStateType = {
         [todolistId1]: [
             {id: taskId1, title: "Bread", isDone: false, editMode: false},
             {id: taskId2, title: "Milk", isDone: false, editMode: false},
@@ -66,7 +72,7 @@ test("correct title task should be changed", () => {
 
     const newTaskTitle = 'Chocolate'
 
-    const startState: TasksType = {
+    const startState: TasksStateType = {
         [todolistId1]: [
             {id: taskId1, title: "Bread", isDone: false, editMode: false},
             {id: taskId2, title: "Milk", isDone: false, editMode: false},
@@ -91,7 +97,7 @@ test("correct task status should be changed", () => {
     const taskId2 = v1();
     const taskId3 = v1();
 
-    const startState: TasksType = {
+    const startState: TasksStateType = {
         [todolistId1]: [
             {id: taskId1, title: "Bread", isDone: false, editMode: false},
             {id: taskId2, title: "Milk", isDone: false, editMode: false},
@@ -118,7 +124,7 @@ test('new array should be added when new todolist is added', () => {
     const taskId2 = v1();
     const taskId3 = v1();
 
-    const startState: TasksType = {
+    const startState: TasksStateType = {
         [todolistId1]: [
             {id: taskId1, title: "Bread", isDone: false, editMode: false},
             {id: taskId2, title: "Milk", isDone: false, editMode: false},
@@ -130,12 +136,9 @@ test('new array should be added when new todolist is added', () => {
             {id: taskId3, title: "React", isDone: false, editMode: false}
         ]
     };
- 
-    const action = AddTodolistAC("new todolist");
- 
-    const endState = tasksReducer(startState, action)
- 
- 
+
+    const endState = tasksReducer(startState, addTodolistAC("new todolist"))
+
     const keys = Object.keys(endState);
     const newKey = keys.find(k => k != todolistId1 && k != todolistId2);
     if (!newKey) {
@@ -145,4 +148,34 @@ test('new array should be added when new todolist is added', () => {
     expect(keys.length).toBe(3);
     expect(endState[newKey]).toEqual([]);
  });
- 
+
+test('property with todolistId should be deleted', () => {
+    const todolistId1 = v1();
+    const todolistId2 = v1();
+    const taskId1 = v1();
+    const taskId2 = v1();
+    const taskId3 = v1();
+
+    const startState: TasksStateType = {
+        [todolistId1]: [
+            {id: taskId1, title: "Bread", isDone: false, editMode: false},
+            {id: taskId2, title: "Milk", isDone: false, editMode: false},
+            {id: taskId3, title: "Chocolate", isDone: false, editMode: false},
+        ],
+        [todolistId2]: [
+            {id: taskId1, title: "CSS", isDone: false, editMode: false},
+            {id: taskId2, title: "JS", isDone: true, editMode: false},
+            {id: taskId3, title: "React", isDone: false, editMode: false}
+        ]
+    };
+
+
+    const endState = tasksReducer(startState, removeTodolistAC(todolistId2))
+
+
+    const keys = Object.keys(endState);
+
+    expect(keys.length).toBe(1);
+    expect(endState[todolistId2]).not.toBeDefined();
+});
+
