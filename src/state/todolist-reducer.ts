@@ -15,7 +15,7 @@ export type TodolistType = {
 type StateType = Array<TodolistType>
 
 type RemoveTodolistActionType = ReturnType<typeof RemoveTodolistAC>
-type AddTodolistActionType = ReturnType<typeof AddTodolistAC>
+export type AddTodolistActionType = ReturnType<typeof AddTodolistAC>
 type ChangeTodolistTitleActionType = ReturnType<typeof ChangeTodolistTitleAC>
 type ChangeTodolistFilterActionType = ReturnType<typeof ChangeTodolistFilterAC>
 

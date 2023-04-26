@@ -1,4 +1,5 @@
 import {v1} from "uuid";
+import { AddTodolistActionType } from "./todolist-reducer";
 
 type TaskType = {
     id: string;
@@ -21,10 +22,19 @@ type StateType = TasksObjType;
 type ActionType = ChangeTaskTitleActionType
     | RemoveTaskActionType
     | AddTaskActionType
-    | ChangeTaskStatusACActionType;
+    | ChangeTaskStatusACActionType
+    | AddTodolistActionType
 
 export const tasksReducer = (state: StateType, action: ActionType): StateType => {
     switch (action.type) {
+        case "ADD-TODOLIST":{
+            return { 
+                ...state,
+                [v1()]: []
+            }
+            
+            //return [...state, {id: v1(), title: action.title, filter: FilterValuesType.all,}]
+        }
         case "ADD-TASK": {
             const task = {id: v1(), title: action.title, isDone: false, editMode: false};
             return {

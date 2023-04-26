@@ -1,6 +1,7 @@
 import {v1} from "uuid";
 import {TasksType} from "../App";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
+import { AddTodolistAC } from "./todolist-reducer";
 
 test("correct task should be added", () => {
     const todolistId1 = v1();
@@ -108,3 +109,40 @@ test("correct task status should be changed", () => {
     expect(endState[todolistId1][0].isDone).toBeTruthy();
     expect(startState[todolistId1][0].isDone).toBeFalsy();
 });
+
+test('new array should be added when new todolist is added', () => {
+
+    const todolistId1 = v1();
+    const todolistId2 = v1();
+    const taskId1 = v1();
+    const taskId2 = v1();
+    const taskId3 = v1();
+
+    const startState: TasksType = {
+        [todolistId1]: [
+            {id: taskId1, title: "Bread", isDone: false, editMode: false},
+            {id: taskId2, title: "Milk", isDone: false, editMode: false},
+            {id: taskId3, title: "Chocolate", isDone: false, editMode: false},
+        ],
+        [todolistId2]: [
+            {id: taskId1, title: "CSS", isDone: false, editMode: false},
+            {id: taskId2, title: "JS", isDone: true, editMode: false},
+            {id: taskId3, title: "React", isDone: false, editMode: false}
+        ]
+    };
+ 
+    const action = AddTodolistAC("new todolist");
+ 
+    const endState = tasksReducer(startState, action)
+ 
+ 
+    const keys = Object.keys(endState);
+    const newKey = keys.find(k => k != todolistId1 && k != todolistId2);
+    if (!newKey) {
+        throw Error("new key should be added")
+    }
+ 
+    expect(keys.length).toBe(3);
+    expect(endState[newKey]).toEqual([]);
+ });
+ 
