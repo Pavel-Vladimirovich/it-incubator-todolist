@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import App_useReducer from "./App_useReducer";
 
-ReactDOM.render(<App/>,document.getElementById("root"));
+ReactDOM.render(<App_useReducer/>,document.getElementById("root"));
 serviceWorker.unregister();
