@@ -78,7 +78,7 @@ function App() {
   });
   console.log(tasks[todolistId1][0].title)
 
-  function changeFilter(value: FilterValuesType, todolistId: string) {
+  function changeFilter(todolistId: string, value: FilterValuesType) {
     const todolist = todolists.find((tl) => tl.id === todolistId);
     if (todolist) {
       todolist.filter = value;
@@ -111,7 +111,7 @@ function App() {
     setTasks({ ...tasks });
   }
 
-  function changeTaskStatus(taskId: string, isDone: boolean, todolistId: string) {
+  function changeTaskStatus(todolistId: string, taskId: string, isDone: boolean) {
     const task = tasks[todolistId].find((t) => t.id === taskId);
     if (task) {
       task.isDone = isDone;

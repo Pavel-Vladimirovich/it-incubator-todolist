@@ -22,12 +22,12 @@ type PropsType = {
   id: string;
   title: string;
   tasks: Array<TaskType>;
-  addTask: (title: string, todolistId: string) => void;
-  changeFilter: (value: FilterValuesType, todolistId: string) => void;
+  addTask: (todolistId: string, title: string) => void;
+  changeFilter: (todolistId: string, filterValue: FilterValuesType) => void;
   changeTaskStatus: (
+    todolistId: string,
     taskId: string,
-    isDone: boolean,
-    todolistId: string
+    isDone: boolean
   ) => void;
   filter: FilterValuesType;
   removeTask: (id: string, todolistId: string) => void;
@@ -43,7 +43,7 @@ type PropsType = {
 
 export const Todolist = (props: PropsType) => {
   const addTasksHandler = (title: string) => {
-    props.addTask(title.trim(), props.id);
+    props.addTask(props.id, title.trim());
   };
   const changeTitleTodolistHandler = (title: string) => {
     props.changeTitleTodolist(title, props.id);
@@ -52,13 +52,13 @@ export const Todolist = (props: PropsType) => {
     props.removeTodolist(props.id);
   };
   const onAllClickHandler = () => {
-    props.changeFilter(FilterValuesType.all, props.id);
+    props.changeFilter(props.id, FilterValuesType.all);
   };
   const onActiveClickHandler = () => {
-    props.changeFilter(FilterValuesType.active, props.id);
+    props.changeFilter(props.id, FilterValuesType.active);
   };
   const onCompletedClickHandler = () => {
-    props.changeFilter(FilterValuesType.completed, props.id);
+    props.changeFilter(props.id, FilterValuesType.completed);
   };
 
   const [newTitle, setNewTitle] = useState("");
@@ -67,10 +67,10 @@ export const Todolist = (props: PropsType) => {
     <div className={style.todolist}>
       <div className={style.todolist_header}>
         <h3 className={style.header_title}>
-          <EditableSpan
-              title={props.title}
-              onChangeTitle={changeTitleTodolistHandler}
-          />
+          {/*<EditableSpan*/}
+          {/*    title={props.title}*/}
+          {/*    onChangeTitle={changeTitleTodolistHandler}*/}
+          {/*/>*/}
         </h3>
         <Button
           variant="contained"
@@ -136,7 +136,7 @@ export const Todolist = (props: PropsType) => {
           };
           const removeTaskHandler = () => props.removeTask(t.id, props.id);
           const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-            props.changeTaskStatus(t.id, event.currentTarget.checked, props.id);
+            props.changeTaskStatus(props.id, t.id, event.currentTarget.checked);
           };
           const keyForLabel = v1();
           return (
