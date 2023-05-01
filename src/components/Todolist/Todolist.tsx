@@ -30,14 +30,14 @@ type PropsType = {
     isDone: boolean
   ) => void;
   filter: FilterValuesType;
-  removeTask: (id: string, todolistId: string) => void;
+  removeTask: (todolistId: string, id: string) => void;
   removeTodolist: (id: string) => void;
-  changeTitleTask: (title: string, id: string, todolistId: string) => void;
+  changeTitleTask: (todolistId: string, id: string, title: string) => void;
   changeTitleTodolist: (title: string, todolistId: string) => void;
   toggleEditMode: (
+    todolistId: string,
     taskId: string,
-    editMode: boolean,
-    todolistId: string
+    editMode: boolean
   ) => void;
 };
 
@@ -67,6 +67,7 @@ export const Todolist = (props: PropsType) => {
     <div className={style.todolist}>
       <div className={style.todolist_header}>
         <h3 className={style.header_title}>
+          {props.title}
           {/*<EditableSpan*/}
           {/*    title={props.title}*/}
           {/*    onChangeTitle={changeTitleTodolistHandler}*/}
@@ -82,7 +83,11 @@ export const Todolist = (props: PropsType) => {
         </Button>
       </div>
       <div className={style.todolist_input}>
-        <AddItemForm addItem={addTasksHandler} textMessage="Note created successfully!"/>
+        <AddItemForm
+            addItem={addTasksHandler}
+            textMessage="Task created successfully!"
+            labelMessage="Add a new task..."
+        />
       </div>
       <div className={style.todolist_filter}>
         <Grid container spacing={1}>
@@ -127,14 +132,14 @@ export const Todolist = (props: PropsType) => {
       <ul className={style.todolist_tasks}>
         {props.tasks.map((t) => {
           const activateEditMode = () => {
-            props.toggleEditMode(t.id, true, props.id);
+            props.toggleEditMode(props.id, t.id, true);
             setNewTitle(t.title);
           };
           const deactivateActivateEditMode = () => {
-            props.toggleEditMode(t.id, false, props.id);
-            props.changeTitleTask(newTitle, t.id, props.id);
+            props.toggleEditMode(props.id, t.id, false);
+            props.changeTitleTask(props.id, t.id, newTitle);
           };
-          const removeTaskHandler = () => props.removeTask(t.id, props.id);
+          const removeTaskHandler = () => props.removeTask(props.id, t.id);
           const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
             props.changeTaskStatus(props.id, t.id, event.currentTarget.checked);
           };
@@ -166,10 +171,10 @@ export const Todolist = (props: PropsType) => {
               <div className={style.item_btn_container}>
                 <Tooltip title="Edit">
                   <IconButton
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color: "white",
-                    }}
+                    // style={{
+                    //   backgroundColor: "#3f51b5",
+                    //   color: "white",
+                    // }}
                     onClick={activateEditMode}
                     color="primary"
                     size="small"
@@ -179,12 +184,13 @@ export const Todolist = (props: PropsType) => {
                 </Tooltip>
                 <Tooltip title="Delete">
                   <IconButton
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color: "white",
-                    }}
-                    size="small"
-                    onClick={removeTaskHandler}>
+                    // style={{
+                    //   backgroundColor: "#3f51b5",
+                    //   color: "white",
+                    // }}
+                    onClick={removeTaskHandler}
+                    color="secondary"
+                    size="small">
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>

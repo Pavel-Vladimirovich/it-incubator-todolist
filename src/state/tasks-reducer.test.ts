@@ -5,7 +5,7 @@ import {
     changeTaskTitleAC,
     removeTaskAC,
     tasksReducer,
-    TasksStateType
+    TasksStateType, toggleTaskEditModeAC
 } from "./tasks-reducer";
 import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
 
@@ -114,6 +114,32 @@ test("correct task status should be changed", () => {
     expect(endState[todolistId2].length).toBe(3);
     expect(endState[todolistId1][0].isDone).toBeTruthy();
     expect(startState[todolistId1][0].isDone).toBeFalsy();
+});
+
+test("correct task toggleEditMode should be changed", () => {
+    const todolistId1 = v1();
+    const todolistId2 = v1();
+    const taskId1 = v1();
+    const taskId2 = v1();
+    const taskId3 = v1();
+
+    const startState: TasksStateType = {
+        [todolistId1]: [
+            {id: taskId1, title: "Bread", isDone: false, editMode: false},
+            {id: taskId2, title: "Milk", isDone: false, editMode: false},
+            {id: taskId3, title: "Chocolate", isDone: false, editMode: false},
+        ],
+        [todolistId2]: [
+            {id: taskId1, title: "CSS", isDone: false, editMode: false},
+            {id: taskId2, title: "JS", isDone: true, editMode: false},
+            {id: taskId3, title: "React", isDone: false, editMode: false}
+        ]
+    };
+    const endState = tasksReducer(startState, toggleTaskEditModeAC(todolistId1, taskId1, true));
+    expect(endState[todolistId1].length).toBe(3);
+    expect(endState[todolistId2].length).toBe(3);
+    expect(endState[todolistId1][0].editMode).toBeTruthy();
+    expect(startState[todolistId1][0].editMode).toBeFalsy();
 });
 
 test('new array should be added when new todolist is added', () => {

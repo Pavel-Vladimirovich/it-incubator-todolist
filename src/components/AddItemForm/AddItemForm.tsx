@@ -14,6 +14,7 @@ const CURRENT_TARGET_VALUE = "CURRENT_TARGET_VALUE";
 type AddItemFormPropsType = {
     addItem: (title: string) => void;
     textMessage: string
+    labelMessage: string
 };
 
 type ActionType = {
@@ -72,7 +73,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 };
 
 
-const AddItemForm = ({addItem, textMessage}: AddItemFormPropsType) => {
+const AddItemForm = ({addItem, textMessage, labelMessage}: AddItemFormPropsType) => {
 
     const [state, dispatch] = useReducer(reducer, {error: false, errorMessage: "", title: ""});
     const [open, setOpen] = useState(false);
@@ -130,7 +131,7 @@ const AddItemForm = ({addItem, textMessage}: AddItemFormPropsType) => {
                         id="standard-multiline-flexible"
                         multiline
                         maxRows={4}
-                        label={state.errorMessage ? state.errorMessage : "Add a new to-do list..."}
+                        label={state.errorMessage ? state.errorMessage : labelMessage}
                         value={state.title}
                         onChange={onChangeHandler}
                         onKeyDown={onKeyPressHandler}

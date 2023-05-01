@@ -11,22 +11,20 @@ import {
     changeTodolistTitleAC, removeTodolistAC,
     todolistsReducer
 } from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer,
+    toggleTaskEditModeAC
+} from "./state/tasks-reducer";
 
 enum FilterValuesType {
     all = "all",
     completed = "completed",
     active = "active",
 }
-
-type TodolistType = {
-    id: string;
-    title: string;
-    filter: FilterValuesType;
-};
-type TasksType = {
-    [key: string]: Array<TaskType>;
-};
 
 function App() {
     const todolistId1 = v1();
@@ -85,8 +83,9 @@ function App() {
     });
 
     function addTodolist(title: string) {
-        dispatchTodolist(addTodolistAC(title))
-        dispatchTasks(addTodolistAC(title))
+        const action = addTodolistAC(title)
+        dispatchTodolist(action)
+        dispatchTasks(action)
     }
 
     function removeTodolist(id: string) {
@@ -117,13 +116,8 @@ function App() {
         dispatchTasks(changeTaskStatusAC(todolistId, taskId, isDone))
     }
 
-
-    function toggleEditMode(taskId: string, editMode: boolean, todolistId: string) {
-        const task = tasks[todolistId].find((t) => t.id === taskId);
-        if (task) {
-            task.editMode = editMode;
-        }
-        //setTasks({ ...tasks });
+    function toggleEditMode(todolistId: string, taskId: string, editMode: boolean) {
+        dispatchTasks(toggleTaskEditModeAC(todolistId, taskId, editMode))
     }
 
     return (
@@ -132,10 +126,11 @@ function App() {
             <Container maxWidth="xl">
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={{ textAlign: "center", marginTop: "20px" }}>
-                        <h1 className={style.header_title}></h1>
+                        <h1 className={style.header_title}>my todolists</h1>
                         <AddItemForm
                             addItem={addTodolist}
                             textMessage="Todolist created successfully!"
+                            labelMessage="Add a new to-do list..."
                         />
                     </Grid>
                     {todolists.map((tl) => {
