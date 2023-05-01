@@ -15,14 +15,16 @@ export type TasksStateType = {
 type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 type AddTaskActionType = ReturnType<typeof addTaskAC>
-type ChangeTaskStatusACActionType = ReturnType<typeof changeTaskStatusAC>
+type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
+type ToggleTaskEditModeActionType = ReturnType<typeof toggleTaskEditModeAC>
 
 type ActionType = ChangeTaskTitleActionType
     | RemoveTaskActionType
     | AddTaskActionType
-    | ChangeTaskStatusACActionType
+    | ChangeTaskStatusActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
+    | ToggleTaskEditModeActionType
 
 export const tasksReducer = (state: TasksStateType, action: ActionType): TasksStateType => {
     switch (action.type) {
@@ -58,6 +60,17 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                 [action.todolistId]: updatedTasks,
             };
         }
+        case "TOGGLE-TASK-EDIT-MODE":{
+            const todolistTasks = state[action.todolistId];
+            const updatedTasks = todolistTasks.map((task) =>
+                task.id === action.taskId ? {...task, editMode: action.editMode} : task
+            );
+            return {
+                ...state,
+                [action.todolistId]: updatedTasks,
+            };
+        }
+
         case "ADD-TODOLIST":{
             return {
                 ...state,
@@ -69,8 +82,9 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
             delete stateCopy[action.todolistId]
             return stateCopy
         }
+
         default:
-            throw new Error("I don't understand this type")
+            return {...state}
     }
 };
 
@@ -99,3 +113,11 @@ export const changeTaskTitleAC = (todolistId: string, taskId: string, title: str
     taskId: taskId,
     title: title
 } as const)
+
+export const toggleTaskEditModeAC = (todolistId: string, taskId: string, editMode: boolean) => ({
+    type: "TOGGLE-TASK-EDIT-MODE",
+    todolistId,
+    taskId,
+    editMode
+} as const)
+
