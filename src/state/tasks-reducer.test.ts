@@ -7,7 +7,7 @@ import {
     tasksReducer,
     TasksStateType, toggleTaskEditModeAC
 } from "./tasks-reducer";
-import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
+import {addTodolistAC, removeTodolistAC} from "./todolist-reducer";
 
 test("correct task should be added", () => {
     const todolistId1 = v1();
