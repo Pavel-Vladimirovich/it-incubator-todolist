@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, {ChangeEvent, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss";
 import { v1 } from "uuid";
@@ -29,7 +29,9 @@ type TodolistPropsType = {
   removeTodolist: (todolistId: string) => void
 };
 
-export const Todolist = (props: TodolistPropsType) => {
+
+export const Todolist = React.memo((props: TodolistPropsType) => {
+    console.log('render todolist')
   const tasks = useSelector<AppStateType, Array<TaskType>>((state => state.tasks[props.id]));
   const dispatch = useDispatch();
   const [newTitle, setNewTitle] = useState("");
@@ -176,4 +178,4 @@ export const Todolist = (props: TodolistPropsType) => {
       </ul>
     </div>
   );
-};
+});

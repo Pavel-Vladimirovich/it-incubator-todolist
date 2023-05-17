@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./App.module.scss";
 import {Todolist} from "./components/Todolist/Todolist";
@@ -22,12 +22,15 @@ function App() {
     function addTodolist(title: string) {
         dispatch(addTodolistAC(title))
     }
+
     function removeTodolist(todolistId: string) {
         dispatch(removeTodolistAC(todolistId))
     }
-    function changeTodolistFilter(todolistId: string, filterValue: FilterValuesType) {
-        dispatch(changeTodolistFilterAC(todolistId, filterValue))
-    }
+
+    const changeTodolistFilter = useCallback(
+        (todolistId: string, filterValue: FilterValuesType) => {
+            dispatch(changeTodolistFilterAC(todolistId, filterValue))
+        }, [])
 
     return (
         <>
