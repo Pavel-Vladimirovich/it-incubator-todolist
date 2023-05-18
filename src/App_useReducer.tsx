@@ -2,31 +2,26 @@ import React, {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./App.module.scss";
 import {Todolist} from "./components/Todolist/Todolist";
-//import AddItemForm from "./components/AddItemForm/AddItemForm";
+import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import {Container, Grid, Paper} from "@material-ui/core";
 import HideAppBar from "./components/MenuAppBar/HideAppBar";
-import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    FilterValuesType,
-    removeTodolistAC,
-    TodolistType
-} from "./state/todolist-reducer";
+import {addTodolistAC, changeTodolistFilterAC, FilterValuesType, removeTodolistAC, TodolistType} from "./state/todolist-reducer";
 import {AppStateType} from "./state/store";
-import { AddItemForm } from "./components/AddItemForm/AddItemForm";
+
 
 function App() {
-    console.log("APP")
+    console.log("render app")
     const dispatch = useDispatch()
     const todolists = useSelector<AppStateType, Array<TodolistType>>((state => state.todolists));
 
-    function addTodolist(title: string) {
+    const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }
+    }, [])
 
-    function removeTodolist(todolistId: string) {
+    const removeTodolist = useCallback(
+        (todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
-    }
+    }, [])
 
     const changeTodolistFilter = useCallback(
         (todolistId: string, filterValue: FilterValuesType) => {

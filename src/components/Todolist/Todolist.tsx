@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useCallback, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss";
 import { v1 } from "uuid";
@@ -42,9 +42,10 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
   const changeTitleTodolistHandler = (title: string) => {
     dispatch(changeTodolistTitleAC(props.id, title))
   };
-  const addTasksHandler = (title: string) => {
+  const addTasksHandler = useCallback( (title: string) => {
     dispatch(addTaskAC(props.id, title.trim()))
-  };
+  },[props.id]);
+
   const onAllClickHandler = () => props.changeFilter(props.id, FilterValuesType.all);
   const onActiveClickHandler = () => props.changeFilter(props.id, FilterValuesType.active);
   const onCompletedClickHandler = () => props.changeFilter(props.id, FilterValuesType.completed);
@@ -84,6 +85,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
           <Grid item xs={12} sm={4}>
             <Button
               style={{ width: "100%" }}
+              color={props.filter === FilterValuesType.all ? "primary" : "default"}
               startIcon={<ReceiptIcon />}
               variant="contained"
               onClick={onAllClickHandler}>

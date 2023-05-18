@@ -74,7 +74,7 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 
 
 export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: AddItemFormPropsType) => {
-    console.log('add item form')
+    console.log('render item form')
     const [state, dispatch] = useReducer(reducer, {error: false, errorMessage: "", title: ""});
     const [open, setOpen] = useState(false);
 
