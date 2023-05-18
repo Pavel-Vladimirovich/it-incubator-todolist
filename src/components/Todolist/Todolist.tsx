@@ -6,7 +6,7 @@ import {changeTodolistTitleAC, FilterValuesType, removeTodolistAC} from "../../s
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, toggleTaskEditModeAC} from "../../state/tasks-reducer";
 import {AppStateType} from "../../state/store";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
-import AddItemForm from "../AddItemForm/AddItemForm";
+import { AddItemForm } from "../AddItemForm/AddItemForm";
 import {Button, Checkbox, Grid, IconButton, Tooltip} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";

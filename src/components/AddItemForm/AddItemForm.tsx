@@ -73,8 +73,8 @@ const reducer = (state: StateType, action: ActionType): StateType => {
 };
 
 
-const AddItemForm = ({addItem, textMessage, labelMessage}: AddItemFormPropsType) => {
-
+export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: AddItemFormPropsType) => {
+    console.log('add item form')
     const [state, dispatch] = useReducer(reducer, {error: false, errorMessage: "", title: ""});
     const [open, setOpen] = useState(false);
 
@@ -156,6 +156,5 @@ const AddItemForm = ({addItem, textMessage, labelMessage}: AddItemFormPropsType)
             </Snackbar>
         </form>
     );
-};
+})
 
-export default React.memo(AddItemForm);

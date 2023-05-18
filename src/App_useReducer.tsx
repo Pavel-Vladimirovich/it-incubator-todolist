@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./App.module.scss";
 import {Todolist} from "./components/Todolist/Todolist";
-import AddItemForm from "./components/AddItemForm/AddItemForm";
+//import AddItemForm from "./components/AddItemForm/AddItemForm";
 import {Container, Grid, Paper} from "@material-ui/core";
 import HideAppBar from "./components/MenuAppBar/HideAppBar";
 import {
@@ -13,9 +13,10 @@ import {
     TodolistType
 } from "./state/todolist-reducer";
 import {AppStateType} from "./state/store";
+import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 
 function App() {
-
+    console.log("APP")
     const dispatch = useDispatch()
     const todolists = useSelector<AppStateType, Array<TodolistType>>((state => state.todolists));
 

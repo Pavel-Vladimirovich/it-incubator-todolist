@@ -6,7 +6,7 @@ type propsInputType={
 }
 
 
-export const Input = (props: propsInputType) => {
+const Input = (props: propsInputType) => {
 
 	const onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>)=>{
 		props.setTitle(event.currentTarget.value);
