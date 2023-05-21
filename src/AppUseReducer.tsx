@@ -16,17 +16,17 @@ function App() {
 
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }, [])
+    }, [dispatch])
 
     const removeTodolist = useCallback(
         (todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
-    }, [])
+    }, [dispatch])
 
     const changeTodolistFilter = useCallback(
         (todolistId: string, filterValue: FilterValuesType) => {
             dispatch(changeTodolistFilterAC(todolistId, filterValue))
-        }, [])
+        }, [dispatch])
 
     return (
         <>

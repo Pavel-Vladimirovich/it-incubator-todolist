@@ -2,7 +2,7 @@ import React, {ChangeEvent, useCallback, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss";
 import { v1 } from "uuid";
-import {changeTodolistTitleAC, FilterValuesType, removeTodolistAC} from "../../state/todolist-reducer";
+import { FilterValuesType} from "../../state/todolist-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, toggleTaskEditModeAC} from "../../state/tasks-reducer";
 import {AppStateType} from "../../state/store";
 import { EditableSpan } from "../EditableSpan/EditableSpan";
@@ -29,7 +29,6 @@ type TodolistPropsType = {
   removeTodolist: (todolistId: string) => void
 };
 
-
 export const Todolist = React.memo((props: TodolistPropsType) => {
     console.log('render todolist')
   const tasks = useSelector<AppStateType, Array<TaskType>>((state => state.tasks[props.id]));
@@ -39,16 +38,16 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
   const removeTodolistHandler = () => {
     props.removeTodolist(props.id)
   };
-  const changeTitleTodolistHandler = (title: string) => {
-    dispatch(changeTodolistTitleAC(props.id, title))
-  };
+  // const changeTitleTodolistHandler = (title: string) => {
+  //   dispatch(changeTodolistTitleAC(props.id, title))
+  // };
   const addTasksHandler = useCallback( (title: string) => {
     dispatch(addTaskAC(props.id, title.trim()))
-  },[props.id]);
+  },[dispatch,props.id]);
 
-  const onAllClickHandler = () => props.changeFilter(props.id, FilterValuesType.all);
-  const onActiveClickHandler = () => props.changeFilter(props.id, FilterValuesType.active);
-  const onCompletedClickHandler = () => props.changeFilter(props.id, FilterValuesType.completed);
+  const onAllClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.all),[props.changeFilter]);// почему-то ругается на зависимости
+  const onActiveClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.active),[props.changeFilter]);
+  const onCompletedClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.completed),[props.changeFilter]);
 
   let tasksForTodolist = tasks;
   if (props.filter === FilterValuesType.completed) {
@@ -67,12 +66,10 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
         </h3>
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           startIcon={<DeleteIcon />}
           onClick={removeTodolistHandler}
-        >
-          remove
-        </Button>
+        >remove</Button>
       </div>
       <div className={style.todolist_input}>
         <AddItemForm
@@ -122,13 +119,13 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
             setNewTitle(t.title);
           };
 
-          const deactivateActivateEditMode = () => {
+          const deactivateEditMode = () => {
             dispatch(toggleTaskEditModeAC(props.id, t.id, false))
             dispatch(changeTaskTitleAC(props.id, t.id, newTitle))
           };
 
-          const removeTaskHandler = () => dispatch(removeTaskAC(props.id, t.id));
-          const onChangeTaskStatusHandler = (event: ChangeEvent<HTMLInputElement>) => {
+          const removeTask = () => dispatch(removeTaskAC(props.id, t.id));
+          const onChangeTaskStatus = (event: ChangeEvent<HTMLInputElement>) => {
             dispatch(changeTaskStatusAC(props.id, t.id, event.currentTarget.checked))
           };
 
@@ -141,7 +138,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                   size="medium"
                   id={keyForLabel}
                   checked={t.isDone}
-                  onChange={onChangeTaskStatusHandler}
+                  onChange={onChangeTaskStatus}
                 />
               </Tooltip>
               <label
@@ -153,7 +150,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                   setNewTitle={setNewTitle}
                   toggleEditMode={t.editMode}
                   activateEditMode={activateEditMode}
-                  deactivateActivateEditMode={deactivateActivateEditMode}
+                  deactivateActivateEditMode={deactivateEditMode}
                 />
               </label>
               <div className={style.item_btn_container}>
@@ -167,7 +164,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                 </Tooltip>
                 <Tooltip title="Delete">
                   <IconButton
-                    onClick={removeTaskHandler}
+                    onClick={removeTask}
                     color="secondary"
                     size="small">
                     <DeleteIcon />
