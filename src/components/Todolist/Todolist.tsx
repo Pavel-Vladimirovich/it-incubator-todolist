@@ -13,6 +13,7 @@ import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import EditIcon from "@material-ui/icons/Edit";
+import {Task} from "../Task/Task";
 
 export type TaskType = {
   id: string;
@@ -112,66 +113,36 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
         </Grid>
       </div>
       <ul className={style.todolist_tasks}>
-        {tasksForTodolist.map((t) => {
+        {tasksForTodolist.map((task) => {
 
           const activateEditMode = () => {
-            dispatch(toggleTaskEditModeAC(props.id, t.id, true))
-            setNewTitle(t.title);
+            dispatch(toggleTaskEditModeAC(props.id, task.id, true))
+            setNewTitle(task.title);
           };
 
           const deactivateEditMode = () => {
-            dispatch(toggleTaskEditModeAC(props.id, t.id, false))
-            dispatch(changeTaskTitleAC(props.id, t.id, newTitle))
+            dispatch(toggleTaskEditModeAC(props.id, task.id, false))
+            dispatch(changeTaskTitleAC(props.id, task.id, newTitle))
           };
+          const removeTask = () => dispatch(removeTaskAC(props.id, task.id));
 
-          const removeTask = () => dispatch(removeTaskAC(props.id, t.id));
-          const onChangeTaskStatus = (event: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeTaskStatusAC(props.id, t.id, event.currentTarget.checked))
+          const onChangeTaskStatus = (status: boolean) => {
+            dispatch(changeTaskStatusAC(props.id, task.id, status))
           };
 
           const keyForLabel = v1();
           return (
-            <li key={t.id} className={`${style.task_item}`}>
-              <Tooltip title="completed">
-                <Checkbox
-                  color="primary"
-                  size="medium"
-                  id={keyForLabel}
-                  checked={t.isDone}
-                  onChange={onChangeTaskStatus}
-                />
-              </Tooltip>
-              <label
-                htmlFor={keyForLabel}
-                className={`${t.isDone ? style.task_isDone : ""} `}>
-                <EditableSpan
-                  title={t.title}
+              <Task
+                  key={task.id}
+                  task={task}
+                  keyForLabel={keyForLabel}
+                  removeTask={removeTask}
                   newTitle={newTitle}
                   setNewTitle={setNewTitle}
-                  toggleEditMode={t.editMode}
                   activateEditMode={activateEditMode}
-                  deactivateActivateEditMode={deactivateEditMode}
-                />
-              </label>
-              <div className={style.item_btn_container}>
-                <Tooltip title="Edit">
-                  <IconButton
-                    onClick={activateEditMode}
-                    color="primary"
-                    size="small">
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Delete">
-                  <IconButton
-                    onClick={removeTask}
-                    color="secondary"
-                    size="small">
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            </li>
+                  deactivateEditMode={deactivateEditMode}
+                  onChangeTaskStatus={onChangeTaskStatus}
+              />
           );
         })}
       </ul>
