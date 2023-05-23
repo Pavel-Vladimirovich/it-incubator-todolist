@@ -1,10 +1,12 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useCallback} from "react";
 import style from "../Todolist/Todolist.module.scss";
 import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {TaskType} from "../Todolist/Todolist";
+import {removeTaskAC} from "../../state/tasks-reducer";
+import {useDispatch} from "react-redux";
 
 type PropsTaskType = {
     keyForLabel: string
@@ -13,11 +15,14 @@ type PropsTaskType = {
     setNewTitle: (value: string)=> void
     activateEditMode: ()=> void
     deactivateEditMode: ()=> void
-    removeTask: ()=> void
     task: TaskType
+    todolistId: string
 }
 
-export const Task = React.memo(({task, keyForLabel, onChangeTaskStatus, newTitle, setNewTitle, removeTask, activateEditMode, deactivateEditMode}: PropsTaskType) => {
+export const Task = React.memo(({task, todolistId, keyForLabel, onChangeTaskStatus, newTitle, setNewTitle, activateEditMode, deactivateEditMode}: PropsTaskType) => {
+    console.log('render task')
+    const dispatch = useDispatch()
+    const removeTask = useCallback(() => dispatch(removeTaskAC(todolistId, task.id)), [])
     const onChangeTaskStatusHandler = (event: ChangeEvent<HTMLInputElement>) =>{
         onChangeTaskStatus(event.currentTarget.checked)
     }

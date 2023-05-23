@@ -1,18 +1,22 @@
-import React, {ChangeEvent, useCallback, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss";
 import { v1 } from "uuid";
 import { FilterValuesType} from "../../state/todolist-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, toggleTaskEditModeAC} from "../../state/tasks-reducer";
+import {
+  addTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
+  toggleTaskEditModeAC
+} from "../../state/tasks-reducer";
 import {AppStateType} from "../../state/store";
-import { EditableSpan } from "../EditableSpan/EditableSpan";
 import { AddItemForm } from "../AddItemForm/AddItemForm";
-import {Button, Checkbox, Grid, IconButton, Tooltip} from "@material-ui/core";
+import {Button, Grid} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
-import EditIcon from "@material-ui/icons/Edit";
 import {Task} from "../Task/Task";
 
 export type TaskType = {
@@ -113,7 +117,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
         </Grid>
       </div>
       <ul className={style.todolist_tasks}>
-        {tasksForTodolist.map((task) => {
+        {tasksForTodolist.map((task: TaskType) => {
 
           const activateEditMode = () => {
             dispatch(toggleTaskEditModeAC(props.id, task.id, true))
@@ -135,8 +139,8 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
               <Task
                   key={task.id}
                   task={task}
+                  todolistId={props.id}
                   keyForLabel={keyForLabel}
-                  removeTask={removeTask}
                   newTitle={newTitle}
                   setNewTitle={setNewTitle}
                   activateEditMode={activateEditMode}
