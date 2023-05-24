@@ -43,7 +43,7 @@ function App() {
                     </Grid>
                     {todolists.map((tl) => {
                         return (
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={6} key={tl.id}>
                                 <Paper
                                     elevation={3}
                                     variant="outlined"

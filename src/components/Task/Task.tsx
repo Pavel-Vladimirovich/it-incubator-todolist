@@ -5,26 +5,36 @@ import {EditableSpan} from "../EditableSpan/EditableSpan";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {TaskType} from "../Todolist/Todolist";
-import {changeTaskStatusAC, removeTaskAC} from "../../state/tasks-reducer";
+import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, toggleTaskEditModeAC} from "../../state/tasks-reducer";
 import {useDispatch} from "react-redux";
 
 type PropsTaskType = {
     keyForLabel: string
     newTitle: string
     setNewTitle: (value: string)=> void
-    activateEditMode: ()=> void
-    deactivateEditMode: ()=> void
     task: TaskType
     todolistId: string
 }
 
-export const Task = React.memo(({task, todolistId, keyForLabel, newTitle, setNewTitle, activateEditMode, deactivateEditMode}: PropsTaskType) => {
+export const Task = React.memo(({task, todolistId, keyForLabel, newTitle, setNewTitle}: PropsTaskType) => {
     console.log('render task')
     const dispatch = useDispatch()
-    const removeTask = useCallback(() => dispatch(removeTaskAC(todolistId, task.id)), [])
+
+    const removeTaskHandler = useCallback(() => dispatch(removeTaskAC(todolistId, task.id)), [dispatch,todolistId,task.id])
+
     const onChangeTaskStatusHandler = useCallback( (event: ChangeEvent<HTMLInputElement>) =>{
         dispatch(changeTaskStatusAC(todolistId, task.id, event.currentTarget.checked))
-    }, [todolistId, task.id])
+    }, [dispatch,todolistId, task.id])
+
+    const activateEditMode = useCallback(() => {
+        dispatch(toggleTaskEditModeAC(todolistId, task.id, true))
+        setNewTitle(task.title);
+    },[dispatch, todolistId, task.id, task.title, setNewTitle]);
+
+    const deactivateEditMode = useCallback(() => {
+        dispatch(toggleTaskEditModeAC(todolistId, task.id, false))
+        dispatch(changeTaskTitleAC(todolistId, task.id, newTitle))
+    }, [dispatch, todolistId, task.id, newTitle]);
     
     return (
         <li key={task.id} className={`${style.task_item}`}>
@@ -39,7 +49,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel, newTitle, setNew
             </Tooltip>
             <label
                 htmlFor={keyForLabel}
-                className={`${task.isDone ? style.task_isDone : ""} `}>
+                className={`${task.isDone ? style.task_isDone : ""}`}>
                 <EditableSpan
                     title={task.title}
                     newTitle={newTitle}
@@ -60,7 +70,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel, newTitle, setNew
                 </Tooltip>
                 <Tooltip title="Delete">
                     <IconButton
-                        onClick={removeTask}
+                        onClick={removeTaskHandler}
                         color="secondary"
                         size="small">
                         <DeleteIcon />

@@ -3,13 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss";
 import { v1 } from "uuid";
 import { FilterValuesType} from "../../state/todolist-reducer";
-import {
-  addTaskAC,
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  removeTaskAC,
-  toggleTaskEditModeAC
-} from "../../state/tasks-reducer";
+import {addTaskAC,} from "../../state/tasks-reducer";
 import {AppStateType} from "../../state/store";
 import { AddItemForm } from "../AddItemForm/AddItemForm";
 import {Button, Grid} from "@material-ui/core";
@@ -50,9 +44,9 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     dispatch(addTaskAC(props.id, title.trim()))
   },[dispatch,props.id]);
 
-  const onAllClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.all),[props.changeFilter]);// почему-то ругается на зависимости
-  const onActiveClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.active),[props.changeFilter]);
-  const onCompletedClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.completed),[props.changeFilter]);
+  const onAllClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.all),[props]);// почему-то ругается на зависимости !!!уточнить этот вопрос!!!
+  const onActiveClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.active),[props]);
+  const onCompletedClickHandler = useCallback(() => props.changeFilter(props.id, FilterValuesType.completed),[props]);
 
   let tasksForTodolist = tasks;
   if (props.filter === FilterValuesType.completed) {
@@ -119,20 +113,21 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
       <ul className={style.todolist_tasks}>
         {tasksForTodolist.map((task: TaskType) => {
 
-          const activateEditMode = () => {
-            dispatch(toggleTaskEditModeAC(props.id, task.id, true))
-            setNewTitle(task.title);
-          };
+          // const activateEditMode = () => {
+          //   dispatch(toggleTaskEditModeAC(props.id, task.id, true))
+          //   setNewTitle(task.title);
+          // };
 
-          const deactivateEditMode = () => {
-            dispatch(toggleTaskEditModeAC(props.id, task.id, false))
-            dispatch(changeTaskTitleAC(props.id, task.id, newTitle))
-          };
+          // const deactivateEditMode = () => {
+          //   dispatch(toggleTaskEditModeAC(props.id, task.id, false))
+          //   dispatch(changeTaskTitleAC(props.id, task.id, newTitle))
+          // };
+
           //const removeTask = () => dispatch(removeTaskAC(props.id, task.id));
 
-          const onChangeTaskStatus = (status: boolean) => {
-            dispatch(changeTaskStatusAC(props.id, task.id, status))
-          };
+          // const onChangeTaskStatus = (status: boolean) => {
+          //   dispatch(changeTaskStatusAC(props.id, task.id, status))
+          // };
 
           const keyForLabel = v1();
           return (
@@ -143,8 +138,6 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                   keyForLabel={keyForLabel}
                   newTitle={newTitle}
                   setNewTitle={setNewTitle}
-                  activateEditMode={activateEditMode}
-                  deactivateEditMode={deactivateEditMode}
               />
           );
         })}
