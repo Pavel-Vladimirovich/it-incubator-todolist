@@ -128,7 +128,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
             dispatch(toggleTaskEditModeAC(props.id, task.id, false))
             dispatch(changeTaskTitleAC(props.id, task.id, newTitle))
           };
-          const removeTask = () => dispatch(removeTaskAC(props.id, task.id));
+          //const removeTask = () => dispatch(removeTaskAC(props.id, task.id));
 
           const onChangeTaskStatus = (status: boolean) => {
             dispatch(changeTaskStatusAC(props.id, task.id, status))
@@ -145,7 +145,6 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
                   setNewTitle={setNewTitle}
                   activateEditMode={activateEditMode}
                   deactivateEditMode={deactivateEditMode}
-                  onChangeTaskStatus={onChangeTaskStatus}
               />
           );
         })}
