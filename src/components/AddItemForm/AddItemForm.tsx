@@ -29,9 +29,7 @@ type StateType = {
 };
 
 function Alert(props: AlertProps) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
+    return <MuiAlert elevation={6} variant="filled" {...props} />}
 
 const reducer = (state: StateType, action: ActionType): StateType => {
     switch (action.type) {
@@ -72,9 +70,8 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     }
 };
 
-
-const AddItemForm = ({addItem, textMessage, labelMessage}: AddItemFormPropsType) => {
-
+export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: AddItemFormPropsType) => {
+    //console.log('render item form')
     const [state, dispatch] = useReducer(reducer, {error: false, errorMessage: "", title: ""});
     const [open, setOpen] = useState(false);
 
@@ -86,7 +83,6 @@ const AddItemForm = ({addItem, textMessage, labelMessage}: AddItemFormPropsType)
         if (reason === "clickaway") {
             return;
         }
-
         setOpen(false);
     };
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +152,5 @@ const AddItemForm = ({addItem, textMessage, labelMessage}: AddItemFormPropsType)
             </Snackbar>
         </form>
     );
-};
+})
 
-export default React.memo(AddItemForm);

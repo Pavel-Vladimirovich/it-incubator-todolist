@@ -1,7 +1,6 @@
-import {IconButton, TextField, Tooltip} from "@material-ui/core";
-import React, {ChangeEvent, useEffect, useState} from "react";
-import style from "./EditableSpan.module.scss";
-import EditIcon from "@material-ui/icons/Edit";
+import {TextField} from "@material-ui/core";
+import React, {ChangeEvent} from "react";
+
 
 type EditableSpanPropsType = {
     newTitle: string
@@ -9,10 +8,10 @@ type EditableSpanPropsType = {
     title: string;
     toggleEditMode: boolean;
     activateEditMode: () => void;
-    deactivateActivateEditMode: () => void;
+    deactivateEditMode: () => void;
 };
-export const EditableSpan = ({title, toggleEditMode, activateEditMode, deactivateActivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
-
+export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
+    console.log('render editable span')
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
     };
@@ -26,7 +25,7 @@ export const EditableSpan = ({title, toggleEditMode, activateEditMode, deactivat
                     maxRows={5}
                     value={newTitle}
                     onChange={onChangeHandler}
-                    onBlur={deactivateActivateEditMode}
+                    onBlur={deactivateEditMode}
                     autoFocus
                 />
             ) : (
@@ -34,4 +33,4 @@ export const EditableSpan = ({title, toggleEditMode, activateEditMode, deactivat
             )}
         </>
     );
-};
+});

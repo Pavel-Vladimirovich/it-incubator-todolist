@@ -68,7 +68,7 @@ function ScrollTop(props: Props) {
 export default function HideAppBar() {
 	const classes = useStyles();
   return (
-    <React.Fragment>
+    <>
       <CssBaseline />
       <HideOnScroll>
 	  <AppBar>
@@ -89,6 +89,6 @@ export default function HideAppBar() {
           <KeyboardArrowUpIcon />
         </Fab>
       </ScrollTop>
-    </React.Fragment>
+    </>
   );
 }

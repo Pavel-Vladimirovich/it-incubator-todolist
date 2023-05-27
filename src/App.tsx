@@ -1,33 +1,32 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./App.module.scss";
 import {Todolist} from "./components/Todolist/Todolist";
-import AddItemForm from "./components/AddItemForm/AddItemForm";
+import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import {Container, Grid, Paper} from "@material-ui/core";
 import HideAppBar from "./components/MenuAppBar/HideAppBar";
-import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    FilterValuesType,
-    removeTodolistAC,
-    TodolistType
-} from "./state/todolist-reducer";
+import {addTodolistAC, changeTodolistFilterAC, FilterValuesType, removeTodolistAC, TodolistType} from "./state/todolist-reducer";
 import {AppStateType} from "./state/store";
 
-function App() {
 
+function App() {
+    console.log("render app")
     const dispatch = useDispatch()
     const todolists = useSelector<AppStateType, Array<TodolistType>>((state => state.todolists));
 
-    function addTodolist(title: string) {
+    const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }
-    function removeTodolist(todolistId: string) {
+    },[dispatch])
+
+    const removeTodolist = useCallback(
+        (todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
-    }
-    function changeTodolistFilter(todolistId: string, filterValue: FilterValuesType) {
-        dispatch(changeTodolistFilterAC(todolistId, filterValue))
-    }
+    }, [dispatch])
+
+    const changeTodolistFilter = useCallback(
+        (todolistId: string, filterValue: FilterValuesType) => {
+            dispatch(changeTodolistFilterAC(todolistId, filterValue))
+        }, [dispatch])
 
     return (
         <>
@@ -44,13 +43,13 @@ function App() {
                     </Grid>
                     {todolists.map((tl) => {
                         return (
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={6} key={tl.id}>
                                 <Paper
                                     elevation={3}
                                     variant="outlined"
                                     style={{padding: "10px"}}>
                                     <Todolist
-                                        id={tl.id}
+                                        todolistId={tl.id}
                                         key={tl.id}
                                         title={tl.title}
                                         changeFilter={changeTodolistFilter}

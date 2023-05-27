@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType, todolistId1} from "./todolist-reducer";
+import {AddTodolistActionType, RemoveTodolistActionType} from "./todolist-reducer";
 
 type TaskType = {
     id: string;
