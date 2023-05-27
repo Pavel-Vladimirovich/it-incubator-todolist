@@ -8,9 +8,9 @@ type EditableSpanPropsType = {
     title: string;
     toggleEditMode: boolean;
     activateEditMode: () => void;
-    deactivateActivateEditMode: () => void;
+    deactivateEditMode: () => void;
 };
-export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateActivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
+export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
     console.log('render editable span')
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
@@ -25,7 +25,7 @@ export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode
                     maxRows={5}
                     value={newTitle}
                     onChange={onChangeHandler}
-                    onBlur={deactivateActivateEditMode}
+                    onBlur={deactivateEditMode}
                     autoFocus
                 />
             ) : (

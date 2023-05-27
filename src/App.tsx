@@ -16,7 +16,7 @@ function App() {
 
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }, [dispatch])
+    },[dispatch])
 
     const removeTodolist = useCallback(
         (todolistId: string) => {
@@ -49,7 +49,7 @@ function App() {
                                     variant="outlined"
                                     style={{padding: "10px"}}>
                                     <Todolist
-                                        id={tl.id}
+                                        todolistId={tl.id}
                                         key={tl.id}
                                         title={tl.title}
                                         changeFilter={changeTodolistFilter}
