@@ -1,6 +1,6 @@
 import React, {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import style from "./Todolist.module.scss";
+import style from "./Todolist.module.scss"
 import { v1 } from "uuid";
 import { FilterValuesType} from "../../state/todolist-reducer";
 import {addTaskAC,} from "../../state/tasks-reducer";
