@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState, useReducer} from "react";
-import style from "./AddItemForm.module.scss";
+
 import {Button, Grid, Snackbar, TextField} from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
@@ -116,7 +116,6 @@ export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: Add
         <form
             noValidate
             autoComplete="off"
-            className={`${style.text_field} ${style.text_field_floating_2}`}
         >
             <Grid container spacing={1}>
                 <Grid item xs={12} sm={10}>
