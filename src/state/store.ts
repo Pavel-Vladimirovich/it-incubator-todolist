@@ -1,4 +1,4 @@
-import {combineReducers, createStore} from "redux";
+import {combineReducers, legacy_createStore as createStore} from "redux";
 import {todolistReducer} from "./todolist-reducer";
 import {tasksReducer} from "./tasks-reducer";
 

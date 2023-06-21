@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState, useReducer} from "react";
-import style from "./AddItemForm.module.scss";
+
 import {Button, Grid, Snackbar, TextField} from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
@@ -116,12 +116,11 @@ export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: Add
         <form
             noValidate
             autoComplete="off"
-            className={`${style.text_field} ${style.text_field_floating_2}`}
         >
-            <Grid container>
+            <Grid container spacing={1}>
                 <Grid item xs={12} sm={10}>
                     <TextField
-                        style={{width: "100%"}}
+                        style={{ width: "100%"}}
                         error={!!state.errorMessage}
                         variant="outlined"
                         id="standard-multiline-flexible"
@@ -136,10 +135,10 @@ export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: Add
                 <Grid item xs={12} sm={2}>
                     <Button
                         startIcon={<AddBoxIcon/>}
-                        style={{marginLeft: "5px", width: "100%", height: "100%"}}
+                        size="large"
+                        style={{ width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis"}}
                         color="primary"
-                        variant="contained"
-                        className={`${style.btn} ${style.btn_input}`}
+                        variant="outlined"
                         onClick={addTasksHandler}>
                         create
                     </Button>
