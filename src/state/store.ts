@@ -4,6 +4,7 @@ import {tasksReducer} from "./tasks-reducer";
 import thunk from "redux-thunk";
 
 
+
 export type AppStateType = ReturnType<typeof rootReducer>
 
 const rootReducer = combineReducers({

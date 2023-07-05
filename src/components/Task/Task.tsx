@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useCallback, useState} from "react";
+import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import style from "./Task.module.scss";
 import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import {EditableSpan} from "../EditableSpan/EditableSpan";
@@ -6,8 +6,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
     changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
+    changeTaskTitleAC, fetchTasksTC,
+    removeTaskAC, removeTaskTC,
     TaskDomainType,
     toggleTaskEditModeAC
 } from "../../state/tasks-reducer";
@@ -23,9 +23,10 @@ type PropsTaskType = {
 export const Task = React.memo(({task, todolistId, keyForLabel}: PropsTaskType) => {
     console.log('render task')
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<any>()
+
     const [newTitle, setNewTitle] = useState("");
-    const removeTask = useCallback(() => dispatch(removeTaskAC(todolistId, task.id)), [dispatch,todolistId,task.id])
+    const removeTask = useCallback(() => dispatch(removeTaskTC(todolistId, task.id)), [dispatch,todolistId,task.id])
 
     const onChangeTaskStatus = useCallback( (event: ChangeEvent<HTMLInputElement>) =>{
         const taskStatus = event.currentTarget.checked

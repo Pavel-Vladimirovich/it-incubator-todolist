@@ -1,9 +1,9 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss"
 import {v1} from "uuid";
 import {FilterValuesType} from "../../state/todolist-reducer";
-import {addTaskAC, TaskDomainType,} from "../../state/tasks-reducer";
+import {createTaskAC, createTaskTC, fetchTasksTC, TaskDomainType,} from "../../state/tasks-reducer";
 import {AppStateType} from "../../state/store";
 import {AddItemForm} from "../AddItemForm/AddItemForm";
 import {Button, Grid, Tooltip} from "@material-ui/core";
@@ -27,7 +27,11 @@ type TodolistPropsType = {
 export const Todolist = React.memo(({todolistId, title, changeFilter, filter, removeTodolist}: TodolistPropsType) => {
     console.log('render todolist')
     let tasksForTodolist = useSelector<AppStateType, Array<TaskDomainType>>((state => state.tasks[todolistId]));
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
+
+    useEffect(() => {
+        dispatch(fetchTasksTC(todolistId))
+    }, [])
 
     const removeTodolistHandler = () => {
         removeTodolist(todolistId)
@@ -35,8 +39,8 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, re
     // const changeTitleTodolistHandler = (title: string) => {
     //   dispatch(changeTodolistTitleAC(props.id, title))
     // };
-    const addTasksHandler = useCallback((title: string) => {
-        dispatch(addTaskAC(todolistId, title.trim()))
+    const createTasksHandler = useCallback((title: string) => {
+        dispatch(createTaskTC(todolistId, title.trim()))
     }, [dispatch, todolistId]);
 
     const onAllClickHandler = useCallback(() => changeFilter(todolistId, FilterValuesType.all), [changeFilter, todolistId]);
@@ -58,7 +62,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, re
                     {/*<EditableSpan*/}
                 </h3>
                 <Tooltip title="Delete To Do List"
-                placement={'top'}>
+                         placement={'top'}>
                     <IconButton
                         //color={"secondary"}
                         aria-label={'delete'}
@@ -69,7 +73,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, re
             </div>
             <div>
                 <AddItemForm
-                    addItem={addTasksHandler}
+                    addItem={createTasksHandler}
                     textMessage="Task created successfully!"
                     labelMessage="Add a new task..."/>
             </div>
