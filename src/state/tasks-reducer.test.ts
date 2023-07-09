@@ -3,8 +3,8 @@ import {v1} from "uuid";
 import {
     createTaskAC,
     changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC, setTaskAC,
+    updateTaskAC,
+    removeTaskAC, setTasksAC,
     tasksReducer,
     TasksStateType,
     toggleTaskEditModeAC
@@ -51,7 +51,7 @@ test("task should be correctly removed", () => {
 
 test("title task should be correctly changed", () => {
     const newTaskTitle = 'Chocolate'
-    const endState = tasksReducer(startState, changeTaskTitleAC(todolistId1, taskId1, newTaskTitle));
+    const endState = tasksReducer(startState, updateTaskAC(todolistId1, taskId1, newTaskTitle));
 
     expect(endState[todolistId1][0].title).toBe(newTaskTitle);
     expect(startState[todolistId1][0].title).toBe('Bread');
@@ -119,7 +119,7 @@ test('tasks should be correctly added for todolist', () => {
         {id: taskId2, title: "Milk", addedDate: '', startDate: '', deadline: '', order: 0, status: TaskStatus.New, priority: TaskPriority.Low, description: '', todoListId: ''},
     ]
 
-    const endState = tasksReducer(startState, setTaskAC( 'todolistId1', tasks))
+    const endState = tasksReducer(startState, setTasksAC( 'todolistId1', tasks))
     const keys = Object.keys(endState);
 
     expect(keys.length).toBe(2);
