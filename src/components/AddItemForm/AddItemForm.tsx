@@ -140,7 +140,7 @@ export const AddItemForm = React.memo(({addItem, textMessage, labelMessage}: Add
                         color="primary"
                         variant="outlined"
                         onClick={addTasksHandler}>
-                        create
+                        add
                     </Button>
                 </Grid>
             </Grid>
