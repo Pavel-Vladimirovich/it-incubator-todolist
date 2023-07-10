@@ -1,12 +1,12 @@
 import React, {ChangeEvent, useCallback, useState} from "react";
 import style from "./Task.module.scss";
 import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
-import {EditableSpan} from "../EditableSpan/EditableSpan";
+import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {removeTaskTC, TaskDomainType, toggleTaskEditModeAC, updateTaskTC} from "../../state/tasks-reducer";
+import {removeTaskTC, TaskDomainType, toggleTaskEditModeAC, updateTaskTC} from "../../../tasks-reducer";
 import {useDispatch} from "react-redux";
-import {TaskStatus} from "../../api/todolist-api";
+import {TaskStatus} from "../../../../api/todolist-api";
 
 type TaskPropsType = {
     keyForLabel: string

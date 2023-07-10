@@ -2,17 +2,17 @@ import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss"
 import {v1} from "uuid";
-import {FilterValuesType} from "../../state/todolist-reducer";
-import {createTaskAC, createTaskTC, fetchTasksTC, TaskDomainType,} from "../../state/tasks-reducer";
-import {AppStateType} from "../../state/store";
-import {AddItemForm} from "../AddItemForm/AddItemForm";
+import {FilterValuesType} from "../../todolist-reducer";
+import {createTaskTC, fetchTasksTC, TaskDomainType} from "../../tasks-reducer";
+import {AppStateType} from "../../../app/store";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {Button, Grid, Tooltip} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
-import {Task} from "../Task/Task";
-import {TaskStatus} from "../../api/todolist-api";
+import {Task} from "./Task/Task";
+import {TaskStatus} from "../../../api/todolist-api";
 import IconButton from "@material-ui/core/IconButton";
 
 

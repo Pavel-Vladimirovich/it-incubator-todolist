@@ -1,6 +1,7 @@
 import {todolistsAPI, TodolistType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 
+
 const initialState: TodolistStateType = []
 
 export const todolistReducer = (state: TodolistStateType = initialState, action: ActionType): TodolistStateType => {

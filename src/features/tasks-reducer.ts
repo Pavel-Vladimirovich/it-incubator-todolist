@@ -1,7 +1,7 @@
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistActionType} from "./todolist-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistsAPI, UpdateTaskModelType} from "../api/todolist-api";
 import {Dispatch} from "redux";
-import {AppStateType} from "./store";
+import {AppStateType} from "../app/store";
 
 
 const initialState: TasksStateType = {}
