@@ -11,7 +11,7 @@ type EditableSpanPropsType = {
     deactivateEditMode: () => void;
 };
 export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
-    console.log('render editable span')
+    //console.log('render editable span')
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
     };

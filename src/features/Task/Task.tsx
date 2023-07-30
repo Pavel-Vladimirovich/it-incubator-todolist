@@ -1,13 +1,12 @@
 import React, {ChangeEvent, useCallback, useState} from "react";
 import style from "./Task.module.scss";
 import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
-import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {removeTaskTC, TaskDomainType, toggleTaskEditModeAC, updateTaskTC} from "../../../tasks-reducer";
 import {useDispatch} from "react-redux";
-import {TaskStatus} from "../../../../api/todolist-api";
-
+import {TaskStatus} from "../../api/todolist-api";
+import {EditableSpan} from "../../components/EditableSpan/EditableSpan"
+import {removeTaskAsync, TaskDomainType, toggleTaskEditMode, updateTaskAsync} from "./tasks-reducer";
 type TaskPropsType = {
     keyForLabel: string
     task: TaskDomainType
@@ -20,20 +19,20 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
     const dispatch = useDispatch<any>()
 
     const [newTitle, setNewTitle] = useState("");
-    const removeTask = useCallback(() => dispatch(removeTaskTC(todolistId, task.id)), [dispatch, todolistId, task.id])
+    const removeTask = useCallback(() => dispatch(removeTaskAsync(todolistId, task.id)), [dispatch, todolistId, task.id])
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateTaskTC(todolistId, task.id, {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}))
+        dispatch(updateTaskAsync(todolistId, task.id, {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}))
     }, [dispatch, todolistId, task.id])
 
     const activateEditMode = useCallback(() => {
-        dispatch(toggleTaskEditModeAC(todolistId, task.id, true))
+        dispatch(toggleTaskEditMode(todolistId, task.id, true))
         setNewTitle(task.title);
     }, [dispatch, todolistId, task.id, task.title, setNewTitle]);
 
     const deactivateEditMode = useCallback(() => {
-        dispatch(toggleTaskEditModeAC(todolistId, task.id, false))
-        dispatch(updateTaskTC(todolistId, task.id, {title: newTitle}))
+        dispatch(toggleTaskEditMode(todolistId, task.id, false))
+        dispatch(updateTaskAsync(todolistId, task.id, {title: newTitle}))
     }, [dispatch, todolistId, task.id, newTitle]);
 
     return (

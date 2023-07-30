@@ -2,18 +2,19 @@ import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss"
 import {v1} from "uuid";
-import {FilterValuesType} from "../../todolist-reducer";
-import {createTaskTC, fetchTasksTC, TaskDomainType} from "../../tasks-reducer";
-import {AppStateType} from "../../../app/store";
-import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {Button, Grid, Tooltip} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
-import {Task} from "./Task/Task";
-import {TaskStatus} from "../../../api/todolist-api";
 import IconButton from "@material-ui/core/IconButton";
+import {Task} from "../Task/Task";
+import {AppStateType} from "../../app/store";
+import {StatusRequest} from "../../app/app_reducer";
+import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {TaskStatus} from "../../api/todolist-api";
+import {FilterValuesType} from "./todolist-reducer";
+import {createTaskAsync, fetchTasksAsync, TaskDomainType} from "../Task/tasks-reducer";
 
 
 type TodolistPropsType = {
@@ -21,17 +22,18 @@ type TodolistPropsType = {
     title: string;
     changeFilter: (todolistId: string, filterValue: FilterValuesType) => void;
     filter: FilterValuesType;
+    entityStatus: StatusRequest
     removeTodolist: (todolistId: string) => void
 };
 
-export const Todolist = React.memo(({todolistId, title, changeFilter, filter, removeTodolist}: TodolistPropsType) => {
-    console.log('render todolist')
+export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
+    //console.log('render todolist')
     let tasksForTodolist = useSelector<AppStateType, Array<TaskDomainType>>((state => state.tasks[todolistId]));
     const dispatch = useDispatch<any>();
 
     useEffect(() => {
-        dispatch(fetchTasksTC(todolistId))
-    }, [])
+        dispatch(fetchTasksAsync(todolistId))
+    }, [dispatch, todolistId])
 
     const removeTodolistHandler = () => {
         removeTodolist(todolistId)
@@ -40,7 +42,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, re
     //   dispatch(changeTodolistTitleAC(props.id, title))
     // };
     const createTasksHandler = useCallback((title: string) => {
-        dispatch(createTaskTC(todolistId, title.trim()))
+        dispatch(createTaskAsync(todolistId, title.trim()))
     }, [dispatch, todolistId]);
 
     const onAllClickHandler = useCallback(() => changeFilter(todolistId, FilterValuesType.all), [changeFilter, todolistId]);
@@ -64,7 +66,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, re
                 <Tooltip title="Delete To Do List"
                          placement={'top'}>
                     <IconButton
-                        //color={"secondary"}
+                        disabled={entityStatus === StatusRequest.loading}
                         aria-label={'delete'}
                         onClick={removeTodolistHandler}>
                         <DeleteIcon/>
