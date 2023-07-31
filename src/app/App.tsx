@@ -47,9 +47,9 @@ function App() {
         <>
             <CssBaseline/>
             <HideAppBar/>
+            <CustomizedSnackbars/>
             <div style={{height: '10px'}}>{status === StatusRequest.loading && <LinearProgress color={"primary"} style={{height: '3px'}}/>}</div>
             <Container maxWidth="xl">
-            <CustomizedSnackbars/>
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={{textAlign: "center", marginTop: "20px"}}>
                         <h1 className={style.header_title}>my to do lists</h1>
