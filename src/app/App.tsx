@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./store";
-
 import {StatusRequest} from "./app_reducer";
-import {Container, CssBaseline, Grid, Paper} from "@material-ui/core";
+import {Container, CssBaseline, Grid, LinearProgress, Paper} from "@material-ui/core";
 import HideAppBar from "../components/MenuAppBar/HideAppBar";
 import style from "./App.module.scss";
 import {AddItemForm} from "../components/AddItemForm/AddItemForm";
@@ -14,6 +13,7 @@ import {
     fetchTodolistAsync,
     FilterValuesType, removeTodolistAsync, TodolistDomainType
 } from "../features/Todolist/todolist-reducer";
+import { CustomizedSnackbars } from "../components/Snackbar/Snackbar";
 
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
     const dispatch = useDispatch<any>()
     const todolists = useSelector<AppStateType, Array<TodolistDomainType>>((state => state.todolists));
     const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
-
+    const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
     if (statusRequest === StatusRequest.loading) {
         // console.log(statusRequest)
     }
@@ -47,7 +47,9 @@ function App() {
         <>
             <CssBaseline/>
             <HideAppBar/>
+            <div style={{height: '10px'}}>{status === StatusRequest.loading && <LinearProgress color={"primary"} style={{height: '3px'}}/>}</div>
             <Container maxWidth="xl">
+            <CustomizedSnackbars/>
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={{textAlign: "center", marginTop: "20px"}}>
                         <h1 className={style.header_title}>my to do lists</h1>

@@ -2,6 +2,8 @@ import {Dispatch} from "redux";
 import {AppStateType} from "../../app/store";
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistActionType} from "../Todolist/todolist-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../../api/todolist-api";
+import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+import { ErrorActionType, setAppError, setAppStatusRequest, StatusRequest, StatusRequestActionType } from "../../app/app_reducer";
 
 
 const initialState: TasksStateType = {}
@@ -104,28 +106,57 @@ export const setTasks = (todolistId: string, tasks: Array<TaskType>) => ({
 
 // thunks
 export const fetchTasksAsync = (todolistId: string) => {
-    return (dispatch: Dispatch<ActionType>) => {
+    return (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
+        dispatch(setAppStatusRequest(StatusRequest.loading))
         todolistAPI.getTasks(todolistId)
             .then((response) => {
-                dispatch(setTasks(todolistId, response.data.items))
+                if(response.status === 200){
+                    dispatch(setTasks(todolistId, response.data.items))
+                    dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                }else{
+                    dispatch(setAppError(response.data.error))
+                    dispatch(setAppStatusRequest(StatusRequest.failed))
+                }
+                
+            })
+            .catch(error=>{
+                handleServerNetworkError(error, dispatch) 
             })
     }
 }
 
 export const removeTaskAsync = (todolistId: string, taskId: string) => {
-    return (dispatch: Dispatch<ActionType>) => {
+    return (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+        dispatch(setAppStatusRequest(StatusRequest.loading))
+        //need to disable button -->
         todolistAPI.removeTask(todolistId, taskId)
             .then((response) => {
-                dispatch(removeTask(todolistId, taskId))
+                if(response.data.resultCode === 0){
+                    dispatch(removeTask(todolistId, taskId))
+                    dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                }
+                handleServerAppError(response.data, dispatch)
+            })
+            .catch(error => {
+                handleServerNetworkError(error, dispatch)
             })
     }
 
 }
 export const createTaskAsync = (todolistId: string, title: string) => {
-    return (dispatch: Dispatch<ActionType>) => {
+    return (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+        dispatch(setAppStatusRequest(StatusRequest.loading))
         todolistAPI.createTask(todolistId, title)
             .then((response) => {
-                dispatch(createTask(response.data.data.item))
+                if(response.data.resultCode === 0){
+                    dispatch(createTask(response.data.data.item))
+                    dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                }else{
+                    handleServerAppError(response.data, dispatch)
+                }
+            })
+            .catch(error => {
+                handleServerNetworkError(error, dispatch)
             })
     }
 

@@ -64,14 +64,17 @@ export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusR
                 dispatch(setTodolist(response.data))
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
             }
-            dispatch(setAppError('some error occurred'))
-            dispatch(setAppStatusRequest(StatusRequest.failed))
+            else{
+                dispatch(setAppError('some error occurred'))
+                dispatch(setAppStatusRequest(StatusRequest.failed))
+            }
+            
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
         })
 }
-export const removeTodolistAsync = (todolistId: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
+export const removeTodolistAsync = (todolistId: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     dispatch(setEntityStatus(todolistId, StatusRequest.loading))
     todolistAPI.removeTodolist(todolistId)
@@ -79,22 +82,25 @@ export const removeTodolistAsync = (todolistId: string) => (dispatch: Dispatch<A
             if(response.data.resultCode === 0){
                 dispatch(removeTodolist(todolistId))
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
+            }else{
+                handleServerAppError(response.data, dispatch)
             }
-            handleServerAppError(response.data, dispatch)
+            
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
         })
 }
-export const createTodolistAsync = (title: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
+export const createTodolistAsync = (title: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     todolistAPI.createTodolist(title)
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(createTodolist(response.data.data.item))
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
+            }else{
+                handleServerAppError(response.data, dispatch)
             }
-            handleServerAppError(response.data, dispatch)
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)

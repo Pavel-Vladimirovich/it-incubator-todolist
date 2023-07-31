@@ -2,18 +2,14 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
-import {Button, IconButton, LinearProgress} from '@material-ui/core';
+import {Button, IconButton} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import Zoom from '@material-ui/core/Zoom';
 import Fab from '@material-ui/core/Fab';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import {useSelector} from "react-redux";
-import {AppStateType} from "../../app/store";
-import {StatusRequest} from "../../app/app_reducer";
 
 interface Props {
 	children: React.ReactElement;
@@ -69,11 +65,10 @@ function ScrollTop(props: Props) {
 	);
   }
 export default function HideAppBar() {
-	const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
+	
 	const classes = useStyles();
   return (
     <>
-      <CssBaseline />
       <HideOnScroll>
 	  <AppBar>
         <Toolbar>
@@ -81,14 +76,14 @@ export default function HideAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Todolist
+            Todo list
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       </HideOnScroll>
       <Toolbar id="back-to-top-anchor"/>
-		<div style={{height: '10px'}}>{status === StatusRequest.loading && <LinearProgress color={"secondary"} style={{height: '6px'}}/>}</div>
+		
 	  <ScrollTop>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
