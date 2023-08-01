@@ -52,7 +52,7 @@ function App() {
             <Container maxWidth="xl">
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={{textAlign: "center", marginTop: "20px"}}>
-                        <h1 className={style.header_title}>my to do lists</h1>
+                        <h1 className={style.header_title}>todo <span>list</span></h1>
                         <AddItemForm
                             addItem={createTodolistHandler}
                             textMessage="Todolist created successfully!"
@@ -73,6 +73,7 @@ function App() {
                                         changeFilter={changeTodolistFilterHandler}
                                         filter={tl.filter}
                                         entityStatus={tl.entityStatus}
+                                        toggleEditMode={tl.editMode}
                                         removeTodolist={removeTodolistHandler}
                                     />
                                 </Paper>

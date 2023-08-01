@@ -172,7 +172,7 @@ type domainTaskModelType = {
 
 
 export const updateTaskAsync = (todolistId: string, taskId: string, domainModel: domainTaskModelType) => {
-    return (dispatch: Dispatch<ActionType>, getState: () => AppStateType) => {
+    return (dispatch: Dispatch<ActionType | StatusRequestActionType>, getState: () => AppStateType) => {
         const state = getState()
         const task = state.tasks[todolistId].find(ts => ts.id === taskId)
         if (!task) {
@@ -191,6 +191,10 @@ export const updateTaskAsync = (todolistId: string, taskId: string, domainModel:
         todolistAPI.updateTask(todolistId, taskId, modelApi)
             .then((response) => {
                 dispatch(updateTask(todolistId, taskId, domainModel))
+                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+            })
+            .catch(error => {
+                handleServerNetworkError(error, dispatch)
             })
     }
 

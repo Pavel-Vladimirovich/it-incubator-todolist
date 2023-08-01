@@ -15,6 +15,7 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus} from "../../api/todolist-api";
 import {FilterValuesType} from "./todolist-reducer";
 import {createTaskAsync, fetchTasksAsync, TaskDomainType} from "../Task/tasks-reducer";
+import { EditableTitleTodolist } from "../../components/EditableTitleTodolist/EditableTitleTodolist";
 
 
 type TodolistPropsType = {
@@ -22,11 +23,12 @@ type TodolistPropsType = {
     title: string;
     changeFilter: (todolistId: string, filterValue: FilterValuesType) => void;
     filter: FilterValuesType;
-    entityStatus: StatusRequest
+    entityStatus: StatusRequest;
+    toggleEditMode: boolean;
     removeTodolist: (todolistId: string) => void
 };
 
-export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
+export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, toggleEditMode, removeTodolist}: TodolistPropsType) => {
     //console.log('render todolist')
     let tasksForTodolist = useSelector<AppStateType, Array<TaskDomainType>>((state => state.tasks[todolistId]));
     const dispatch = useDispatch<any>();
@@ -60,8 +62,11 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
         <div className={style.todolist}>
             <div className={style.todolist_header}>
                 <h3 className={style.header_title}>
-                    {title}
-                    {/*<EditableSpan*/}
+                    <EditableTitleTodolist 
+                    id={todolistId}
+                    title={title}
+                    key={todolistId}
+                    toggleEditMode={toggleEditMode}/>
                 </h3>
                 <Tooltip title="Delete To Do List"
                          placement={'top'}>

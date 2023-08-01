@@ -1,5 +1,4 @@
 import React, { ChangeEvent, KeyboardEvent, useState, useReducer } from "react";
-
 import { Button, Grid, Snackbar, TextField } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
@@ -156,8 +155,7 @@ export const AddItemForm = React.memo(
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert
             onClose={handleClose}
-            severity={!!state.error ? "error" : "success"}
-          >
+            severity={!!state.error ? "error" : "success"}>
             {!!state.error ? TEXT_ERROR_MESSAGE : textMessage}
           </Alert>
         </Snackbar>

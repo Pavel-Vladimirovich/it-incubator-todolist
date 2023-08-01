@@ -14,9 +14,9 @@
 .todolist_header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
+ 
   & .header_title {
+    flex: 1 1 auto;
     color: rgb(44, 130, 213);
     text-transform: uppercase;
     letter-spacing: .1rem;

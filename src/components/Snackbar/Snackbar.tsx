@@ -33,15 +33,15 @@ export const CustomizedSnackbars = React.memo(()=>{
     if (reason === "clickaway") {
       return;
     }
-    //dispatch(setAppStatusRequest(StatusRequest.idle))
+    dispatch(setAppStatusRequest(StatusRequest.idle))
     dispatch(setAppError(null))
   };
 
   return (
     <div className={classes.root}>
-      <Snackbar open={isError} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={"info"}>
-          {error}
+      <Snackbar open={isError || isSucceeded} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={isError ? "error" : "success"}>
+          {isError && error}{isSucceeded && StatusRequest.succeeded} 
         </Alert>
       </Snackbar>
     </div>

@@ -10,14 +10,15 @@ import {
     todolistReducer,
 } from './todolist-reducer';
 import {v1} from 'uuid';
-import {StatusRequest} from "../app/app_reducer";
+import { StatusRequest } from '../../app/app_reducer';
+
 
 const todolistId1 = v1();
 const todolistId2 = v1();
 const todolistId3 = v1();
 const startState: Array<TodolistDomainType> = [
-    {id: todolistId1, title: "What to learn", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: ''},
-    {id: todolistId2, title: "What to buy", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: ''}
+    {id: todolistId1, title: "What to learn", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: '', editMode: false},
+    {id: todolistId2, title: "What to buy", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: '', editMode: false}
 ]
 
 test('todolist should be correctly added', () => {
