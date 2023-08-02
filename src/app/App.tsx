@@ -48,7 +48,7 @@ function App() {
             <CssBaseline/>
             <HideAppBar/>
             <CustomizedSnackbars/>
-            <div style={{height: '10px'}}>{status === StatusRequest.loading && <LinearProgress color={"primary"} style={{height: '3px'}}/>}</div>
+            <div style={{height: '10px'}}>{status === StatusRequest.loading && <LinearProgress color={"secondary"} style={{height: '3px'}}/>}</div>
             <Container maxWidth="xl">
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={{textAlign: "center", marginTop: "20px"}}>
@@ -73,7 +73,6 @@ function App() {
                                         changeFilter={changeTodolistFilterHandler}
                                         filter={tl.filter}
                                         entityStatus={tl.entityStatus}
-                                        toggleEditMode={tl.editMode}
                                         removeTodolist={removeTodolistHandler}
                                     />
                                 </Paper>

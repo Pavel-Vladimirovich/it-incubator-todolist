@@ -21,13 +21,12 @@ const initialState: TodolistStateType = []
 export const todolistReducer = (state: TodolistStateType = initialState, action: ActionType): TodolistStateType => {
     switch (action.type) {
         case "SET_TODOLISTS":
-            return action.todolists.map(tl => ({...tl, filter: FilterValuesType.all, entityStatus: StatusRequest.idle, editMode: false}))
+            return action.todolists.map(tl => ({...tl, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}))
         case "CREATE_TODOLIST":
-            return [{...action.todolist, filter: FilterValuesType.all, entityStatus: StatusRequest.idle, editMode: false}, ...state]
+            return [{...action.todolist, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}, ...state]
         case 'REMOVE_TODOLIST':
             return state.filter(tl => tl.id !== action.todolistId)
         case "CHANGE_TODOLIST_TITLE":
-        case "TOGGLE_TODOLIST_EDIT_MODE":    
         case "CHANGE_TODOLIST_FILTER":
         case "SET_ENTITY_STATUS":
             return state.map(tl => tl.id === action.id ? {...tl, ...action.payloadType} : tl)
@@ -55,11 +54,6 @@ export const setEntityStatus = (id: string, entityStatus: StatusRequest) => ({
     payloadType: {entityStatus}
 } as const)
 export const setTodolist = (todolists: Array<TodolistType>) => ({type: 'SET_TODOLISTS', todolists} as const)
-export const toggleTodolistEditMode = (id: string, editMode: boolean) => ({
-    type: "TOGGLE_TODOLIST_EDIT_MODE",
-    id,
-    payloadType: {editMode}
-} as const)
 
 // thunks
 export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
@@ -83,13 +77,16 @@ export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusR
 export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
     return (dispatch: Dispatch<ActionType | StatusRequestActionType> )=> {
         dispatch(setAppStatusRequest(StatusRequest.loading))
+        dispatch(setEntityStatus(todolistId, StatusRequest.loading))
         todolistAPI.updateTodolistTitle(todolistId ,title)
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(changeTodolistTitle(todolistId, title))
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                dispatch(setEntityStatus(todolistId, StatusRequest.succeeded))
             }else{
                 handleServerAppError(response.data, dispatch)
+                dispatch(setEntityStatus(todolistId, StatusRequest.failed))
             }
         })
         .catch(error => {
@@ -138,7 +135,6 @@ export const createTodolistAsync = (title: string) => (dispatch: Dispatch<Action
 export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
     entityStatus: StatusRequest
-    editMode: boolean
 }
 type TodolistStateType = Array<TodolistDomainType>
 
@@ -153,4 +149,3 @@ type ActionType =
     | ReturnType<typeof changeTodolistTitle>
     | ReturnType<typeof changeTodolistFilter>
     | ReturnType<typeof setEntityStatus>
-    | ReturnType<typeof toggleTodolistEditMode>

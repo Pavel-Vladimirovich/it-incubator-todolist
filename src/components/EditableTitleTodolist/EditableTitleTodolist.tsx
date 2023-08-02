@@ -1,30 +1,30 @@
 import {TextField} from "@material-ui/core";
 import React, {ChangeEvent, useState} from "react";
-import { useDispatch } from "react-redux";
-import { toggleTodolistEditMode, updateTodolistTitleAsync } from "../../features/Todolist/todolist-reducer";
+import {useDispatch} from "react-redux";
+import {updateTodolistTitleAsync} from "../../features/Todolist/todolist-reducer";
+import {StatusRequest} from "../../app/app_reducer";
 
 
 type PropsType = {
 	id: string;
     title: string;
-	toggleEditMode: boolean;
+	entityStatus: StatusRequest
 };
-export const EditableTitleTodolist = React.memo(({id, title, toggleEditMode}: PropsType) => {
-    console.log('render editable title todo')
+export const EditableTitleTodolist = React.memo(({id, title, entityStatus}: PropsType) => {
 	const dispatch = useDispatch<any>()
-
 	const [newTitle, setNewTitle] = useState<string>('');
+	const [toggleEditMode, setToggleEditMode] = useState<boolean>(false)
 
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
     };
 	const activateEditMode = () => {
-		dispatch(toggleTodolistEditMode(id, true))
+		setToggleEditMode(true)
 		setNewTitle(title)
 	}
 	const deactivateEditMode = () => {
-		dispatch(toggleTodolistEditMode(id, false))
-		dispatch(updateTodolistTitleAsync(id, newTitle))
+		setToggleEditMode(false)
+		dispatch(updateTodolistTitleAsync(id, newTitle)) //!!! для переиспользования вынести за пределы компоненты
 	}
 
     return (
@@ -40,7 +40,7 @@ export const EditableTitleTodolist = React.memo(({id, title, toggleEditMode}: Pr
                     autoFocus
                 />
             ) : (
-                <span style={{cursor: "pointer", width: "100%", border:'1px solid red'}} onDoubleClick={activateEditMode}>{title}</span>
+                <span style={{cursor: entityStatus === StatusRequest.loading ? "wait" : "pointer", width: "100%", border:'1px solid red'}} onDoubleClick={activateEditMode}>{title}</span>
             )}
         </>
     );

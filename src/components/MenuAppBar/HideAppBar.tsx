@@ -22,11 +22,12 @@ const useStyles = makeStyles((theme) => ({
 		right: theme.spacing(2),
 	},
 	menuButton: {
-	  marginRight: theme.spacing(2),
+	  	marginRight: theme.spacing(2),
 	},
 	title: {
-	  flexGrow: 1,
-	  textTransform: "uppercase"
+		flexGrow: 1,
+		textTransform: "uppercase",
+		cursor: "default"
 	},
   }));
   
@@ -83,7 +84,6 @@ export default function HideAppBar() {
       </AppBar>
       </HideOnScroll>
       <Toolbar id="back-to-top-anchor"/>
-		
 	  <ScrollTop>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />

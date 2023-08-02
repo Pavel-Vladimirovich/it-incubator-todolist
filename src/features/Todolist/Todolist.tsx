@@ -24,11 +24,10 @@ type TodolistPropsType = {
     changeFilter: (todolistId: string, filterValue: FilterValuesType) => void;
     filter: FilterValuesType;
     entityStatus: StatusRequest;
-    toggleEditMode: boolean;
     removeTodolist: (todolistId: string) => void
 };
 
-export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, toggleEditMode, removeTodolist}: TodolistPropsType) => {
+export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
     //console.log('render todolist')
     let tasksForTodolist = useSelector<AppStateType, Array<TaskDomainType>>((state => state.tasks[todolistId]));
     const dispatch = useDispatch<any>();
@@ -65,8 +64,8 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
                     <EditableTitleTodolist 
                     id={todolistId}
                     title={title}
-                    key={todolistId}
-                    toggleEditMode={toggleEditMode}/>
+                    entityStatus={entityStatus}
+                    key={todolistId}/>
                 </h3>
                 <Tooltip title="Delete To Do List"
                          placement={'top'}>
