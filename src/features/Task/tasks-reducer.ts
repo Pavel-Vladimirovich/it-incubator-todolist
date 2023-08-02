@@ -134,8 +134,9 @@ export const removeTaskAsync = (todolistId: string, taskId: string) => {
                 if(response.data.resultCode === 0){
                     dispatch(removeTask(todolistId, taskId))
                     dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                }else{
+                    handleServerAppError(response.data, dispatch)
                 }
-                handleServerAppError(response.data, dispatch)
             })
             .catch(error => {
                 handleServerNetworkError(error, dispatch)

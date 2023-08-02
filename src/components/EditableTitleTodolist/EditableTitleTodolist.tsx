@@ -1,9 +1,7 @@
 import {TextField} from "@material-ui/core";
-import React, {ChangeEvent, useEffect, useState} from "react";
-import { useSelector } from "react-redux";
+import React, {ChangeEvent, useState} from "react";
 import { useDispatch } from "react-redux";
-import { AppStateType } from "../../app/store";
-import { changeTodolistTitle, toggleTodolistEditMode } from "../../features/Todolist/todolist-reducer";
+import { toggleTodolistEditMode, updateTodolistTitleAsync } from "../../features/Todolist/todolist-reducer";
 
 
 type PropsType = {
@@ -12,8 +10,8 @@ type PropsType = {
 	toggleEditMode: boolean;
 };
 export const EditableTitleTodolist = React.memo(({id, title, toggleEditMode}: PropsType) => {
-    //console.log('render editable span')
-	const dispatch = useDispatch()
+    console.log('render editable title todo')
+	const dispatch = useDispatch<any>()
 
 	const [newTitle, setNewTitle] = useState<string>('');
 
@@ -26,7 +24,7 @@ export const EditableTitleTodolist = React.memo(({id, title, toggleEditMode}: Pr
 	}
 	const deactivateEditMode = () => {
 		dispatch(toggleTodolistEditMode(id, false))
-		dispatch(changeTodolistTitle(id, newTitle))
+		dispatch(updateTodolistTitleAsync(id, newTitle))
 	}
 
     return (
@@ -42,7 +40,7 @@ export const EditableTitleTodolist = React.memo(({id, title, toggleEditMode}: Pr
                     autoFocus
                 />
             ) : (
-                <span style={{cursor: "pointer"}} onDoubleClick={activateEditMode}>{title}</span>
+                <span style={{cursor: "pointer", width: "100%", border:'1px solid red'}} onDoubleClick={activateEditMode}>{title}</span>
             )}
         </>
     );

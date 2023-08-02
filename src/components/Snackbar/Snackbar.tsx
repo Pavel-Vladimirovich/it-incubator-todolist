@@ -39,9 +39,9 @@ export const CustomizedSnackbars = React.memo(()=>{
 
   return (
     <div className={classes.root}>
-      <Snackbar open={isError || isSucceeded} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={isError ? "error" : "success"}>
-          {isError && error}{isSucceeded && StatusRequest.succeeded} 
+      <Snackbar open={isError} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={"error"}>
+            {error ? error : null}
         </Alert>
       </Snackbar>
     </div>

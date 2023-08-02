@@ -74,11 +74,30 @@ export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusR
                 dispatch(setAppError('some error occurred'))
                 dispatch(setAppStatusRequest(StatusRequest.failed))
             }
-            
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
         })
+}
+
+export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
+    return (dispatch: Dispatch<ActionType | StatusRequestActionType> )=> {
+        dispatch(setAppStatusRequest(StatusRequest.loading))
+        todolistAPI.updateTodolistTitle(todolistId ,title)
+        .then(response => {
+            if(response.data.resultCode === 0){
+                dispatch(changeTodolistTitle(todolistId, title))
+                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+            }else{
+                handleServerAppError(response.data, dispatch)
+            }
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
+        })
+
+
+    }
 }
 export const removeTodolistAsync = (todolistId: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
