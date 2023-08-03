@@ -11,7 +11,7 @@ const initialState: TasksStateType = {}
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
     switch (action.type) {
         case "CREATE-TASK": {
-            const task: TaskDomainType = {...action.task, editMode: false};
+            const task: TaskType = {...action.task};
             return {
                 ...state,
                 [task.todoListId]: [task, ...state[task.todoListId]]
@@ -34,17 +34,6 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
                 [action.todolistId]: updatedTasks,
             };
         }
-        case "TOGGLE-TASK-EDIT-MODE": {
-            const todolistTasks = state[action.todolistId];
-            const updatedTasks = todolistTasks.map((task) =>
-                task.id === action.taskId ? {...task, editMode: action.editMode} : task
-            );
-            return {
-                ...state,
-                [action.todolistId]: updatedTasks,
-            };
-        }
-
         case "CREATE_TODOLIST": {
             return {
                 ...state,
@@ -89,13 +78,6 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: doma
     todolistId,
     taskId,
     domainModel
-} as const)
-
-export const toggleTaskEditMode = (todolistId: string, taskId: string, editMode: boolean) => ({
-    type: "TOGGLE-TASK-EDIT-MODE",
-    todolistId,
-    taskId,
-    editMode
 } as const)
 
 export const setTasks = (todolistId: string, tasks: Array<TaskType>) => ({
@@ -201,17 +183,15 @@ export const updateTaskAsync = (todolistId: string, taskId: string, domainModel:
 
 }
 // types
-export type TaskDomainType = TaskType & { editMode: boolean }
 
 export type TasksStateType = {
-    [key: string]: Array<TaskDomainType>;
+    [key: string]: Array<TaskType>;
 };
 
 export type ActionType =
     | ReturnType<typeof updateTask>
     | ReturnType<typeof removeTask>
     | ReturnType<typeof createTask>
-    | ReturnType<typeof toggleTaskEditMode>
     | ReturnType<typeof setTasks>
     | AddTodolistActionType
     | RemoveTodolistActionType

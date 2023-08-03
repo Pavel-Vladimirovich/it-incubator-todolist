@@ -4,34 +4,36 @@ import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {useDispatch} from "react-redux";
-import {TaskStatus} from "../../api/todolist-api";
+import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {EditableSpan} from "../../components/EditableSpan/EditableSpan"
-import {removeTaskAsync, TaskDomainType, toggleTaskEditMode, updateTaskAsync} from "./tasks-reducer";
+import {removeTaskAsync, updateTaskAsync} from "./tasks-reducer";
 type TaskPropsType = {
     keyForLabel: string
-    task: TaskDomainType
+    task: TaskType
     todolistId: string
 }
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
-    //console.log('render task')
-
+    // console.log('render task')
     const dispatch = useDispatch<any>()
 
-    const [newTitle, setNewTitle] = useState("");
-    const removeTask = useCallback(() => dispatch(removeTaskAsync(todolistId, task.id)), [dispatch, todolistId, task.id])
+    const [newTitle, setNewTitle] = useState<string>("");
+    const [editMode, setEditMode] = useState<boolean>(false);
+
+    // const removeTask = useCallback(() => dispatch(removeTaskAsync(todolistId, task.id)), [dispatch, todolistId, task.id])
+    const removeTask = () => {dispatch(removeTaskAsync(todolistId, task.id))}
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         dispatch(updateTaskAsync(todolistId, task.id, {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}))
     }, [dispatch, todolistId, task.id])
 
     const activateEditMode = useCallback(() => {
-        dispatch(toggleTaskEditMode(todolistId, task.id, true))
+        setEditMode(true)
         setNewTitle(task.title);
-    }, [dispatch, todolistId, task.id, task.title, setNewTitle]);
+    }, [task.title]);
 
     const deactivateEditMode = useCallback(() => {
-        dispatch(toggleTaskEditMode(todolistId, task.id, false))
+        setEditMode(false)
         dispatch(updateTaskAsync(todolistId, task.id, {title: newTitle}))
     }, [dispatch, todolistId, task.id, newTitle]);
 
@@ -53,7 +55,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
                     title={task.title}
                     newTitle={newTitle}
                     setNewTitle={setNewTitle}
-                    toggleEditMode={task.editMode}
+                    toggleEditMode={editMode}
                     activateEditMode={activateEditMode}
                     deactivateEditMode={deactivateEditMode}
                 />

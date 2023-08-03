@@ -2,7 +2,7 @@ import {TextField} from "@material-ui/core";
 import React, {ChangeEvent} from "react";
 
 
-type EditableSpanPropsType = {
+type PropsType = {
     newTitle: string
     setNewTitle: (value: string) => void
     title: string;
@@ -10,8 +10,9 @@ type EditableSpanPropsType = {
     activateEditMode: () => void;
     deactivateEditMode: () => void;
 };
-export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: EditableSpanPropsType) => {
+export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: PropsType) => {
     //console.log('render editable span')
+    
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
     };

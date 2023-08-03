@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import style from "./Todolist.module.scss"
 import {v1} from "uuid";
-import {Button, Grid, Tooltip} from "@material-ui/core";
+import {Button, Grid, Tooltip, Typography} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
@@ -12,9 +12,9 @@ import {Task} from "../Task/Task";
 import {AppStateType} from "../../app/store";
 import {StatusRequest} from "../../app/app_reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {TaskStatus} from "../../api/todolist-api";
-import {FilterValuesType} from "./todolist-reducer";
-import {createTaskAsync, fetchTasksAsync, TaskDomainType} from "../Task/tasks-reducer";
+import {TaskStatus, TaskType} from "../../api/todolist-api";
+import {FilterValuesType, updateTodolistTitleAsync} from "./todolist-reducer";
+import {createTaskAsync, fetchTasksAsync, } from "../Task/tasks-reducer";
 import { EditableTitleTodolist } from "../../components/EditableTitleTodolist/EditableTitleTodolist";
 
 
@@ -29,7 +29,7 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
     //console.log('render todolist')
-    let tasksForTodolist = useSelector<AppStateType, Array<TaskDomainType>>((state => state.tasks[todolistId]));
+    let tasksForTodolist = useSelector<AppStateType, Array<TaskType>>((state => state.tasks[todolistId]));
     const dispatch = useDispatch<any>();
 
     useEffect(() => {
@@ -39,9 +39,9 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
     const removeTodolistHandler = () => {
         removeTodolist(todolistId)
     };
-    // const changeTitleTodolistHandler = (title: string) => {
-    //   dispatch(changeTodolistTitleAC(props.id, title))
-    // };
+    const updateTitleTodolistHandler = (title: string) => {
+      dispatch(updateTodolistTitleAsync(todolistId, title))
+    };
     const createTasksHandler = useCallback((title: string) => {
         dispatch(createTaskAsync(todolistId, title.trim()))
     }, [dispatch, todolistId]);
@@ -60,13 +60,12 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
     return (
         <div className={style.todolist}>
             <div className={style.todolist_header}>
-                <h3 className={style.header_title}>
+                <Typography variant="h3" className={style.header_title}>
                     <EditableTitleTodolist 
-                    id={todolistId}
-                    title={title}
-                    entityStatus={entityStatus}
-                    key={todolistId}/>
-                </h3>
+                        title={title}
+                        onClisk={updateTitleTodolistHandler}
+                        key={todolistId}/>
+                </Typography>
                 <Tooltip title="Delete To Do List"
                          placement={'top'}>
                     <IconButton
@@ -116,7 +115,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
                 </Grid>
             </Grid>
             <ul>
-                {tasksForTodolist.map((task: TaskDomainType) => {
+                {tasksForTodolist.map((task: TaskType) => {
                     const keyForLabel = v1();
                     return (
                         <Task

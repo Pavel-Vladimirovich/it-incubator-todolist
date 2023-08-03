@@ -1,17 +1,11 @@
-import {TextField} from "@material-ui/core";
+import {TextField, Tooltip} from "@material-ui/core";
 import React, {ChangeEvent, useState} from "react";
-import {useDispatch} from "react-redux";
-import {updateTodolistTitleAsync} from "../../features/Todolist/todolist-reducer";
-import {StatusRequest} from "../../app/app_reducer";
-
 
 type PropsType = {
-	id: string;
     title: string;
-	entityStatus: StatusRequest
+    onClisk: (title: string) => void;
 };
-export const EditableTitleTodolist = React.memo(({id, title, entityStatus}: PropsType) => {
-	const dispatch = useDispatch<any>()
+export const EditableTitleTodolist = React.memo(({title, onClisk}: PropsType) => {
 	const [newTitle, setNewTitle] = useState<string>('');
 	const [toggleEditMode, setToggleEditMode] = useState<boolean>(false)
 
@@ -24,7 +18,7 @@ export const EditableTitleTodolist = React.memo(({id, title, entityStatus}: Prop
 	}
 	const deactivateEditMode = () => {
 		setToggleEditMode(false)
-		dispatch(updateTodolistTitleAsync(id, newTitle)) //!!! для переиспользования вынести за пределы компоненты
+		onClisk(newTitle)
 	}
 
     return (
@@ -40,7 +34,9 @@ export const EditableTitleTodolist = React.memo(({id, title, entityStatus}: Prop
                     autoFocus
                 />
             ) : (
-                <span style={{cursor: entityStatus === StatusRequest.loading ? "wait" : "pointer", width: "100%", border:'1px solid red'}} onDoubleClick={activateEditMode}>{title}</span>
+                <Tooltip title="Edit" placement={"top"}>
+                    <span style={{cursor: "pointer"}} onDoubleClick={activateEditMode}>{title}</span>
+                </Tooltip>
             )}
         </>
     );
