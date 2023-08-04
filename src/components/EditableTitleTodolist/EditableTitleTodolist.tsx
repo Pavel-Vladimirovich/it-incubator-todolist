@@ -1,11 +1,20 @@
-import {TextField, Tooltip} from "@material-ui/core";
+import {TextField, Tooltip, Typography} from "@material-ui/core";
 import React, {ChangeEvent, useState} from "react";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    TextField: {
+        width: "100%"
+    }
+})
 
 type PropsType = {
     title: string;
     onClisk: (title: string) => void;
 };
 export const EditableTitleTodolist = React.memo(({title, onClisk}: PropsType) => {
+    const classes = useStyles();
+
 	const [newTitle, setNewTitle] = useState<string>('');
 	const [toggleEditMode, setToggleEditMode] = useState<boolean>(false)
 
@@ -25,7 +34,7 @@ export const EditableTitleTodolist = React.memo(({title, onClisk}: PropsType) =>
         <>
             {toggleEditMode ? (
                 <TextField
-                    style={{width:"100%"}}
+                    className={classes.TextField}
                     id="standard-multiline-flexible"
                     multiline
                     value={newTitle}

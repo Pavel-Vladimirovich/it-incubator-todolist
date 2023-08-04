@@ -2,9 +2,8 @@ import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./store";
 import {StatusRequest} from "./app_reducer";
-import {Container, CssBaseline, Grid, createTheme, LinearProgress, Paper, ThemeProvider, Typography} from "@material-ui/core";
+import {Container, CssBaseline, Grid, LinearProgress, Paper, ThemeProvider, Typography} from "@material-ui/core";
 import HideAppBar from "../components/MenuAppBar/HideAppBar";
-import style from "./App.module.scss";
 import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {Todolist} from "../features/Todolist/Todolist";
 import {
@@ -14,62 +13,36 @@ import {
     FilterValuesType, removeTodolistAsync, TodolistDomainType
 } from "../features/Todolist/todolist-reducer";
 import { CustomizedSnackbars } from "../components/Snackbar/Snackbar";
+import { theme } from "../utils/themeUI";
+import { makeStyles } from '@material-ui/core/styles';
 
-const theme = createTheme({
-    palette: {
-      primary: {
-        light: '#3492ca',
-        main: '#3492ca',
-        dark: '#0277bd',
-        contrastText: '#fff',
-      },
-      secondary: {
-        light: '#ff7961',
-        main: '#33abb8',
-        dark: '#0097a7',
-        contrastText: '#000',
-      },
+const useStyles = makeStyles({
+    linearProgressContainer: {
+        height: "3px"
     },
-    typography:{
-        fontFamily: 'Quicksand',
-        fontWeightRegular: 400,
-        fontWeightMedium: 500,
-        fontWeightBold: 600
+    linearProgress:{
+        height: "3px",
+    },
+    title:{
+        textTransform: "uppercase",
+        letterSpacing: ".15rem",
+        cursor: "default",
+        marginTop: "20px"
+    },
+    span: {
+        color: theme.palette.primary.main
     }
-  });
 
-theme.typography.h1 = {
-  fontSize: '1.2rem',
-  
-  '@media (min-width:600px)': {
-    fontSize: '1.5rem',
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: '2.4rem',
-  },
-};
-
-theme.typography.h3 = {
-    fontSize: '1rem',
-    '@media (min-width:600px)': {
-      fontSize: '1.2rem',
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '1.4rem',
-    },
-  };
-  
-
+})
 
 function App() {
     // console.log("render app")
+    const classes = useStyles()
     const dispatch = useDispatch<any>()
     const todolists = useSelector<AppStateType, Array<TodolistDomainType>>((state => state.todolists));
-    const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
+    //const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
     const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
-    if (statusRequest === StatusRequest.loading) {
-        // console.log(statusRequest)
-    }
+   
     useEffect(() => {
         dispatch(fetchTodolistAsync())
     }, [dispatch])
@@ -93,11 +66,11 @@ function App() {
             <CssBaseline />
             <HideAppBar/>
             <CustomizedSnackbars/>
-            <div style={{height: '10px'}}>{status === StatusRequest.loading && <LinearProgress color={"secondary"} style={{height: '3px'}}/>}</div>
+            <div className={classes.linearProgressContainer}>{status === StatusRequest.loading && <LinearProgress color={'primary'} className={classes.linearProgress}/>}</div>
             <Container maxWidth="xl">
                 <Grid container spacing={3}>
-                    <Grid item xs={12} style={{textAlign: "center", marginTop: "20px"}}>
-                    <Typography variant="h1" color='textSecondary' className={style.header_title}>todo <span>list</span></Typography>
+                    <Grid item xs={12} >
+                    <Typography variant="h1" align="center" color='textSecondary' gutterBottom className={classes.title}>todo <span className={classes.span}>list</span></Typography>
                         <AddItemForm
                             addItem={createTodolistHandler}
                             textMessage="Todolist created successfully!"
@@ -109,8 +82,8 @@ function App() {
                             <Grid item xs={12} md={6} key={tl.id}>
                                 <Paper
                                     elevation={3}
-                                    variant="outlined"
-                                    style={{padding: "10px"}}>
+                                    variant="elevation"
+                                   >
                                     <Todolist
                                         todolistId={tl.id}
                                         key={tl.id}

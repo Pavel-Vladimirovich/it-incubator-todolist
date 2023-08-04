@@ -50,7 +50,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
             </Tooltip>
             <label
                 htmlFor={keyForLabel}
-                className={`${task.status === TaskStatus.Completed ? style.task_completed : ""}`}>
+                className={`${task.status === TaskStatus.Completed && style.task_completed}`}>
                 <EditableSpan
                     title={task.title}
                     newTitle={newTitle}
@@ -72,7 +72,8 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
                 <Tooltip title="Delete">
                     <IconButton
                         onClick={removeTask}
-                        size="small">
+                        size="small"
+                        color="secondary">
                         <DeleteIcon/>
                     </IconButton>
                 </Tooltip>

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent, useState, useReducer } from "react";
-import { Button, Grid, Snackbar, TextField } from "@material-ui/core";
+import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
@@ -90,7 +90,10 @@ export const AddItemForm = React.memo(
       }
       setOpen(false);
     };
+
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+      dispatch({ type: REMOVE_TEXT_ERROR });
+      dispatch({ type: REMOVE_ERROR });
       dispatch({
         type: CURRENT_TARGET_VALUE,
         titleText: event.currentTarget.value,
@@ -103,7 +106,7 @@ export const AddItemForm = React.memo(
         addTasksHandler();
       }
     };
-
+    
     const addTasksHandler = () => {
       if (state.title.trim() === "") {
         dispatch({ type: ERROR_FIELD_IS_EMPTY });
@@ -118,16 +121,14 @@ export const AddItemForm = React.memo(
       // handleClick();
     };
     return (
-      <form noValidate autoComplete="off">
+      <form noValidate autoComplete="off" onSubmit={e=>{e.preventDefault()}}>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={10}>
             <TextField
-              style={{ width: "100%" }}
-              error={!!state.errorMessage}
-              variant="outlined"
-              id="standard-multiline-flexible"
-              multiline
-              maxRows={4}
+              fullWidth
+              required
+              error={state.error}
+              id="standard-basic"
               label={state.errorMessage ? state.errorMessage : labelMessage}
               value={state.title}
               onChange={onChangeHandler}
@@ -137,18 +138,16 @@ export const AddItemForm = React.memo(
           <Grid item xs={12} sm={2}>
             <Button
               startIcon={<AddBoxIcon />}
-              size="large"
-              style={{
-                width: "100%",
-                height: "100%",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
+              fullWidth
+              style={{height: '100%'}}
               color="primary"
               variant="outlined"
+              disableElevation
               onClick={addTasksHandler}
             >
-              add
+              <Typography noWrap>
+                create
+              </Typography>
             </Button>
           </Grid>
         </Grid>

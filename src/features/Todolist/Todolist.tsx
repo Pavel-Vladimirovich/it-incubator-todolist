@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import style from "./Todolist.module.scss"
 import {v1} from "uuid";
-import {Button, Grid, Tooltip, Typography} from "@material-ui/core";
+import {Button, Tooltip, Typography} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
@@ -16,7 +15,28 @@ import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {FilterValuesType, updateTodolistTitleAsync} from "./todolist-reducer";
 import {createTaskAsync, fetchTasksAsync, } from "../Task/tasks-reducer";
 import { EditableTitleTodolist } from "../../components/EditableTitleTodolist/EditableTitleTodolist";
+import { ButtonGroup } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles({
+    container: {
+        display: "grid",
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto auto auto auto",
+        gap: "25px",
+        padding: "10px",
+    },
+    header: {
+        display: "flex",
+        alignItems: "center",
+    },
+    title: {
+        flex: "1 1 auto",
+        textTransform: "uppercase",
+        letterSpacing: '.1rem',
+        wordBreak: "break-word"
+    }
+})
 
 type TodolistPropsType = {
     todolistId: string;
@@ -29,6 +49,7 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
     //console.log('render todolist')
+    const classes = useStyles()
     let tasksForTodolist = useSelector<AppStateType, Array<TaskType>>((state => state.tasks[todolistId]));
     const dispatch = useDispatch<any>();
 
@@ -58,9 +79,9 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
     }
 
     return (
-        <div className={style.todolist}>
-            <div className={style.todolist_header}>
-                <Typography variant="h3" className={style.header_title}>
+        <div className={classes.container}>
+            <div className={classes.header}>
+                <Typography variant="h3" color="primary" gutterBottom className={classes.title}>
                     <EditableTitleTodolist 
                         title={title}
                         onClisk={updateTitleTodolistHandler}
@@ -82,38 +103,32 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
                     textMessage="Task created successfully!"
                     labelMessage="Add a new task..."/>
             </div>
-            <Grid container spacing={1}>
-                <Grid item xs={12} sm={4}>
+                <ButtonGroup variant="text" fullWidth>
                     <Button
-                        style={{width: "100%"}}
-                        color={filter === FilterValuesType.all ? "primary" : "default"}
+                        color={filter === FilterValuesType.all ? "secondary" : "default"}
                         startIcon={<ReceiptIcon/>}
-                        variant="contained"
                         onClick={onAllClickHandler}>
-                        All
+                        <Typography noWrap>
+                            All
+                        </Typography>
                     </Button>
-                </Grid>
-                <Grid item xs={12} sm={4}>
                     <Button
-                        style={{width: "100%"}}
-                        color={filter === FilterValuesType.active ? "primary" : "default"}
+                        color={filter === FilterValuesType.active ? "secondary" : "default"}
                         startIcon={<BallotIcon/>}
-                        variant="contained"
                         onClick={onActiveClickHandler}>
-                        Active
+                        <Typography noWrap>
+                            Active
+                        </Typography>
                     </Button>
-                </Grid>
-                <Grid item xs={12} sm={4}>
                     <Button
-                        style={{width: "100%"}}
-                        color={filter === FilterValuesType.completed ? "primary" : "default"}
+                        color={filter === FilterValuesType.completed ? "secondary" : "default"}
                         startIcon={<AssignmentTurnedInIcon/>}
-                        variant="contained"
                         onClick={onCompletedClickHandler}>
-                        Completed
+                        <Typography noWrap>
+                            Completed
+                        </Typography>
                     </Button>
-                </Grid>
-            </Grid>
+                </ButtonGroup>
             <ul>
                 {tasksForTodolist.map((task: TaskType) => {
                     const keyForLabel = v1();
