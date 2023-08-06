@@ -3,7 +3,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Slide from '@material-ui/core/Slide';
 import {Button, IconButton, LinearProgress} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,6 +12,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {StatusRequest} from "../../app/app_reducer";
 import {useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
+import {Link, NavLink} from "react-router-dom";
 
 interface Props {
 	children: React.ReactElement;
@@ -81,7 +81,9 @@ export default function HideAppBar() {
           <Typography variant="h6" className={classes.title}>
             Todo list
           </Typography>
-          <Button color="inherit">Login</Button>
+			<NavLink to="/login">
+				Login
+			</NavLink>
         </Toolbar>
 	  	<div className={classes.linearProgressContainer}>{statusRequest === StatusRequest.loading && <LinearProgress color={'primary'} className={classes.linearProgress}/>}</div>
       </AppBar>
