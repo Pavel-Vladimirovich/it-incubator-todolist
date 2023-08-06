@@ -9,6 +9,9 @@ export const instance = axios.create({
 });
 
 export const todolistAPI = {
+    getAuthenticatorData() {
+        return instance.get<ResponseType<AuthDataType>>('auth/me')
+    },
     getTodolist() {
         return instance.get<Array<TodolistType>>('todo-lists')
     },
@@ -63,6 +66,11 @@ export enum TaskPriority {
     Hi = 2,
     Urgently = 3,
     Later = 4
+}
+export type AuthDataType = {
+    id: number | null
+    email: string
+    login: string
 }
 
 export type TaskType = {

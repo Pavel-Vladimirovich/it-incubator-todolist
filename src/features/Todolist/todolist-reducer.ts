@@ -24,7 +24,7 @@ export const todolistReducer = (state: TodolistStateType = initialState, action:
             return action.todolists.map(tl => ({...tl, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}))
         case "CREATE_TODOLIST":
             return [{...action.todolist, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}, ...state]
-        case 'REMOVE_TODOLIST':
+        case "REMOVE_TODOLIST":
             return state.filter(tl => tl.id !== action.todolistId)
         case "CHANGE_TODOLIST_TITLE":
         case "CHANGE_TODOLIST_FILTER":
@@ -36,15 +36,15 @@ export const todolistReducer = (state: TodolistStateType = initialState, action:
 }
 
 // actions
-export const removeTodolist = (todolistId: string) => ({type: 'REMOVE_TODOLIST', todolistId} as const)
+export const removeTodolist = (todolistId: string) => ({type: "REMOVE_TODOLIST", todolistId} as const)
 export const createTodolist = (todolist: TodolistType) => ({type: "CREATE_TODOLIST", todolist} as const)
 export const changeTodolistTitle = (id: string, title: string) => ({
-    type: 'CHANGE_TODOLIST_TITLE',
+    type: "CHANGE_TODOLIST_TITLE",
     id,
     payloadType: {title}
 } as const)
 export const changeTodolistFilter = (id: string, filter: FilterValuesType) => ({
-    type: 'CHANGE_TODOLIST_FILTER',
+    type: "CHANGE_TODOLIST_FILTER",
     id,
     payloadType: {filter}
 } as const)
@@ -53,7 +53,7 @@ export const setEntityStatus = (id: string, entityStatus: StatusRequest) => ({
     id,
     payloadType: {entityStatus}
 } as const)
-export const setTodolist = (todolists: Array<TodolistType>) => ({type: 'SET_TODOLISTS', todolists} as const)
+export const setTodolist = (todolists: Array<TodolistType>) => ({type: "SET_TODOLISTS", todolists} as const)
 
 // thunks
 export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
@@ -65,7 +65,7 @@ export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusR
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
             }
             else{
-                dispatch(setAppError('some error occurred'))
+                dispatch(setAppError("some error occurred"))
                 dispatch(setAppStatusRequest(StatusRequest.failed))
             }
         })

@@ -4,12 +4,15 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Slide from '@material-ui/core/Slide';
-import {Button, IconButton} from '@material-ui/core';
+import {Button, IconButton, LinearProgress} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import Zoom from '@material-ui/core/Zoom';
 import Fab from '@material-ui/core/Fab';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import {StatusRequest} from "../../app/app_reducer";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../app/store";
 
 interface Props {
 	children: React.ReactElement;
@@ -29,17 +32,15 @@ const useStyles = makeStyles((theme) => ({
 		textTransform: "uppercase",
 		cursor: "default"
 	},
+	linearProgressContainer: {
+		height: "3px"
+	},
+	linearProgress: {
+		height: "3px",
+	},
+
   }));
-  
-function HideOnScroll(props: Props) {
-  const { children } = props;
-  const trigger = useScrollTrigger();
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-}
+
 function ScrollTop(props: Props) {
 	const { children } = props;
 	const classes = useStyles();
@@ -65,13 +66,14 @@ function ScrollTop(props: Props) {
 	  </Zoom>
 	);
   }
+
 export default function HideAppBar() {
-	
 	const classes = useStyles();
+	const statusRequest = useSelector<AppStateType>(store => store.app.status)
+
   return (
     <>
-      <HideOnScroll>
-	  <AppBar>
+	  <AppBar position={'fixed'}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -81,8 +83,8 @@ export default function HideAppBar() {
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
+	  	<div className={classes.linearProgressContainer}>{statusRequest === StatusRequest.loading && <LinearProgress color={'primary'} className={classes.linearProgress}/>}</div>
       </AppBar>
-      </HideOnScroll>
       <Toolbar id="back-to-top-anchor"/>
 	  <ScrollTop>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
