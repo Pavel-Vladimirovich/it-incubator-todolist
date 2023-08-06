@@ -1,33 +1,37 @@
-import React, {ChangeEvent, useState} from "react";
-import  style from "./EditableSpan.module.scss";
+import {TextField} from "@material-ui/core";
+import React, {ChangeEvent} from "react";
 
-type EditableSpanPropsType = {
-    title: string
-    onChangeTitle: (title: string) => void
-    className?: string
-}
-export const EditableSpan = ({title, onChangeTitle, className}: EditableSpanPropsType) => {
 
-    const [editMode, setEditMode] = useState<boolean>(false);
-    const [newTitle, setNewTitle] = useState('')
-
+type PropsType = {
+    newTitle: string
+    setNewTitle: (value: string) => void
+    title: string;
+    toggleEditMode: boolean;
+    activateEditMode: () => void;
+    deactivateEditMode: () => void;
+};
+export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: PropsType) => {
+    //console.log('render editable span')
+    
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setNewTitle(event.currentTarget.value)
-    }
-    const activateEditMode = () => {
-        setEditMode(true)
-        setNewTitle(title)
-    }
-    const deactivateActivateEditMode = () => {
-        setEditMode(false)
-        onChangeTitle(newTitle)
-    }
-
+        setNewTitle(event.currentTarget.value);
+    };
     return (
         <>
-            {editMode ?
-                <textarea className={style.input}  value={newTitle}  onChange={onChangeHandler} onBlur={deactivateActivateEditMode} autoFocus/> :
-                <span onDoubleClick={activateEditMode}>{title}</span>}
+            {toggleEditMode ? (
+                <TextField
+                    style={{width:"100%" }}
+                    id="standard-multiline-flexible"
+                    multiline
+                    maxRows={5}
+                    value={newTitle}
+                    onChange={onChangeHandler}
+                    onBlur={deactivateEditMode}
+                    autoFocus
+                />
+            ) : (
+                <span onDoubleClick={activateEditMode}>{title}</span>
+            )}
         </>
-    )
-}
+    );
+});
