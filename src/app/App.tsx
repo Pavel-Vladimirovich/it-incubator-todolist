@@ -4,7 +4,7 @@ import HideAppBar from "../components/MenuAppBar/HideAppBar";
 import {CustomizedSnackbars} from "../components/Snackbar/Snackbar";
 import {theme} from "../utils/comonStyleThemeUI";
 import {TodolistList} from "../features/TodolistList/TodolistList";
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {Outlet} from "react-router-dom";
 
 
 
@@ -17,6 +17,7 @@ function App() {
                 <HideAppBar/>
                 <CustomizedSnackbars/>
                 <TodolistList/>
+                <Outlet/>
             </ThemeProvider>
         </>
     );

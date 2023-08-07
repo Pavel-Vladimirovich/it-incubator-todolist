@@ -12,7 +12,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {StatusRequest} from "../../app/app_reducer";
 import {useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 interface Props {
 	children: React.ReactElement;
