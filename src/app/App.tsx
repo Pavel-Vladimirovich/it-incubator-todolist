@@ -8,7 +8,7 @@ import {Outlet} from "react-router-dom";
 
 
 function App() {
-    console.log("render app")
+    // console.log("render app")
     return (
         <>
             <ThemeProvider theme={theme}>
