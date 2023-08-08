@@ -7,17 +7,26 @@ import {Provider} from "react-redux";
 import {store} from "./app/store";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Login} from "./features/Login/Login";
+import {TodolistList} from "./features/TodolistList/TodolistList";
+import {ErrorPage} from "./components/Error-page/Error-page";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App/>,
-        errorElement: <div>Error</div>
+        errorElement: <ErrorPage/>,
+        children:[
+            {
+                path: "/",
+                element: <TodolistList/>,
+            },
+            {
+                path: "/login",
+                element: <Login/>,
+            },
+        ]
     },
-    {
-        path: "/login",
-        element: <Login/>,
-    },
+    
 ]);
 
 

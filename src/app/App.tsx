@@ -1,9 +1,8 @@
 import React from "react";
-import {CssBaseline, ThemeProvider} from "@material-ui/core";
+import {Container, CssBaseline, ThemeProvider} from "@material-ui/core";
 import HideAppBar from "../components/MenuAppBar/HideAppBar";
 import {CustomizedSnackbars} from "../components/Snackbar/Snackbar";
 import {theme} from "../utils/comonStyleThemeUI";
-import {TodolistList} from "../features/TodolistList/TodolistList";
 import {Outlet} from "react-router-dom";
 
 
@@ -16,8 +15,9 @@ function App() {
                 <CssBaseline/>
                 <HideAppBar/>
                 <CustomizedSnackbars/>
-                <TodolistList/>
-                <Outlet/>
+                <Container maxWidth="xl">
+                    <Outlet/>
+                </Container>
             </ThemeProvider>
         </>
     );

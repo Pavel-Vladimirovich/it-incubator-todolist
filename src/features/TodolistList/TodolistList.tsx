@@ -68,37 +68,35 @@ export const TodolistList = () => {
         }, [dispatch])
 
     return(
-        <Container maxWidth="xl">
-            <Grid container spacing={3}>
-                <Grid item xs={12} >
-                    <Typography variant="h1" align="center" color='textSecondary' gutterBottom className={classes.title}>todo <span className={classes.span}>list</span></Typography>
-                    <AddItemForm
-                        addItem={createTodolistHandler}
-                        textMessage="Todolist created successfully!"
-                        labelMessage="Add a new to-do list..."
-                    />
-                </Grid>
-                {todolists.map((tl) => {
-                    return (
-                        <Grid item xs={12} md={6} key={tl.id}>
-                            <Paper
-                                elevation={8}
-                                variant="elevation"
-                            >
-                                <Todolist
-                                    todolistId={tl.id}
-                                    key={tl.id}
-                                    title={tl.title}
-                                    changeFilter={changeTodolistFilterHandler}
-                                    filter={tl.filter}
-                                    entityStatus={tl.entityStatus}
-                                    removeTodolist={removeTodolistHandler}
-                                />
-                            </Paper>
-                        </Grid>
-                    );
-                })}
+        <Grid container spacing={3}>
+            <Grid item xs={12} >
+                <Typography variant="h1" align="center" color='textSecondary' gutterBottom className={classes.title}>todo <span className={classes.span}>list</span></Typography>
+                <AddItemForm
+                    addItem={createTodolistHandler}
+                    textMessage="Todolist created successfully!"
+                    labelMessage="Add a new to-do list..."
+                />
             </Grid>
-        </Container>
+            {todolists.map((tl) => {
+                return (
+                    <Grid item xs={12} md={6} key={tl.id}>
+                        <Paper
+                            elevation={8}
+                            variant="elevation"
+                        >
+                            <Todolist
+                                todolistId={tl.id}
+                                key={tl.id}
+                                title={tl.title}
+                                changeFilter={changeTodolistFilterHandler}
+                                filter={tl.filter}
+                                entityStatus={tl.entityStatus}
+                                removeTodolist={removeTodolistHandler}
+                            />
+                        </Paper>
+                    </Grid>
+                );
+            })}
+        </Grid>
     )
 }
