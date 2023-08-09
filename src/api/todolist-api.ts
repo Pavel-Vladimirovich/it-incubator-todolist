@@ -9,12 +9,7 @@ export const instance = axios.create({
 });
 
 export const todolistAPI = {
-    getAuthenticatorData() {
-        return instance.get<ResponseType<AuthDataType>>('auth/me')
-    },
-    setAuthenticatorData(model: AuthorizeModelType){
-        return instance.post<ResponseType<{ userId: number }>>('auth/login', model)
-    },
+
     getTodolist() {
         return instance.get<Array<TodolistType>>('todo-lists')
     },
@@ -41,6 +36,15 @@ export const todolistAPI = {
     }
 }
 
+export const authAPI = {
+    getAuthenticatorData() {
+        return instance.get<ResponseType<AuthDataType>>('auth/me')
+    },
+    setAuthenticatorData(data: AuthorizeDataType){
+        return instance.post<ResponseType<{ userId: number }>>('auth/login', data)
+    },
+}
+
 // types
 export type ResponseType<D = {}> = {
     resultCode: number
@@ -48,7 +52,7 @@ export type ResponseType<D = {}> = {
     data: D
 }
 
-export type AuthorizeModelType = {
+export type AuthorizeDataType = {
     email: string
     password: string
 }
@@ -79,7 +83,7 @@ export type AuthDataType = {
     id: number | null
     email: string
     login: string
-    authDataSuccess: boolean
+    isLoggedIn: boolean
 }
 
 export type TaskType = {

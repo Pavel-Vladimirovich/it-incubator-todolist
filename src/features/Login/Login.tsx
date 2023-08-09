@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {Button,Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, TextField, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import { setAuthenticatorDataAsync } from "../../app/auth_reducer";
+import { loginAsync } from "../../app/auth_reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppStateType } from "../../app/store";
@@ -17,13 +17,8 @@ const useStyles = makeStyles({
 
 export const Login = () => {
     const navigate = useNavigate();
-    const authenticatorData = useSelector<AppStateType>(state => state.authData.authDataSuccess)
+    const authenticatorData = useSelector<AppStateType>(state => state.authData.isLoggedIn)
     const dispatch = useDispatch<any>()
-
-    if(authenticatorData){
-      navigate('/')
-    }
-
     const classes = useStyles();
     const formik = useFormik({
       initialValues: {
@@ -35,10 +30,15 @@ export const Login = () => {
         password: Yup.string().required('Required')
       }),
       onSubmit: values => {
-        dispatch(setAuthenticatorDataAsync(values))
+        dispatch(loginAsync(values))
       },
     });
-    
+
+    useEffect(() => {
+        if (authenticatorData) {
+            navigate('/');
+        }
+    }, [authenticatorData, navigate]);
 
     return (
         <>

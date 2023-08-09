@@ -1,4 +1,4 @@
-import {AuthDataType, AuthorizeModelType, todolistAPI} from "../api/todolist-api";
+import {authAPI, AuthDataType, AuthorizeDataType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import { setAppStatusRequest, StatusRequest, StatusRequestActionType } from "./app_reducer";
@@ -8,7 +8,7 @@ const initialState: AuthDataType = {
     id: null,
     login: "",
     email: "",
-    authDataSuccess: false
+    isLoggedIn: false
 }
 
 export const authReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
@@ -18,10 +18,10 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
                 ...state,
                 ...action.authData
             }
-        case "AUTH_SUCCESS": 
+        case "login/IS_LOGGED_IN":
         return {
             ...state,
-            authDataSuccess: action.authDataSuccess
+            isLoggedIn: action.isLoggedIn
         }    
         default:
             return state
@@ -35,14 +35,14 @@ const authData = (authData: AuthDataType) => ({
         authData
 } as const)
 
-const setAuthDataSuccess = () => ({
-    type: "AUTH_SUCCESS",
-    authDataSuccess: true
+const setAuthDataSuccess = (isLoggedIn: boolean) => ({
+    type: "login/IS_LOGGED_IN",
+    isLoggedIn
 }as const)
 
 // thunks
 export const getAuthDataAsync = () => (dispatch: Dispatch) => {
-    todolistAPI.getAuthenticatorData()
+    authAPI.getAuthenticatorData()
         .then(response => {
             if(response.status === 200){
                 dispatch(authData(response.data.data))
@@ -55,12 +55,12 @@ export const getAuthDataAsync = () => (dispatch: Dispatch) => {
         })
 }
 
-export const setAuthenticatorDataAsync = (model: AuthorizeModelType) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+export const loginAsync = (data: AuthorizeDataType) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
-    todolistAPI.setAuthenticatorData(model)
+    authAPI.setAuthenticatorData(data)
         .then(response => {
             if(response.data.resultCode === 0){
-                dispatch(setAuthDataSuccess())
+                dispatch(setAuthDataSuccess(true))
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
             }else{
                 handleServerAppError(response.data, dispatch)
