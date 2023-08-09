@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from "react";
-import {Container, Grid, Paper, Typography} from "@material-ui/core";
+import { Grid, Paper, Typography} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "../Todolist/Todolist";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,12 +11,10 @@ import {
     removeTodolistAsync,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
-import {StatusRequest} from "../../app/app_reducer";
 import {AuthDataType} from "../../api/todolist-api";
 import {getAuthDataAsync} from "../../app/auth_reducer";
 import {makeStyles} from "@material-ui/core/styles";
 import {theme} from "../../utils/comonStyleThemeUI";
-import {Link} from "react-router-dom";
 
 const useStyles = makeStyles({
     linearProgressContainer: {
@@ -44,7 +42,7 @@ export const TodolistList = () => {
     const dispatch = useDispatch<any>()
     const todolists = useSelector<AppStateType, Array<TodolistDomainType>>((state => state.todolists));
     //const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
-    const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
+    // const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
     const authData = useSelector<AppStateType, AuthDataType>((state) => state.authData)
     console.log(authData)
 

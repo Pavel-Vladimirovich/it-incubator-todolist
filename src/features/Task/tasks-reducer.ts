@@ -70,8 +70,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
 };
 // actions
 export const createTask = (task: TaskType) => ({type: "CREATE-TASK", task} as const)
-export const removeTask = (todolistId: string, taskId: string) => ({type: "REMOVE-TASK", todolistId, taskId} as const)
 
+export const removeTask = (todolistId: string, taskId: string) => ({type: "REMOVE-TASK", todolistId, taskId} as const)
 
 export const updateTask = (todolistId: string, taskId: string, domainModel: domainTaskModelType) => ({
     type: "UPDATE-TASK",

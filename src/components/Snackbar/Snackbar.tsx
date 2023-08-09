@@ -23,11 +23,11 @@ export const CustomizedSnackbars = React.memo(()=>{
   const classes = useStyles();
 
   const error  = useSelector<AppStateType, string | null>((state) => state.app.error);
-  const status = useSelector<AppStateType, StatusRequest>(state=>state.app.status)
+  // const status = useSelector<AppStateType, StatusRequest>(state=>state.app.status)
   const dispatch = useDispatch();
 
   const isError = error !== null
-  const isSucceeded = status === StatusRequest.succeeded
+  // const isSucceeded = status === StatusRequest.succeeded
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {

@@ -12,6 +12,9 @@ export const todolistAPI = {
     getAuthenticatorData() {
         return instance.get<ResponseType<AuthDataType>>('auth/me')
     },
+    setAuthenticatorData(model: AuthorizeModelType){
+        return instance.post<ResponseType<{ userId: number }>>('auth/login', model)
+    },
     getTodolist() {
         return instance.get<Array<TodolistType>>('todo-lists')
     },
@@ -28,7 +31,7 @@ export const todolistAPI = {
         return instance.get<tasksResponseType>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title: title})
+        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title: title})
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
@@ -43,6 +46,11 @@ export type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>,
     data: D
+}
+
+export type AuthorizeModelType = {
+    email: string
+    password: string
 }
 
 export type TodolistType = {
@@ -71,6 +79,7 @@ export type AuthDataType = {
     id: number | null
     email: string
     login: string
+    authDataSuccess: boolean
 }
 
 export type TaskType = {
