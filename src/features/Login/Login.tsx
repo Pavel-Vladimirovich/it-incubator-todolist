@@ -17,28 +17,30 @@ const useStyles = makeStyles({
 
 export const Login = () => {
     const navigate = useNavigate();
-    const authenticatorData = useSelector<AppStateType>(state => state.authData.isLoggedIn)
+    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.authData.isLoggedIn)
     const dispatch = useDispatch<any>()
     const classes = useStyles();
     const formik = useFormik({
       initialValues: {
         email: '',
         password: '',
+        rememberMe: false
       },
       validationSchema: Yup.object({
         email: Yup.string().email('Invalid email address').required('Required'),
         password: Yup.string().required('Required')
       }),
       onSubmit: values => {
+        alert(JSON.stringify(values, null, 2))
         dispatch(loginAsync(values))
       },
     });
 
     useEffect(() => {
-        if (authenticatorData) {
+        if (isLoggedIn) {
             navigate('/');
         }
-    }, [authenticatorData, navigate]);
+    }, [isLoggedIn, navigate]);
 
     return (
         <>
@@ -54,7 +56,7 @@ export const Login = () => {
                     <TextField label="Enter your pass" type="password" {...formik.getFieldProps('password')}/>
                     {formik.touched.password && formik.errors.password ? 
                     <FormHelperText variant="outlined" error>{formik.errors.password}</FormHelperText> : <FormHelperText variant="outlined">password</FormHelperText>}
-                    <FormControlLabel control={<Checkbox color="primary"/>}
+                    <FormControlLabel control={<Checkbox color="primary" {...formik.getFieldProps('rememberMe')}/>}
                                       label={<Typography color="textSecondary">Remember
                                         me</Typography>}/>
                     <Button type={"submit"} color="primary" variant="outlined" fullWidth>sign in</Button>

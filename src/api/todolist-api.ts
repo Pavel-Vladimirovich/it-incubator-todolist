@@ -37,10 +37,10 @@ export const todolistAPI = {
 }
 
 export const authAPI = {
-    getAuthenticatorData() {
+    getAuthData() {
         return instance.get<ResponseType<AuthDataType>>('auth/me')
     },
-    setAuthenticatorData(data: AuthorizeDataType){
+    login(data: LoginDataType){
         return instance.post<ResponseType<{ userId: number }>>('auth/login', data)
     },
 }
@@ -52,9 +52,15 @@ export type ResponseType<D = {}> = {
     data: D
 }
 
-export type AuthorizeDataType = {
+export type LoginDataType = {
     email: string
     password: string
+}
+// идентификационные данные
+export type AuthDataType = {
+    id: number | null
+    email: string
+    login: string
 }
 
 export type TodolistType = {
@@ -78,12 +84,6 @@ export enum TaskPriority {
     Hi = 2,
     Urgently = 3,
     Later = 4
-}
-export type AuthDataType = {
-    id: number | null
-    email: string
-    login: string
-    isLoggedIn: boolean
 }
 
 export type TaskType = {

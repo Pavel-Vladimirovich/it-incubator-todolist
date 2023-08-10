@@ -1,9 +1,8 @@
 import React from "react";
-import {Container, CssBaseline, ThemeProvider} from "@material-ui/core";
-import HideAppBar from "../components/MenuAppBar/HideAppBar";
-import {CustomizedSnackbars} from "../components/Snackbar/Snackbar";
+import {CssBaseline, ThemeProvider} from "@material-ui/core";
 import {theme} from "../utils/comonStyleThemeUI";
 import {Outlet} from "react-router-dom";
+import {Layout} from "../components/Layout";
 
 
 
@@ -13,11 +12,9 @@ function App() {
         <>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
-                <HideAppBar/>
-                <CustomizedSnackbars/>
-                <Container maxWidth="xl">
+                <Layout>
                     <Outlet/>
-                </Container>
+                </Layout>
             </ThemeProvider>
         </>
     );

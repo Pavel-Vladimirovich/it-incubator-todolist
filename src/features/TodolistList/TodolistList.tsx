@@ -11,10 +11,10 @@ import {
     removeTodolistAsync,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
-import {AuthDataType} from "../../api/todolist-api";
-import {getAuthDataAsync} from "../../app/auth_reducer";
+import {CurrentAutDataType, getCurrentAuthDataAsync} from "../../app/auth_reducer";
 import {makeStyles} from "@material-ui/core/styles";
 import {theme} from "../../utils/comonStyleThemeUI";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
     linearProgressContainer: {
@@ -35,21 +35,26 @@ const useStyles = makeStyles({
 
 })
 
-
 export const TodolistList = () => {
     const classes = useStyles()
-
+    const navigate = useNavigate();
     const dispatch = useDispatch<any>()
     const todolists = useSelector<AppStateType, Array<TodolistDomainType>>((state => state.todolists));
     //const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
     // const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
-    const authData = useSelector<AppStateType, AuthDataType>((state) => state.authData)
-    console.log(authData)
+    const isAuthorized = useSelector<AppStateType, boolean>((state) => state.app.isAuthorized)
+    
 
-    useEffect(() => {
+    useEffect(()=>{
+        dispatch(getCurrentAuthDataAsync())
         dispatch(fetchTodolistAsync())
-        dispatch(getAuthDataAsync())
-    }, [dispatch])
+        if(!isAuthorized)
+        navigate('login')
+        console.log(isAuthorized)
+       
+    }, [dispatch, isAuthorized, navigate])
+
+   
 
     const createTodolistHandler = useCallback((title: string) => {
         dispatch(createTodolistAsync(title))
@@ -64,6 +69,9 @@ export const TodolistList = () => {
         (todolistId: string, filterValue: FilterValuesType) => {
             dispatch(changeTodolistFilter(todolistId, filterValue))
         }, [dispatch])
+
+    
+    
 
     return(
         <Grid container spacing={3}>
