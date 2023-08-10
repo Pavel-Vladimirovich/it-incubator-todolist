@@ -7,7 +7,7 @@ import { loginAsync } from "../../app/auth_reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppStateType } from "../../app/store";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const useStyles = makeStyles({
     container: {
@@ -16,10 +16,10 @@ const useStyles = makeStyles({
 });
 
 export const Login = () => {
+    const classes = useStyles();
     const navigate = useNavigate();
     const isLoggedIn = useSelector<AppStateType, boolean>(state => state.authData.isLoggedIn)
     const dispatch = useDispatch<any>()
-    const classes = useStyles();
     const formik = useFormik({
       initialValues: {
         email: '',
@@ -28,7 +28,8 @@ export const Login = () => {
       },
       validationSchema: Yup.object({
         email: Yup.string().email('Invalid email address').required('Required'),
-        password: Yup.string().required('Required')
+        password: Yup.string().required('Required'),
+        rememberMe: Yup.boolean()
       }),
       onSubmit: values => {
         alert(JSON.stringify(values, null, 2))
@@ -36,11 +37,9 @@ export const Login = () => {
       },
     });
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate('/');
-        }
-    }, [isLoggedIn, navigate]);
+    useEffect(()=>{
+        isLoggedIn && navigate('/')
+    }, [isLoggedIn, navigate])
 
     return (
         <>
@@ -56,7 +55,7 @@ export const Login = () => {
                     <TextField label="Enter your pass" type="password" {...formik.getFieldProps('password')}/>
                     {formik.touched.password && formik.errors.password ? 
                     <FormHelperText variant="outlined" error>{formik.errors.password}</FormHelperText> : <FormHelperText variant="outlined">password</FormHelperText>}
-                    <FormControlLabel control={<Checkbox color="primary" {...formik.getFieldProps('rememberMe')}/>}
+                    <FormControlLabel control={<Checkbox color="primary" checked={formik.values.rememberMe} {...formik.getFieldProps('rememberMe')}/>}
                                       label={<Typography color="textSecondary">Remember
                                         me</Typography>}/>
                     <Button type={"submit"} color="primary" variant="outlined" fullWidth>sign in</Button>

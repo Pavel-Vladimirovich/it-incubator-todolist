@@ -1,3 +1,8 @@
+import {Dispatch} from "redux";
+import {authAPI} from "../api/todolist-api";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {currentAuthData, CurrentAuthDataType, login, LoginActionType} from "./auth_reducer";
+
 export enum StatusRequest {
     idle = "idle",
     loading = "loading",
@@ -8,7 +13,7 @@ export enum StatusRequest {
 const initialState = {
     error: null as string | null,
     status: StatusRequest.idle as StatusRequest,
-    isAuthorized: false as boolean
+    isInitialization: false as boolean
 }
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
@@ -26,7 +31,7 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
         case "APP/IS_AUTHORIZED": 
         return {
             ...state,
-            isAuthorized: action.payloadType
+            isInitialization: action.payloadType
         }
         default:
             return state
@@ -37,14 +42,32 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
 // actions
 export const setAppError = (error: string | null) => ({type: "APP/SET_ERROR", payloadType: error} as const)
 export const setAppStatusRequest = (status: StatusRequest) => ({type: "APP/SET_STATUS", payloadType: status} as const)
-export const appAuthorized = (isAuthorized: boolean) => ({type: "APP/IS_AUTHORIZED", payloadType: isAuthorized} as const)
+export const setAppInitialization = (isAuthorized: boolean) => ({type: "APP/IS_AUTHORIZED", payloadType: isAuthorized} as const)
+
+// thunks
+export const appInitializationAsync = () => (dispatch: Dispatch<ActionType | LoginActionType | CurrentAuthDataType>) => {
+    authAPI.getAuthData()
+        .then(response => {
+            if(response.data.resultCode === 0){
+                dispatch(login(true))
+                dispatch(currentAuthData(response.data.data))
+            }else{
+                handleServerAppError(response.data, dispatch)
+            }
+            dispatch(setAppInitialization(true))
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
+
+        })
+}
 
 // types
 type InitialStateType = typeof initialState
 
 export type ErrorActionType = ReturnType<typeof setAppError>
 export type StatusRequestActionType = ReturnType<typeof setAppStatusRequest>
-export type IsAuthorizedType = ReturnType<typeof appAuthorized>
+export type IsAuthorizedType = ReturnType<typeof setAppInitialization>
 
 type ActionType =
     | ErrorActionType

@@ -11,7 +11,6 @@ import {
     removeTodolistAsync,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
-import {CurrentAutDataType, getCurrentAuthDataAsync} from "../../app/auth_reducer";
 import {makeStyles} from "@material-ui/core/styles";
 import {theme} from "../../utils/comonStyleThemeUI";
 import { useNavigate } from "react-router-dom";
@@ -42,19 +41,14 @@ export const TodolistList = () => {
     const todolists = useSelector<AppStateType, Array<TodolistDomainType>>((state => state.todolists));
     //const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
     // const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
-    const isAuthorized = useSelector<AppStateType, boolean>((state) => state.app.isAuthorized)
-    
+    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.authData.isLoggedIn)
 
     useEffect(()=>{
-        dispatch(getCurrentAuthDataAsync())
+        if(!isLoggedIn){
+            navigate('login')
+        }
         dispatch(fetchTodolistAsync())
-        if(!isAuthorized)
-        navigate('login')
-        console.log(isAuthorized)
-       
-    }, [dispatch, isAuthorized, navigate])
-
-   
+    }, [dispatch, isLoggedIn, navigate])
 
     const createTodolistHandler = useCallback((title: string) => {
         dispatch(createTodolistAsync(title))
@@ -70,7 +64,7 @@ export const TodolistList = () => {
             dispatch(changeTodolistFilter(todolistId, filterValue))
         }, [dispatch])
 
-    
+
     
 
     return(

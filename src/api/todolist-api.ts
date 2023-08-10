@@ -55,6 +55,7 @@ export type ResponseType<D = {}> = {
 export type LoginDataType = {
     email: string
     password: string
+    rememberMe: boolean
 }
 // идентификационные данные
 export type AuthDataType = {

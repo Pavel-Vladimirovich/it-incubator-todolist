@@ -1,7 +1,7 @@
 import {authAPI, AuthDataType, LoginDataType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import { appAuthorized, setAppStatusRequest, StatusRequest, StatusRequestActionType } from "./app_reducer";
+import { setAppInitialization, setAppStatusRequest, StatusRequest, StatusRequestActionType } from "./app_reducer";
 
 
 const initialState: InitialStateType = {
@@ -13,12 +13,12 @@ const initialState: InitialStateType = {
 
 export const authReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
     switch (action.type) {
-        case "LOGIN/AUTH_DATA":
+        case "AUTH/AUTH_DATA":
             return {
                 ...state,
                 ...action.authData
             }
-        case "LOGIN/IS_LOGGED_IN":
+        case "AUTH/IS_LOGGED_IN":
         return {
             ...state,
             isLoggedIn: action.isLoggedIn
@@ -30,34 +30,17 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 
 
 // actions
-const currentAuthData = (authData: AuthDataType) => ({
-        type: "LOGIN/AUTH_DATA",
+export const currentAuthData = (authData: AuthDataType) => ({
+        type: "AUTH/AUTH_DATA",
         authData
 } as const)
 
-const login = (isLoggedIn: boolean) => ({
-    type: "LOGIN/IS_LOGGED_IN",
+export const login = (isLoggedIn: boolean) => ({
+    type: "AUTH/IS_LOGGED_IN",
     isLoggedIn
 }as const)
 
 // thunks
-export const getCurrentAuthDataAsync = () => (dispatch: Dispatch) => {
-    authAPI.getAuthData()
-        .then(response => {
-            if(response.data.resultCode === 0){
-                dispatch(currentAuthData(response.data.data))
-                dispatch(appAuthorized(true))
-            }else{
-                handleServerAppError(response.data, dispatch)
-                dispatch(appAuthorized(false))
-            }
-        })
-        .catch(error => {
-            handleServerNetworkError(error, dispatch)
-            dispatch(appAuthorized(false))
-        })
-}
-
 export const loginAsync = (data: LoginDataType) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     authAPI.login(data)
@@ -70,6 +53,9 @@ export const loginAsync = (data: LoginDataType) => (dispatch: Dispatch<ActionTyp
                 dispatch(setAppStatusRequest(StatusRequest.failed))
             }
         })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
+        })
 }
 
 // types
@@ -78,7 +64,8 @@ export type CurrentAutDataType = AuthDataType &
 {   
     isLoggedIn: boolean,
 }
-
+export type LoginActionType = ReturnType<typeof login>
+export type CurrentAuthDataType = ReturnType<typeof currentAuthData>
 type ActionType = 
-| ReturnType<typeof currentAuthData>
-| ReturnType<typeof login>
+| LoginActionType
+| CurrentAuthDataType
