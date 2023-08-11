@@ -1,6 +1,6 @@
 import { Container } from "@material-ui/core";
 import React, { ReactNode } from "react";
-import HideAppBar from "./MenuAppBar/HideAppBar";
+import MenuAppBar from "./MenuAppBar/MenuAppBar";
 import { CustomizedSnackbars } from "./Snackbar/Snackbar";
 
 type PropsType = {
@@ -10,7 +10,7 @@ type PropsType = {
 export const Layout = ({children}: PropsType) => {
 	return(
 		<>
-		<HideAppBar/>
+		<MenuAppBar/>
         <CustomizedSnackbars/>
 		<Container maxWidth="xl">
 		{children ?? ''}    

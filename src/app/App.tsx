@@ -1,14 +1,12 @@
 import React, {useEffect} from "react";
-import {CssBaseline, ThemeProvider} from "@material-ui/core";
+import {CssBaseline, Grid, ThemeProvider} from "@material-ui/core";
 import { CircularProgress } from '@material-ui/core';
-import {theme} from "../utils/comonStyleThemeUI";
 import {Outlet} from "react-router-dom";
 import {Layout} from "../components/Layout";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./store";
 import {appInitializationAsync} from "./app_reducer";
-
-
+import { theme } from "../styles/theme-UI";
 
 function App() {
     const dispatch = useDispatch<any>()
@@ -19,7 +17,11 @@ function App() {
     }, [dispatch])
 
     if(!isInitialization){
-       return <CircularProgress color="primary" />
+         return(
+            <Grid container justifyContent="center" alignItems="center" style={{height: "100vh"}}>
+                <CircularProgress color="primary" />
+            </Grid>
+         )  
     }
 
     return (

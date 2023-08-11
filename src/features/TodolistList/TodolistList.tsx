@@ -12,8 +12,8 @@ import {
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
 import {makeStyles} from "@material-ui/core/styles";
-import {theme} from "../../utils/comonStyleThemeUI";
 import { useNavigate } from "react-router-dom";
+import { theme } from "../../styles/theme-UI";
 
 const useStyles = makeStyles({
     linearProgressContainer: {

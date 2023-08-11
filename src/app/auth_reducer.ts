@@ -1,7 +1,7 @@
 import {authAPI, AuthDataType, LoginDataType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import { setAppInitialization, setAppStatusRequest, StatusRequest, StatusRequestActionType } from "./app_reducer";
+import { setAppStatusRequest, StatusRequest, StatusRequestActionType } from "./app_reducer";
 
 
 const initialState: InitialStateType = {
@@ -47,6 +47,23 @@ export const loginAsync = (data: LoginDataType) => (dispatch: Dispatch<ActionTyp
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(login(true))
+                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+            }else{
+                handleServerAppError(response.data, dispatch)
+                dispatch(setAppStatusRequest(StatusRequest.failed))
+            }
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
+        })
+}
+
+export const logoutAsync = () => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+    dispatch(setAppStatusRequest(StatusRequest.loading))
+    authAPI.logout()
+        .then(response => {
+            if(response.data.resultCode === 0){
+                dispatch(login(false))
                 dispatch(setAppStatusRequest(StatusRequest.succeeded))
             }else{
                 handleServerAppError(response.data, dispatch)
