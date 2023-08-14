@@ -26,7 +26,6 @@ const useStyles = makeStyles({
         textTransform: "uppercase",
         letterSpacing: ".15rem",
         cursor: "default",
-        marginTop: "20px"
     },
     span: {
         color: theme.palette.primary.main

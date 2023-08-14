@@ -33,9 +33,6 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "uppercase",
     cursor: "default",
   },
-  linearProgressContainer: {
-    height: "3px",
-  },
   linearProgress: {
     height: "3px",
   },
@@ -48,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
+  toolbar: theme.mixins.toolbar
 }));
 
 function ScrollTop(props: Props) {
@@ -105,7 +103,7 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position={"fixed"}>
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
@@ -149,16 +147,15 @@ export default function MenuAppBar() {
             </div>
           )}
         </Toolbar>
-        <div className={classes.linearProgressContainer}>
-          {statusRequest === StatusRequest.loading && (
+        {statusRequest === StatusRequest.loading && (
             <LinearProgress
               color={"primary"}
               className={classes.linearProgress}
             />
           )}
-        </div>
       </AppBar>
       <Toolbar id="back-to-top-anchor" />
+      <div className={classes.toolbar}></div>
       <ScrollTop>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
