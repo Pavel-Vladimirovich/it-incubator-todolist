@@ -3,7 +3,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, {AlertProps} from "@material-ui/lab/Alert";
 import {makeStyles, Theme} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../app/store";
+import {AppRootState} from "../../app/store";
 import {setAppError, setAppStatusRequest, StatusRequest} from "../../app/app_reducer";
 
 function Alert(props: AlertProps) {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export const CustomizedSnackbars = React.memo(()=>{
   const classes = useStyles();
 
-  const error  = useSelector<AppStateType, string | null>((state) => state.app.error);
+  const error  = useSelector<AppRootState, string | null>((state) => state.app.error);
   // const status = useSelector<AppStateType, StatusRequest>(state=>state.app.status)
   const dispatch = useDispatch();
 

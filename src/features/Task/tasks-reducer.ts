@@ -1,9 +1,8 @@
-import {Dispatch} from "redux";
-import {AppStateType} from "../../app/store";
+import {AppDispatch, AppRootState} from "../../app/store";
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistActionType} from "../Todolist/todolist-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../../api/todolist-api";
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
-import { ErrorActionType, setAppError, setAppStatusRequest, StatusRequest, StatusRequestActionType } from "../../app/app_reducer";
+import {setAppError, setAppStatusRequest, StatusRequest} from "../../app/app_reducer";
 
 
 const initialState: TasksStateType = {}
@@ -70,16 +69,13 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
 };
 // actions
 export const createTask = (task: TaskType) => ({type: "CREATE-TASK", task} as const)
-
 export const removeTask = (todolistId: string, taskId: string) => ({type: "REMOVE-TASK", todolistId, taskId} as const)
-
 export const updateTask = (todolistId: string, taskId: string, domainModel: domainTaskModelType) => ({
     type: "UPDATE-TASK",
     todolistId,
     taskId,
     domainModel
 } as const)
-
 export const setTasks = (todolistId: string, tasks: Array<TaskType>) => ({
     type: "SET-TASKS",
     todolistId,
@@ -88,7 +84,7 @@ export const setTasks = (todolistId: string, tasks: Array<TaskType>) => ({
 
 // thunks
 export const fetchTasksAsync = (todolistId: string) => {
-    return (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
+    return (dispatch: AppDispatch) => {
         dispatch(setAppStatusRequest(StatusRequest.loading))
         todolistAPI.getTasks(todolistId)
             .then((response) => {
@@ -108,7 +104,7 @@ export const fetchTasksAsync = (todolistId: string) => {
 }
 
 export const removeTaskAsync = (todolistId: string, taskId: string) => {
-    return (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+    return (dispatch: AppDispatch) => {
         dispatch(setAppStatusRequest(StatusRequest.loading))
         //need to disable button -->
         todolistAPI.removeTask(todolistId, taskId)
@@ -127,7 +123,7 @@ export const removeTaskAsync = (todolistId: string, taskId: string) => {
 
 }
 export const createTaskAsync = (todolistId: string, title: string) => {
-    return (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+    return (dispatch: AppDispatch) => {
         dispatch(setAppStatusRequest(StatusRequest.loading))
         todolistAPI.createTask(todolistId, title)
             .then((response) => {
@@ -155,7 +151,7 @@ type domainTaskModelType = {
 
 
 export const updateTaskAsync = (todolistId: string, taskId: string, domainModel: domainTaskModelType) => {
-    return (dispatch: Dispatch<ActionType | StatusRequestActionType>, getState: () => AppStateType) => {
+    return (dispatch: AppDispatch, getState: () => AppRootState) => {
         const state = getState()
         const task = state.tasks[todolistId].find(ts => ts.id === taskId)
         if (!task) {
@@ -188,7 +184,7 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>;
 };
 
-export type ActionType =
+type ActionType =
     | ReturnType<typeof updateTask>
     | ReturnType<typeof removeTask>
     | ReturnType<typeof createTask>

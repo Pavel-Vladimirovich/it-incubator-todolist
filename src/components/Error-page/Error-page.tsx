@@ -2,7 +2,7 @@ import React from "react";
 import { isRouteErrorResponse, useRouteError, useNavigate } from "react-router-dom";
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import errorImg from "../../assets/images/error.jpg";
-import { theme } from "../../styles/theme-UI";
+import { theme } from "../../styles/general";
 
 const useStyles = makeStyles({
   container: {

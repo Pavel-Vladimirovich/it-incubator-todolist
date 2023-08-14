@@ -1,7 +1,7 @@
 import {authAPI, AuthDataType, LoginDataType} from "../api/todolist-api";
-import {Dispatch} from "redux";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import { setAppStatusRequest, StatusRequest, StatusRequestActionType } from "./app_reducer";
+import { setAppStatusRequest, StatusRequest } from "./app_reducer";
+import {AppDispatch} from "./store";
 
 
 const initialState: InitialStateType = {
@@ -41,7 +41,7 @@ export const login = (isLoggedIn: boolean) => ({
 }as const)
 
 // thunks
-export const loginAsync = (data: LoginDataType) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+export const loginAsync = (data: LoginDataType) => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     authAPI.login(data)
         .then(response => {
@@ -58,7 +58,7 @@ export const loginAsync = (data: LoginDataType) => (dispatch: Dispatch<ActionTyp
         })
 }
 
-export const logoutAsync = () => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+export const logoutAsync = () => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     authAPI.logout()
         .then(response => {
@@ -77,12 +77,10 @@ export const logoutAsync = () => (dispatch: Dispatch<ActionType | StatusRequestA
 
 // types
 type InitialStateType = CurrentAutDataType
-export type CurrentAutDataType = AuthDataType & 
-{   
-    isLoggedIn: boolean,
-}
-export type LoginActionType = ReturnType<typeof login>
-export type CurrentAuthDataType = ReturnType<typeof currentAuthData>
+type CurrentAutDataType = AuthDataType & {isLoggedIn: boolean}
+type LoginActionType = ReturnType<typeof login>
+type CurrentAuthDataType = ReturnType<typeof currentAuthData>
+
 type ActionType = 
 | LoginActionType
 | CurrentAuthDataType

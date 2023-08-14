@@ -3,7 +3,7 @@ import { Grid, Paper, Typography} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "../Todolist/Todolist";
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../app/store";
+import {AppRootState} from "../../app/store";
 import {
     changeTodolistFilter,
     createTodolistAsync,
@@ -13,7 +13,7 @@ import {
 } from "../Todolist/todolist-reducer";
 import {makeStyles} from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
-import { theme } from "../../styles/theme-UI";
+import { theme } from "../../styles/general";
 
 const useStyles = makeStyles({
     linearProgressContainer: {
@@ -37,10 +37,11 @@ export const TodolistList = () => {
     const classes = useStyles()
     const navigate = useNavigate();
     const dispatch = useDispatch<any>()
-    const todolists = useSelector<AppStateType, Array<TodolistDomainType>>((state => state.todolists));
+    const todolists = useSelector<AppRootState, Array<TodolistDomainType>>((state => state.todolists));
+    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
+
     //const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
     // const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
-    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.authData.isLoggedIn)
 
     useEffect(()=>{
         if(!isLoggedIn){

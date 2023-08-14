@@ -16,10 +16,11 @@ import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import { StatusRequest } from "../../app/app_reducer";
 import { useSelector } from "react-redux";
-import { AppStateType } from "../../app/store";
+import { AppRootState } from "../../app/store";
 import { useDispatch } from "react-redux";
 import { logoutAsync } from "../../app/auth_reducer";
 import { AccountCircle } from "@material-ui/icons";
+import {AuthDataType} from "../../api/todolist-api";
 
 interface Props {
   children: React.ReactElement;
@@ -81,10 +82,11 @@ function ScrollTop(props: Props) {
 export default function MenuAppBar() {
   const classes = useStyles();
   const dispatch = useDispatch<any>();
-  const statusRequest = useSelector<AppStateType>((store) => store.app.status);
-  const isLoggedIn = useSelector<AppStateType, boolean>(
+  const statusRequest = useSelector<AppRootState>((store) => store.app.status);
+  const isLoggedIn = useSelector<AppRootState, boolean>(
     (state) => state.authData.isLoggedIn
   );
+  const login = useSelector<AppRootState, string>(state => state.authData.login)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -116,6 +118,7 @@ export default function MenuAppBar() {
           <Typography variant="h6" className={classes.title}>
             Todo list
           </Typography>
+          {login && <Typography variant="inherit">{login}</Typography>}
           {isLoggedIn && (
             <div>
               <IconButton

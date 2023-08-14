@@ -6,9 +6,6 @@ import {tasksReducer} from "../features/Task/tasks-reducer";
 import {authReducer} from "./auth_reducer";
 
 
-
-export type AppStateType = ReturnType<typeof rootReducer>
-
 const rootReducer = combineReducers({
     todolists: todolistReducer,
     tasks: tasksReducer,
@@ -17,6 +14,12 @@ const rootReducer = combineReducers({
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));
+
+//types
+export type AppRootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+
+//export type AppThunk <ReturnType = void> = ThunkAction<ReturnType, AppRootState, unknown, ActionApp>
 
 //@ts-ignore
 window.store = store

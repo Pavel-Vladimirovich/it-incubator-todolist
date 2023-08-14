@@ -1,7 +1,7 @@
-import {Dispatch} from "redux";
 import {authAPI} from "../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import {currentAuthData, CurrentAuthDataType, login, LoginActionType} from "./auth_reducer";
+import {currentAuthData, login} from "./auth_reducer";
+import {AppDispatch} from "./store";
 
 export enum StatusRequest {
     idle = "idle",
@@ -45,7 +45,7 @@ export const setAppStatusRequest = (status: StatusRequest) => ({type: "APP/SET_S
 export const setAppInitialization = (isAuthorized: boolean) => ({type: "APP/IS_AUTHORIZED", payloadType: isAuthorized} as const)
 
 // thunks
-export const appInitializationAsync = () => (dispatch: Dispatch<ActionType | LoginActionType | CurrentAuthDataType>) => {
+export const appInitializationAsync = () => (dispatch: AppDispatch) => {
     authAPI.getAuthData()
         .then(response => {
             if(response.data.resultCode === 0){
@@ -58,16 +58,15 @@ export const appInitializationAsync = () => (dispatch: Dispatch<ActionType | Log
         })
         .catch(error => {
             handleServerNetworkError(error, dispatch)
-
         })
 }
 
 // types
 type InitialStateType = typeof initialState
 
-export type ErrorActionType = ReturnType<typeof setAppError>
-export type StatusRequestActionType = ReturnType<typeof setAppStatusRequest>
-export type IsAuthorizedType = ReturnType<typeof setAppInitialization>
+type ErrorActionType = ReturnType<typeof setAppError>
+type StatusRequestActionType = ReturnType<typeof setAppStatusRequest>
+type IsAuthorizedType = ReturnType<typeof setAppInitialization>
 
 type ActionType =
     | ErrorActionType

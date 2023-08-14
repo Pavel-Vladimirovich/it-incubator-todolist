@@ -2,24 +2,19 @@ import React, {useEffect} from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {Button,Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, TextField, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
 import { loginAsync } from "../../app/auth_reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { AppStateType } from "../../app/store";
+import { AppRootState } from "../../app/store";
 import {useNavigate} from "react-router-dom";
 
-const useStyles = makeStyles({
-    container: {
-        marginTop: " 90px",
-    },
-});
 
-export const Login = () => {
-    const classes = useStyles();
+export const Login = React.memo(() => {
+    console.log('render login')
     const navigate = useNavigate();
-    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.authData.isLoggedIn)
+    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
     const dispatch = useDispatch<any>()
+
     const formik = useFormik({
       initialValues: {
         email: '',
@@ -32,7 +27,6 @@ export const Login = () => {
         rememberMe: Yup.boolean()
       }),
       onSubmit: values => {
-        alert(JSON.stringify(values, null, 2))
         dispatch(loginAsync(values))
       },
     });
@@ -43,7 +37,7 @@ export const Login = () => {
 
     return (
         <>
-          <Grid container justifyContent="center" className={classes.container}>
+          <Grid container justifyContent="center">
             <Grid item lg={4} sm={6} xs={12}>
               <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
                 <FormControl fullWidth>
@@ -66,4 +60,4 @@ export const Login = () => {
           </Grid>
         </>
     );
-};
+});

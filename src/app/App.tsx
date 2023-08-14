@@ -4,13 +4,13 @@ import { CircularProgress } from '@material-ui/core';
 import {Outlet} from "react-router-dom";
 import {Layout} from "../components/Layout";
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "./store";
+import {AppRootState} from "./store";
 import {appInitializationAsync} from "./app_reducer";
-import { theme } from "../styles/theme-UI";
+import { theme } from "../styles/general";
 
 function App() {
     const dispatch = useDispatch<any>()
-    const isInitialization = useSelector<AppStateType, boolean>((state) => state.app.isInitialization)
+    const isInitialization = useSelector<AppRootState, boolean>((state) => state.app.isInitialization)
 
     useEffect(()=>{
         dispatch(appInitializationAsync())
