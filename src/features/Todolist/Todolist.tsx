@@ -14,7 +14,7 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {FilterValuesType, updateTodolistTitleAsync} from "./todolist-reducer";
 import {createTaskAsync, fetchTasksAsync, } from "../Task/tasks-reducer";
-import { EditableTitleTodolist } from "../../components/EditableTitleTodolist/EditableTitleTodolist";
+import { EditableTitleTodolist } from "../../components/EditableTitleTodolist";
 import { ButtonGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 

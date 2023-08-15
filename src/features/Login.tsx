@@ -2,10 +2,10 @@ import React, {useEffect} from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {Button,Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, TextField, Typography} from "@material-ui/core";
-import { loginAsync } from "../../app/auth_reducer";
+import { loginAsync } from "../app/auth_reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { AppRootState } from "../../app/store";
+import { AppRootState } from "../app/store";
 import {useNavigate} from "react-router-dom";
 
 

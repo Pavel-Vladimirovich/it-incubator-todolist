@@ -6,9 +6,10 @@ import App from "./app/App";
 import {Provider} from "react-redux";
 import {store} from "./app/store";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {Login} from "./features/Login/Login";
+import {Login} from "./features/Login";
 import {TodolistList} from "./features/TodolistList/TodolistList";
-import {ErrorPage} from "./components/Error-page/Error-page";
+import {ErrorPage} from "./features/ErrorPage";
+import { Clock } from "./components/Clock";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <Login/>,
+            },
+            {
+                path: "/clock",
+                element: <Clock/>,
             },
         ]
     },

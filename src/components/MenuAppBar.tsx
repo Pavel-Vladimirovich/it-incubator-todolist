@@ -2,25 +2,19 @@ import React from "react";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import {
-  AppBar,
-  IconButton,
-  LinearProgress,
-  Menu,
-  MenuItem,
-} from "@material-ui/core";
+import {AppBar,IconButton, LinearProgress, Menu, MenuItem,} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Zoom from "@material-ui/core/Zoom";
 import Fab from "@material-ui/core/Fab";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import { StatusRequest } from "../../app/app_reducer";
 import { useSelector } from "react-redux";
-import { AppRootState } from "../../app/store";
 import { useDispatch } from "react-redux";
-import { logoutAsync } from "../../app/auth_reducer";
 import { AccountCircle } from "@material-ui/icons";
-import {AuthDataType} from "../../api/todolist-api";
+import { StatusRequest } from "../app/app_reducer";
+import { AppRootState } from "../app/store";
+import { logoutAsync } from "../app/auth_reducer";
+import { NavLink } from "react-router-dom";
 
 interface Props {
   children: React.ReactElement;
@@ -146,6 +140,7 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                <MenuItem><NavLink to="/clock">clock</NavLink></MenuItem>
               </Menu>
             </div>
           )}
