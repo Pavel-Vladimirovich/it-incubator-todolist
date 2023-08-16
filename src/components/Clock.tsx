@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Grid, Typography} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import "./clock.css"
 
 const useStyles = makeStyles((theme) => ({
 	arrow: {
@@ -123,6 +124,18 @@ export const Clock = () => {
 				<div className={classes.hoursHand} style={hoursHand}></div>
 				<div className={classes.hoursCircle}></div>
 			</div>
+			<Grid item>
+				<div className="clock">
+					<div className="hour">
+						<div className="hr" id="hr"></div>
+					</div>
+					<div className="min">
+						<div className="mn" id="mn"></div>
+					</div>
+					<div className="sec">
+						<div className="sc" id="sc"></div>
+					</div>
+				</div></Grid>
 		</Grid>
 	)
 }
