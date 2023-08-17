@@ -49,9 +49,7 @@ radial-gradient(circle, rgb(37, 73, 90) 0%, rgb(25, 48, 60) 11%, rgba(9,25,33,1)
   display: flex;
   justify-content: center;
   position: absolute;
-  /* border-radius: 50%; */
-  border: 1px solid red;
-
+  border-radius: 50%;
 }
 
 .hr:before{
@@ -78,7 +76,7 @@ radial-gradient(circle, rgb(37, 73, 90) 0%, rgb(25, 48, 60) 11%, rgba(9,25,33,1)
   position: absolute;
   width: 3px;
   height: 150px;
-  background-color: #fff;
+  background-color: #cc3737;
   z-index: 12;
   border-radius: 6px 6px 0 0;
 }

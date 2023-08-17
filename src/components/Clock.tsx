@@ -1,30 +1,21 @@
 import React, { useEffect, useState } from "react";
-import {Grid, Typography} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {Grid} from "@material-ui/core";
 import "./clock.css"
 
-const useStyles = makeStyles((theme) => ({
-	
-
-}))
 
 export const Clock = () => {
-	const classes = useStyles()
-
 	const [time, setTime] = useState(new Date())
-
-	const options: any = {
-		era: 'long',
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-		weekday: 'long',
-		timezone: 'UTC',
-		hour: 'numeric',
-		minute: 'numeric',
-		second: 'numeric'
-	};
-
+	// const options: any = {
+	// 	era: 'long',
+	// 	year: 'numeric',
+	// 	month: 'long',
+	// 	day: 'numeric',
+	// 	weekday: 'long',
+	// 	timezone: 'UTC',
+	// 	hour: 'numeric',
+	// 	minute: 'numeric',
+	// 	second: 'numeric'
+	// };
 	useEffect(()=>{
 		const clock = setInterval(()=>{
 			setTime(new Date())
@@ -33,12 +24,11 @@ export const Clock = () => {
 			clearInterval(clock)
 		}
 	}, [])
-
-
 	return(
 		<Grid container alignItems="center" direction="column">
-			<Grid item><Typography variant="h4" color="textSecondary">{time.toLocaleString("ru", options)}</Typography></Grid>
-			<Grid item><Typography variant="h4" color="textSecondary">{time.getSeconds()}</Typography></Grid>
+			<Grid item>
+				{/*<Typography variant="h4" color="textSecondary">{time.toLocaleString("ru", options)}</Typography>*/}
+			</Grid>
 			<Grid item>
 				<div className="clock">
 					<div className="hour">
