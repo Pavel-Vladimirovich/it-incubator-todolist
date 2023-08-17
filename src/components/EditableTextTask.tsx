@@ -10,7 +10,7 @@ type PropsType = {
     activateEditMode: () => void;
     deactivateEditMode: () => void;
 };
-export const EditableSpan = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: PropsType) => {
+export const EditableTextTask = React.memo(({title, toggleEditMode, activateEditMode, deactivateEditMode, newTitle, setNewTitle}: PropsType) => {
     //console.log('render editable span')
     
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {

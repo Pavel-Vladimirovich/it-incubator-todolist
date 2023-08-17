@@ -9,9 +9,7 @@ export const instance = axios.create({
 });
 
 export const todolistAPI = {
-    getAuthenticatorData() {
-        return instance.get<ResponseType<AuthDataType>>('auth/me')
-    },
+
     getTodolist() {
         return instance.get<Array<TodolistType>>('todo-lists')
     },
@@ -28,7 +26,7 @@ export const todolistAPI = {
         return instance.get<tasksResponseType>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title: title})
+        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title: title})
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
@@ -38,11 +36,35 @@ export const todolistAPI = {
     }
 }
 
+export const authAPI = {
+    getAuthData() {
+        return instance.get<ResponseType<AuthDataType>>('auth/me')
+    },
+    login(data: LoginDataType){
+        return instance.post<ResponseType<{ userId: number }>>('auth/login', data)
+    },
+    logout(){
+        return instance.delete<ResponseType>('auth/login')
+    },
+}
+
 // types
 export type ResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>,
     data: D
+}
+
+export type LoginDataType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
+// идентификационные данные
+export type AuthDataType = {
+    id: number | null
+    email: string
+    login: string
 }
 
 export type TodolistType = {
@@ -66,11 +88,6 @@ export enum TaskPriority {
     Hi = 2,
     Urgently = 3,
     Later = 4
-}
-export type AuthDataType = {
-    id: number | null
-    email: string
-    login: string
 }
 
 export type TaskType = {

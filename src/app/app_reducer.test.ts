@@ -2,7 +2,8 @@ import {appReducer, setAppError, setAppStatusRequest, StatusRequest} from "./app
 
 const startState = {
     error: null,
-    status: StatusRequest.idle
+    status: StatusRequest.idle,
+    isInitialization: false as boolean
 }
 
 test("correct error should be set", ()=>{

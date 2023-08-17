@@ -4,34 +4,14 @@ html {
 }
 
 body {
-  margin: 0;
   font-size: 1rem;
-  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #424242;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-input[type="text"] {
-  font-family: inherit;
-  /* 1 */
-  font-size: inherit;
-  /* 1 */
-  line-height: inherit;
-  /* 1 */
-  margin: 0;
-  /* 2 */
-}
-
-ul {
-  /*padding-left: 0;*/
-  margin: 0;
 }

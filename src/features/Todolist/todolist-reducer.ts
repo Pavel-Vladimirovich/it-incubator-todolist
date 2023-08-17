@@ -1,13 +1,11 @@
-import {Dispatch} from "redux";
 import {
-    ErrorActionType,
     setAppError,
     setAppStatusRequest,
     StatusRequest,
-    StatusRequestActionType
-} from "../../app/app_reducer";
+    } from "../../app/app_reducer";
 import {todolistAPI, TodolistType} from "../../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {AppDispatch} from "../../app/store";
 
 
 export enum FilterValuesType {
@@ -56,7 +54,7 @@ export const setEntityStatus = (id: string, entityStatus: StatusRequest) => ({
 export const setTodolist = (todolists: Array<TodolistType>) => ({type: "SET_TODOLISTS", todolists} as const)
 
 // thunks
-export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusRequestActionType | ErrorActionType>) => {
+export const fetchTodolistAsync = () => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     todolistAPI.getTodolist()
         .then((response) => {
@@ -75,7 +73,7 @@ export const fetchTodolistAsync = () => (dispatch: Dispatch<ActionType | StatusR
 }
 
 export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
-    return (dispatch: Dispatch<ActionType | StatusRequestActionType> )=> {
+    return (dispatch: AppDispatch )=> {
         dispatch(setAppStatusRequest(StatusRequest.loading))
         dispatch(setEntityStatus(todolistId, StatusRequest.loading))
         todolistAPI.updateTodolistTitle(todolistId ,title)
@@ -96,7 +94,7 @@ export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
 
     }
 }
-export const removeTodolistAsync = (todolistId: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+export const removeTodolistAsync = (todolistId: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     dispatch(setEntityStatus(todolistId, StatusRequest.loading))
     todolistAPI.removeTodolist(todolistId)
@@ -114,7 +112,7 @@ export const removeTodolistAsync = (todolistId: string) => (dispatch: Dispatch<A
             handleServerNetworkError(error, dispatch)
         })
 }
-export const createTodolistAsync = (title: string) => (dispatch: Dispatch<ActionType | StatusRequestActionType>) => {
+export const createTodolistAsync = (title: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest(StatusRequest.loading))
     todolistAPI.createTodolist(title)
         .then(response => {

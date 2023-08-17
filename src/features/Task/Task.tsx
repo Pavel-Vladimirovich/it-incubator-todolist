@@ -5,8 +5,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {useDispatch} from "react-redux";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
-import {EditableSpan} from "../../components/EditableSpan/EditableSpan"
 import {removeTaskAsync, updateTaskAsync} from "./tasks-reducer";
+import { EditableTextTask } from "../../components/EditableTextTask";
 type TaskPropsType = {
     keyForLabel: string
     task: TaskType
@@ -16,11 +16,8 @@ type TaskPropsType = {
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
     // console.log('render task')
     const dispatch = useDispatch<any>()
-
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(false);
-
-    // const removeTask = useCallback(() => dispatch(removeTaskAsync(todolistId, task.id)), [dispatch, todolistId, task.id])
     const removeTask = () => {dispatch(removeTaskAsync(todolistId, task.id))}
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +48,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
             <label
                 htmlFor={keyForLabel}
                 className={`${task.status === TaskStatus.Completed && style.task_completed}`}>
-                <EditableSpan
+                <EditableTextTask
                     title={task.title}
                     newTitle={newTitle}
                     setNewTitle={setNewTitle}
