@@ -4,14 +4,14 @@ import {ResponseType} from "../api/todolist-api";
 
 export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
     if(data.messages.length){
-        dispatch(setAppError(data.messages[0]))
+        dispatch(setAppError({error: data.messages[0]}))
     }else{
-        dispatch(setAppError("some error occurred"))
+        dispatch(setAppError({error: "some error occurred"}))
     }
-    dispatch(setAppStatusRequest(StatusRequest.failed))
+    dispatch(setAppStatusRequest({status: StatusRequest.failed}))
 }
 
 export const handleServerNetworkError = (error: {message: string}, dispatch: Dispatch) => {
-    dispatch(setAppError(error.message ? error.message : "some error occurred"))
-    dispatch(setAppStatusRequest(StatusRequest.failed))
+    dispatch(setAppError(error.message ? {error: error.message} : {error: "some error occurred"}))
+    dispatch(setAppStatusRequest({status: StatusRequest.failed}))
 }

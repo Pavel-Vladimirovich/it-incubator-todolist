@@ -31,8 +31,8 @@ const CustomizedSnackbars = React.memo(()=>{
     if (reason === "clickaway") {
       return;
     }
-    dispatch(setAppStatusRequest(StatusRequest.idle))
-    dispatch(setAppError(null))
+    dispatch(setAppStatusRequest({status: StatusRequest.idle}))
+    dispatch(setAppError({error: null}))
   };
 
   return (

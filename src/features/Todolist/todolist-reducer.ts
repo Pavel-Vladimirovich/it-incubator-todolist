@@ -55,16 +55,16 @@ export const setTodolist = (todolists: Array<TodolistType>) => ({type: "SET_TODO
 
 // thunks
 export const fetchTodolistAsync = () => (dispatch: AppDispatch) => {
-    dispatch(setAppStatusRequest(StatusRequest.loading))
+    dispatch(setAppStatusRequest({status: StatusRequest.loading}))
     todolistAPI.getTodolist()
         .then((response) => {
             if(response.status === 200){
                 dispatch(setTodolist(response.data))
-                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
             }
             else{
-                dispatch(setAppError("some error occurred"))
-                dispatch(setAppStatusRequest(StatusRequest.failed))
+                dispatch(setAppError({error: "some error occurred"}))
+                dispatch(setAppStatusRequest({status: StatusRequest.failed}))
             }
         })
         .catch(error => {
@@ -74,13 +74,13 @@ export const fetchTodolistAsync = () => (dispatch: AppDispatch) => {
 
 export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
     return (dispatch: AppDispatch )=> {
-        dispatch(setAppStatusRequest(StatusRequest.loading))
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         dispatch(setEntityStatus(todolistId, StatusRequest.loading))
         todolistAPI.updateTodolistTitle(todolistId ,title)
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(changeTodolistTitle(todolistId, title))
-                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 dispatch(setEntityStatus(todolistId, StatusRequest.succeeded))
             }else{
                 handleServerAppError(response.data, dispatch)
@@ -95,13 +95,13 @@ export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
     }
 }
 export const removeTodolistAsync = (todolistId: string) => (dispatch: AppDispatch) => {
-    dispatch(setAppStatusRequest(StatusRequest.loading))
+    dispatch(setAppStatusRequest({status: StatusRequest.loading}))
     dispatch(setEntityStatus(todolistId, StatusRequest.loading))
     todolistAPI.removeTodolist(todolistId)
         .then((response) => {
             if(response.data.resultCode === 0){
                 dispatch(removeTodolist(todolistId))
-                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
             }else{
                 handleServerAppError(response.data, dispatch)
                 dispatch(setEntityStatus(todolistId, StatusRequest.failed))
@@ -113,12 +113,12 @@ export const removeTodolistAsync = (todolistId: string) => (dispatch: AppDispatc
         })
 }
 export const createTodolistAsync = (title: string) => (dispatch: AppDispatch) => {
-    dispatch(setAppStatusRequest(StatusRequest.loading))
+    dispatch(setAppStatusRequest({status: StatusRequest.loading}))
     todolistAPI.createTodolist(title)
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(createTodolist(response.data.data.item))
-                dispatch(setAppStatusRequest(StatusRequest.succeeded))
+                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
             }else{
                 handleServerAppError(response.data, dispatch)
             }
