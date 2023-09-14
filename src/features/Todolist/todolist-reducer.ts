@@ -23,13 +23,11 @@ const slice = createSlice({
     initialState,
     reducers:{
         removeTodolist: (state, action: PayloadAction<{todolistId: string}>) => {
-            // const index = action.payload.todolistId;
-            // if(index) return state.splice(Number(index), 1)
-            const i = state.findIndex(t => t.id === action.payload.todolistId)
-            if(i !== -1) state.splice(i, 1)
+            const index = state.findIndex(t => t.id === action.payload.todolistId)
+            if(index !== -1) state.splice(index, 1)
         },
         createTodolist: (state, action: PayloadAction<TodolistType>) => {
-            state.push({...action.payload, filter: FilterValuesType.all, entityStatus: StatusRequest.idle})
+            state.unshift({...action.payload, filter: FilterValuesType.all, entityStatus: StatusRequest.idle})
         },
         changeTodolistTitle: (state, action: PayloadAction<{id: string, title: string}>) => {
            const todolist = state.find(item => item.id === action.payload.id)
@@ -43,9 +41,16 @@ const slice = createSlice({
             const todolist = state.find(item => item.id === action.payload.id)
             if(todolist) todolist.entityStatus = action.payload.entityStatus
         },
-        setTodolist: (state, action: PayloadAction<Array<TodolistType>>) => {
-            return action.payload.map(tl => ({...tl, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}))
+        setTodolist: (state, action: PayloadAction<{todolists: Array<TodolistType>}>) => {
+            return action.payload.todolists.map(tl => ({...tl, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}))
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(removeTodolist,(state, action: PayloadAction<{todolistId: string}>) => {
+                const i = state.findIndex(t => t.id === action.payload.todolistId)
+                if(i !== -1) state.splice(i, 1)
+            })
     }
 })
 
@@ -95,7 +100,7 @@ export const fetchTodolistAsync = () => (dispatch: AppDispatch) => {
     todolistAPI.getTodolist()
         .then((response) => {
             if(response.status === 200){
-                dispatch(setTodolist(response.data))
+                dispatch(setTodolist({todolists: response.data}))
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
             }
             else{
