@@ -15,30 +15,40 @@ const slice = createSlice({
     reducers:{
         createTask: (state, action: PayloadAction<{task: TaskType}>) => {
             const task: TaskType = {...action.payload.task};
-            state = {
-                [task.todoListId]: [task, ...state[task.todoListId]]
-            }
-            
+            state[task.todoListId].push(task)
         },
         removeTask: (state, action: PayloadAction<{todolistId: string, taskId: string}>) => {
             const todolistTasks = state[action.payload.todolistId]
-            [action.payload.todolistId]: todolistTasks.filter((t) => t.id !== action.payload.taskId)
+            state = { [action.payload.todolistId]: todolistTasks.slice(Number(action.payload.taskId), 1) }
+        },
+        updateTask: (state, action: PayloadAction<{todolistId: string, taskId: string, domainModel: domainTaskModelType}>) => {
+            const todolistTasks = state[action.todolistId];
+            const updatedTasks = todolistTasks.map((task) =>
+                task.id === action.taskId ? {...task, ...action.domainModel} : task
+            );
+            return {
+                ...state,
+                [action.todolistId]: updatedTasks,
+            };
+        },
+        setTasks: (state, action: PayloadAction<{todolistId: string, tasks: Array<TaskType>}>) => {
+            state[action.payload.todolistId].push(...action.payload.tasks)
         }
     }
 })
 
 export const tasksReducer1 = slice.reducer
-export const {createTask} = slice.actions
+// export const {createTask, removeTask} = slice.actions
 
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
     switch (action.type) {
-        // case "CREATE-TASK": {
-        //     const task: TaskType = {...action.task};
-        //     return {
-        //         ...state,
-        //         [task.todoListId]: [task, ...state[task.todoListId]]
-        //     }
-        // }
+        case "CREATE-TASK": {
+            const task: TaskType = {...action.task};
+            return {
+                ...state,
+                [task.todoListId]: [task, ...state[task.todoListId]]
+            }
+        }
         case "REMOVE-TASK": {
             const todolistTasks = state[action.todolistId]
             return {
@@ -91,7 +101,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
     }
 };
 // actions
-// export const createTask = (task: TaskType) => ({type: "CREATE-TASK", task} as const)
+export const createTask = (task: TaskType) => ({type: "CREATE-TASK", task} as const)
 export const removeTask = (todolistId: string, taskId: string) => ({type: "REMOVE-TASK", todolistId, taskId} as const)
 export const updateTask = (todolistId: string, taskId: string, domainModel: domainTaskModelType) => ({
     type: "UPDATE-TASK",
@@ -151,7 +161,7 @@ export const createTaskAsync = (todolistId: string, title: string) => {
         todolistAPI.createTask(todolistId, title)
             .then((response) => {
                 if(response.data.resultCode === 0){
-                    dispatch(createTask({task: response.data.data.item}))
+                    dispatch(createTask(response.data.data.item))
                     dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 }else{
                     handleServerAppError(response.data, dispatch)
