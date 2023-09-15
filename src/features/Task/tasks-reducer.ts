@@ -18,12 +18,15 @@ const slice = createSlice({
     name: 'tasks',
     initialState,
     reducers:{
+        setTasks: (state, action: PayloadAction<{todolistId: string, tasks: Array<TaskType>}>) => {
+            state[action.payload.todolistId] = action.payload.tasks
+        },
         createTask: (state, action: PayloadAction<{task: TaskType}>) => {
             state[action.payload.task.todoListId].unshift(action.payload.task)
         },
         removeTask: (state, action: PayloadAction<{todolistId: string, taskId: string}>) => {
             const tasks = state[action.payload.todolistId]
-            const index = tasks.findIndex(t => t.id = action.payload.taskId)
+            const index = tasks.findIndex(t => t.id === action.payload.taskId)
             if(index !== -1) tasks.splice(index, 1)
         },
         updateTask: (state, action: PayloadAction<{todolistId: string, taskId: string, domainModel: domainTaskModelType}>) => {
@@ -32,9 +35,12 @@ const slice = createSlice({
             if(index !== -1)
             tasks[index] = {...tasks[index], ...action.payload.domainModel}
         },
-        setTasks: (state, action: PayloadAction<{todolistId: string, tasks: Array<TaskType>}>) => {
-            state[action.payload.todolistId] = action.payload.tasks
-        }
+        setStatusTask: (state, action: PayloadAction<{todolistId: string, taskId: string, status: TaskStatus}>) => {
+            const tasks = state[action.payload.todolistId]
+            const index = tasks.findIndex(t => t.id === action.payload.taskId)
+            tasks[index].status = action.payload.status
+        } 
+       
     },
     extraReducers:(builder) => {
         builder
@@ -54,7 +60,7 @@ const slice = createSlice({
 })
 
 export const tasksReducer = slice.reducer
-export const {createTask, removeTask, updateTask, setTasks} = slice.actions
+export const {createTask, removeTask, updateTask, setTasks, setStatusTask} = slice.actions
 
 // export const _tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
 //     switch (action.type) {
@@ -156,7 +162,7 @@ export const fetchTasksAsync = (todolistId: string) => {
 export const removeTaskAsync = (todolistId: string, taskId: string) => {
     return (dispatch: AppDispatch) => {
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-        //need to disable button -->
+        dispatch(setStatusTask({todolistId, taskId, status: TaskStatus.InProgress}))
         todolistAPI.removeTask(todolistId, taskId)
             .then((response) => {
                 if(response.data.resultCode === 0){

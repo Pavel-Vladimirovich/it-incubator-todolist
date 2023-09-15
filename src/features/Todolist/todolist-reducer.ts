@@ -45,13 +45,7 @@ const slice = createSlice({
             return action.payload.todolists.map(tl => ({...tl, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}))
         }
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(removeTodolist,(state, action: PayloadAction<{todolistId: string}>) => {
-                const i = state.findIndex(t => t.id === action.payload.todolistId)
-                if(i !== -1) state.splice(i, 1)
-            })
-    }
+   
 })
 
 export const todolistReducer = slice.reducer

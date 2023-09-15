@@ -22,11 +22,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 const CustomizedSnackbars = React.memo(()=>{
   const classes = useStyles();
   const error  = useSelector<AppRootState, string | null>((state) => state.app.error);
-  // const status = useSelector<AppStateType, StatusRequest>(state=>state.app.status)
+  const statusRequest = useSelector<AppRootState, StatusRequest>((state)=>state.app.status)
   const dispatch = useDispatch();
-  const isError = error !== null
-  // const isSucceeded = status === StatusRequest.succeeded
 
+  const isError = error !== null
+  const isStatus = statusRequest === StatusRequest.succeeded
+ 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
@@ -37,10 +38,16 @@ const CustomizedSnackbars = React.memo(()=>{
 
   return (
     <div className={classes.root}>
-      <Snackbar open={isError} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={"error"}>
+      <Snackbar open={isError || isStatus} autoHideDuration={6000} onClose={handleClose}>
+        {isStatus ? 
+          <Alert onClose={handleClose} severity={"success"}>
+            success
+          </Alert>
+        :
+          <Alert onClose={handleClose} severity={"info"}>
             {error ? error : null}
-        </Alert>
+          </Alert>
+        }
       </Snackbar>
     </div>
   );

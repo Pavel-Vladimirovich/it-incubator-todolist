@@ -18,7 +18,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
     const dispatch = useDispatch<any>()
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(false);
-    const removeTask = useCallback(() => {dispatch(removeTaskAsync(todolistId, task.id))}, [dispatch, todolistId, task.id])
+    const removeTask = useCallback(() => dispatch(removeTaskAsync(todolistId, task.id)), [todolistId, task.id])
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         dispatch(updateTaskAsync(todolistId, task.id, {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}))
@@ -70,7 +70,9 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
                     <IconButton
                         onClick={removeTask}
                         size="small"
-                        color="secondary">
+                        color="secondary"
+                        disabled={task.status === TaskStatus.InProgress} 
+                        >    
                         <DeleteIcon/>
                     </IconButton>
                 </Tooltip>
