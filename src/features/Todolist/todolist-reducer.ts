@@ -3,7 +3,7 @@ import {
     setAppStatusRequest,
     StatusRequest,
     } from "../../app/app_reducer";
-import {todolistAPI, TodolistType} from "../../api/todolist-api";
+import {todolistApi, TodolistType} from "../../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AppDispatch} from "../../app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -91,7 +91,7 @@ export const {changeTodolistFilter,changeTodolistTitle,createTodolist,removeTodo
 // thunks
 export const fetchTodolistAsync = () => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-    todolistAPI.getTodolist()
+    todolistApi.getTodolist()
         .then((response) => {
             if(response.status === 200){
                 dispatch(setTodolist({todolists: response.data}))
@@ -111,7 +111,7 @@ export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
     return (dispatch: AppDispatch )=> {
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
-        todolistAPI.updateTodolistTitle(todolistId ,title)
+        todolistApi.updateTodolistTitle(todolistId ,title)
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(changeTodolistTitle({id: todolistId, title: title}))
@@ -132,7 +132,7 @@ export const updateTodolistTitleAsync = (todolistId: string, title: string) => {
 export const removeTodolistAsync = (todolistId: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest({status: StatusRequest.loading}))
     dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
-    todolistAPI.removeTodolist(todolistId)
+    todolistApi.removeTodolist(todolistId)
         .then((response) => {
             if(response.data.resultCode === 0){
                 dispatch(removeTodolist({todolistId: todolistId}))
@@ -149,7 +149,7 @@ export const removeTodolistAsync = (todolistId: string) => (dispatch: AppDispatc
 }
 export const createTodolistAsync = (title: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-    todolistAPI.createTodolist(title)
+    todolistApi.createTodolist(title)
         .then(response => {
             if(response.data.resultCode === 0){
                 dispatch(createTodolist(response.data.data.item))

@@ -1,6 +1,6 @@
 import {setAppError, setAppStatusRequest, StatusRequest} from "../app/app_reducer";
 import {Dispatch} from "redux";
-import {ResponseType} from "../api/todolist-api";
+import {ResponseType} from "../api/todolist-api.js";
 
 export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
     if(data.messages.length){

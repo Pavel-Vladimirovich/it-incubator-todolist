@@ -8,7 +8,7 @@ import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import IconButton from "@material-ui/core/IconButton";
 import {Task} from "../Task/Task";
-import {AppRootState} from "../../app/store";
+import {AppDispatch, AppRootState} from "../../app/store";
 import {StatusRequest} from "../../app/app_reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
@@ -51,7 +51,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
     //console.log('render todolist')
     const classes = useStyles()
     let tasksForTodolist = useSelector<AppRootState, Array<TaskType>>((state => state.tasks[todolistId]));
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         dispatch(fetchTasksAsync(todolistId))

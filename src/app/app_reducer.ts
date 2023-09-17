@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {authAPI} from "../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {currentAuthData, isLoginIn} from "./auth_reducer";
 import {AppDispatch} from "./store";
+import {authAPI} from "../api/todolist-api";
 
 export enum StatusRequest {
     idle = "idle",
