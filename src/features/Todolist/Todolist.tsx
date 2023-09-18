@@ -64,7 +64,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
       dispatch(updateTodolistTitleAsync(todolistId, title))
     };
     const createTasksHandler = useCallback((title: string) => {
-        dispatch(createTaskAsync(todolistId, title.trim()))
+        dispatch(createTaskAsync({todolistId, title: title.trim()}))
     }, [dispatch, todolistId]);
 
     const onAllClickHandler = useCallback(() => changeFilter(todolistId, FilterValuesType.all), [changeFilter, todolistId]);
