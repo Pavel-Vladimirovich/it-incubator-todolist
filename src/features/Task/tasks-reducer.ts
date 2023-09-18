@@ -93,9 +93,9 @@ const slice = createSlice({
             })
             .addCase(removeTaskAsync.fulfilled, (state, action) => {
                 if(action.payload){
+                    const id = action.payload.taskId
                     const tasks = state[action.payload.todolistId]
-                    // @ts-ignore
-                    const index = tasks.findIndex(t => t.id === action.payload.taskId)
+                    const index = tasks.findIndex(t => t.id === id)
                     if (index !== -1) tasks.splice(index, 1)
                 }else{
 

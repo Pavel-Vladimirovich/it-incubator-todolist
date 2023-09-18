@@ -22,7 +22,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(thunk)
-      // .concat(logger)
+      .concat(logger)
     
 })
 
