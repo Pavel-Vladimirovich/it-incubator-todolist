@@ -38,6 +38,26 @@ export const loginAsync = createAsyncThunk(
     }
 );
 
+export const logoutAsync = createAsyncThunk(
+  'auth/logout', 
+  async (_, {dispatch, rejectWithValue}) => {
+    try{
+      dispatch(setAppStatusRequest({status: StatusRequest.loading}));
+      const response = await authAPI.logout()
+      if (response.data.resultCode === 0) {
+        dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
+        return {isLoggedIn: false};
+    } else {
+        handleServerAppError(response.data, dispatch);
+        dispatch(setAppStatusRequest({status: StatusRequest.failed}));
+        return {isLoggedIn: false};
+    }
+}catch(err) {
+    let error = err as AxiosError; // необходимо типизировать т.к. ругается на тип unknown
+    handleServerNetworkError(error, dispatch);
+    return rejectWithValue(error); // для обработки ошибок в auth_reducer / но может и не понадобится 
+}});
+
 const slice = createSlice({
     name: "auth",
     initialState,
@@ -52,9 +72,13 @@ const slice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(loginAsync.fulfilled, (state, action) => {
+        builder
+        .addCase(loginAsync.fulfilled, (state, action) => {
            state.isLoggedIn = action.payload.isLoggedIn;
-        });
+        })
+        .addCase(logoutAsync.fulfilled, (state, action) => {
+            state.isLoggedIn = action.payload.isLoggedIn;
+        })
     },
 });
 
@@ -109,23 +133,25 @@ export const {currentAuthData, isLoginIn} = slice.actions;
 //         })
 // }
 
-export const logoutAsync = () => (dispatch: AppDispatch) => {
-    dispatch(setAppStatusRequest({status: StatusRequest.loading}));
-    authAPI
-        .logout()
-        .then((response) => {
-            if (response.data.resultCode === 0) {
-                dispatch(isLoginIn({isLoggedIn: false}));
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
-            } else {
-                handleServerAppError(response.data, dispatch);
-                dispatch(setAppStatusRequest({status: StatusRequest.failed}));
-            }
-        })
-        .catch((error) => {
-            handleServerNetworkError(error, dispatch);
-        });
-};
+// export const _logoutAsync = () => (dispatch: AppDispatch) => {
+//     dispatch(setAppStatusRequest({status: StatusRequest.loading}));
+//     authAPI
+//         .logout()
+//         .then((response) => {
+//             if (response.data.resultCode === 0) {
+//                 dispatch(isLoginIn({isLoggedIn: false}));
+//                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
+//             } else {
+//                 handleServerAppError(response.data, dispatch);
+//                 dispatch(setAppStatusRequest({status: StatusRequest.failed}));
+//             }
+//         })
+//         .catch((error) => {
+//             handleServerNetworkError(error, dispatch);
+//         });
+// };
+
+
 
 // types
 type InitialStateType = AuthDataType & { isLoggedIn: boolean };
