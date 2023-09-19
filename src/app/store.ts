@@ -22,15 +22,13 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(thunk)
-      .concat(logger)
+      // .concat(logger)
     
 })
 
 //types
 export type AppRootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-
-//export type AppThunk <ReturnType = void> = ThunkAction<ReturnType, AppRootState, unknown, ActionApp>
 
 //@ts-ignore
 window.store = store

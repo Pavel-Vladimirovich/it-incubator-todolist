@@ -22,7 +22,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
     const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id])
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateTaskAsync(todolistId, task.id, {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}))
+        dispatch(updateTaskAsync({todolistId, taskId:task.id, domainModel:{status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}}))
     }, [dispatch, todolistId, task.id])
 
     const activateEditMode = useCallback(() => {
@@ -32,7 +32,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
 
     const deactivateEditMode = useCallback(() => {
         setEditMode(false)
-        dispatch(updateTaskAsync(todolistId, task.id, {title: newTitle}))
+        dispatch(updateTaskAsync({todolistId, taskId: task.id, domainModel: {title: newTitle}}))
     }, [dispatch, todolistId, task.id, newTitle]);
 
     return (

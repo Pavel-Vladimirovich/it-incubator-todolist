@@ -11,23 +11,23 @@ const initialState: TasksStateType = {}
 
 export const fetchTasksAsync = createAsyncThunk(
     'tasks/fetch', (todolistId: string, {dispatch}) => {
-    dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-    return todolistApi.getTasks(todolistId)
-        .then((response) => {
-            if (response.status === 200) {
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                return {todolistId, tasks: response.data.items}
-            } else {
-                dispatch(setAppError({error: response.data.error}))
-                dispatch(setAppStatusRequest({status: StatusRequest.failed}))
-            }
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
+        return todolistApi.getTasks(todolistId)
+            .then((response) => {
+                if (response.status === 200) {
+                    dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
+                    return {todolistId, tasks: response.data.items}
+                } else {
+                    dispatch(setAppError({error: response.data.error}))
+                    dispatch(setAppStatusRequest({status: StatusRequest.failed}))
+                }
 
-        })
-        .catch(error => {
-            handleServerNetworkError(error, dispatch)
-        })
+            })
+            .catch(error => {
+                handleServerNetworkError(error, dispatch)
+            })
 
-})
+    })
 
 export const createTaskAsync = createAsyncThunk(
     'tasks',
@@ -51,52 +51,55 @@ export const createTaskAsync = createAsyncThunk(
 export const removeTaskAsync = createAsyncThunk(
     'tasks/removeTask',
     async (arg: { todolistId: string, taskId: string }, {dispatch}) => {
-        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-        dispatch(setStatusTask({...arg, status: TaskStatus.InProgress}))
-        const response = await todolistApi.removeTask(arg.todolistId, arg.taskId)
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}));
+        dispatch(setStatusTask({...arg, status: TaskStatus.InProgress}));
         try {
+            const response = await todolistApi.removeTask(arg.todolistId, arg.taskId);
             if (response.data.resultCode === 0) {
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                return {todolistId: arg.todolistId, taskId: arg.taskId}
+                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
+                return {todolistId: arg.todolistId, taskId: arg.taskId};
             } else {
-                handleServerAppError(response.data, dispatch)
+                handleServerAppError(response.data, dispatch);
             }
         } catch (err) {
-            const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
-            handleServerNetworkError(error, dispatch)
+            const error = err as AxiosError; // необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch);
         }
 
     })
-export const updateTaskAsync = createAsyncThunk(
+export const updateTaskAsync = createAsyncThunk<any,
+    { todolistId: string; taskId: string; domainModel: domainTaskModelType },
+    { state: AppRootState}>( // в slice пока нет обработчика
     'task/update',
-    async (arg: {todolistId: string, taskId: string, domainModel: domainTaskModelType}, {dispatch, getState}) => {
-                const state = getState
-                const task = state.tasks[arg.todolistId].find(ts => ts.id === arg.taskId)
-                if (!task) {
-                    console.warn('task not found')
-                    return
-                }
-                const modelApi: UpdateTaskModelType = {
-                    title: task.title,
-                    description: task.description,
-                    status: task.status,
-                    priority: task.priority,
-                    startDate: task.startDate,
-                    deadline: task.deadline,
-                    ...arg.domainModel
-                }
-        try{
-            ( ) => {
-                todolistApi.updateTask(arg.todolistId, arg.taskId, modelApi)
-                    .then((response) => {
-                        dispatch(updateTask({...arg}))
-                        dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                    })
-                    
+    async (arg:{ todolistId: string, taskId: string, domainModel: domainTaskModelType } , {dispatch, getState}) => {
+
+        const state = getState()
+        const task = state.tasks[arg.todolistId].find(ts => ts.id === arg.taskId);
+        if (!task) {
+            console.warn('task not found');
+            return
+        }
+        const modelApi: UpdateTaskModelType = {
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+            ...arg.domainModel
+        };
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}));
+        dispatch(setStatusTask({...arg, status: TaskStatus.InProgress}));
+        try {
+            const response = await todolistApi.updateTask(arg.todolistId, arg.taskId, modelApi);
+            if (response.data.resultCode === 0) {
+                 return {...arg};
+                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
+                dispatch(setStatusTask({...arg, status: TaskStatus.Completed}));
             }
-        }catch(err) {
-            let error = err as AxiosError;
-            handleServerNetworkError(error, dispatch)
+        } catch (err) {
+            let error = err as AxiosError;// необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch);
         }
     }
 )
@@ -145,6 +148,15 @@ const slice = createSlice({
                     const index = tasks.findIndex(t => t.id === action.payload?.taskId)
                     if (index !== -1) tasks.splice(index, 1)
                 }
+            })
+            .addCase(updateTaskAsync.fulfilled, (state, action) => {
+                if(action.payload){
+                    const tasks = state[action.payload.todolistId]
+                    const index = tasks.findIndex(t => t.id === action.payload.taskId)
+                    if (index !== -1)
+                        tasks[index] = {...tasks[index], ...action.payload.domainModel}
+                }
+
             })
     }
 })
