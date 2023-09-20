@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {handleServerAppError, handleServerNetworkError,} from "../utils/error-utils";
 import {currentAuthData, isLoginIn} from "./auth_reducer";
 import {authAPI} from "../api/todolist-api";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 
 export enum StatusRequest {
     idle = "idle",

@@ -5,7 +5,7 @@ import {
     handleServerNetworkError,
 } from "../utils/error-utils";
 import {setAppStatusRequest, StatusRequest} from "./app_reducer";
-import {AppDispatch} from "./store";
+import {AppRootDispatch} from "./store";
 import {AxiosError} from "axios";
 
 

@@ -3,11 +3,11 @@ import style from "./Task.module.scss";
 import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {useDispatch} from "react-redux";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {removeTaskAsync, updateTaskAsync} from "./tasks-reducer";
-import { EditableTextTask } from "../../components/EditableTextTask";
-import {AppDispatch} from "../../app/store";
+import {EditableTextTask} from "../../components/EditableTextTask";
+import {useAppDispatch} from "../../app/store";
+
 type TaskPropsType = {
     keyForLabel: string
     task: TaskType
@@ -16,7 +16,7 @@ type TaskPropsType = {
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
     // console.log('render task')
-    const dispatch = useDispatch<AppDispatch>()
+    const dispatch = useAppDispatch()
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(false);
     const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id])

@@ -8,7 +8,7 @@ import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import IconButton from "@material-ui/core/IconButton";
 import {Task} from "../Task/Task";
-import {AppDispatch, AppRootState} from "../../app/store";
+import {AppRootDispatch, AppRootState, useAppDispatch} from "../../app/store";
 import {StatusRequest} from "../../app/app_reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
@@ -51,7 +51,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
     //console.log('render todolist')
     const classes = useStyles()
     let tasksForTodolist = useSelector<AppRootState, Array<TaskType>>((state => state.tasks[todolistId]));
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(fetchTasksAsync(todolistId))
@@ -61,7 +61,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
         removeTodolist(todolistId)
     };
     const updateTitleTodolistHandler = (title: string) => {
-      dispatch(updateTodolistTitleAsync(todolistId, title))
+      dispatch(updateTodolistTitleAsync({todolistId, title}))
     };
     const createTasksHandler = useCallback((title: string) => {
         dispatch(createTaskAsync({todolistId, title: title.trim()}))
