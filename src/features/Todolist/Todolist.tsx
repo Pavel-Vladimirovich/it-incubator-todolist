@@ -1,22 +1,22 @@
 import React, {useCallback, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {v1} from "uuid";
-import {Button, Tooltip, Typography} from "@material-ui/core";
+import {Button, ButtonGroup, Tooltip, Typography} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import IconButton from "@material-ui/core/IconButton";
 import {Task} from "../Task/Task";
-import {AppRootDispatch, AppRootState, useAppDispatch} from "../../app/store";
+import {AppRootState} from "../../app/store";
 import {StatusRequest} from "../../app/app_reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {FilterValuesType, updateTodolistTitleAsync} from "./todolist-reducer";
-import {createTaskAsync, fetchTasksAsync, } from "../Task/tasks-reducer";
-import { EditableTitleTodolist } from "../../components/EditableTitleTodolist";
-import { ButtonGroup } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {createTaskAsync, fetchTasksAsync,} from "../Task/tasks-reducer";
+import {EditableTitleTodolist} from "../../components/EditableTitleTodolist";
+import {makeStyles} from '@material-ui/core/styles';
+import {useAppDispatch} from "../../hooks/useAppDispatch";
 
 const useStyles = makeStyles({
     container: {
