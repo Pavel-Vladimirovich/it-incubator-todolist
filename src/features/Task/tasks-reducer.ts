@@ -1,5 +1,5 @@
 import {AppRootDispatch, AppRootState} from "../../app/store";
-import {createTodolist, fetchTodolistAsync, removeTodolist} from "../Todolist/todolist-reducer";
+import {createTodolistAsync, fetchTodolistAsync, removeTodolistAsync} from "../Todolist/todolist-reducer";
 import {TaskPriority, TaskStatus, TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {setAppError, setAppStatusRequest, StatusRequest} from "../../app/app_reducer";
@@ -129,10 +129,12 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(removeTodolist, (state, action) => {
+            .addCase(removeTodolistAsync.fulfilled, (state, action) => {
+                if(action.payload)
                 delete state[action.payload.todolistId]
             })
-            .addCase(createTodolist, (state, action) => {
+            .addCase(createTodolistAsync.fulfilled, (state, action) => {
+                if(action.payload)
                 state[action.payload.id] = []
             })
             //получение тудулистов
