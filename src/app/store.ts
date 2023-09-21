@@ -31,7 +31,6 @@ export const store = configureStore({
 export type AppRootState = ReturnType<typeof store.getState>
 export type AppRootDispatch = typeof store.dispatch
 
-export const useAppDispatch = () => useDispatch<AppRootDispatch>()
 
 //@ts-ignore
 window.store = store

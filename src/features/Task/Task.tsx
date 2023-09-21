@@ -6,7 +6,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {removeTaskAsync, updateTaskAsync} from "./tasks-reducer";
 import {EditableTextTask} from "../../components/EditableTextTask";
-import {useAppDispatch} from "../../app/store";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+
 
 type TaskPropsType = {
     keyForLabel: string

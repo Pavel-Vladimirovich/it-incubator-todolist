@@ -12,8 +12,8 @@ const initialState: TasksStateType = {}
 export const fetchTasksAsync = createAsyncThunk(
     'tasks/fetch',
      async (todolistId: string, {dispatch}) => {
+         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try{
-            dispatch(setAppStatusRequest({status: StatusRequest.loading}))
             const response = await todolistApi.getTasks(todolistId)
             if (response.status === 200) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
@@ -32,8 +32,8 @@ export const fetchTasksAsync = createAsyncThunk(
 export const createTaskAsync = createAsyncThunk(
     'tasks',
     async (arg: { todolistId: string, title: string }, {dispatch}) => {
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try {
-            dispatch(setAppStatusRequest({status: StatusRequest.loading}))
             const response = await todolistApi.createTask(arg.todolistId, arg.title)
             if (response.data.resultCode === 0) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
@@ -137,7 +137,7 @@ const slice = createSlice({
                 if(action.payload)
                 state[action.payload.id] = []
             })
-            //получение тудулистов
+            // получение тудулистов
             .addCase(fetchTodolistAsync.fulfilled, (state, action) => {
                 if(action.payload)
                 action.payload.todolists.forEach(tl => {

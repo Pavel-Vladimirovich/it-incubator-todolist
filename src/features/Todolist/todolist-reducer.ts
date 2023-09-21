@@ -40,9 +40,9 @@ export const fetchTodolistAsync = createAsyncThunk(
 export const updateTodolistTitleAsync = createAsyncThunk(
     'todolist/updateTitle',
     async (arg:{todolistId: string, title: string}, {dispatch}) => {
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
+        dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.loading}))
         try{
-            dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-            dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.loading}))
             const response = await  todolistApi.updateTodolistTitle(arg.todolistId, arg.title)
             if(response.data.resultCode === 0){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
@@ -62,8 +62,8 @@ export const updateTodolistTitleAsync = createAsyncThunk(
 export const createTodolistAsync = createAsyncThunk(
     'todolist/create',
     async (title: string, {dispatch}) => {
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try{
-            dispatch(setAppStatusRequest({status: StatusRequest.loading}))
             const response = await todolistApi.createTodolist(title)
             if(response.data.resultCode === 0){
                return response.data.data.item
@@ -81,9 +81,9 @@ export const createTodolistAsync = createAsyncThunk(
 export const removeTodolistAsync = createAsyncThunk(
     'todolist/remove',
     async (todolistId: string, {dispatch, rejectWithValue}) => {
+        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
+        dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
         try{
-            dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-            dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
             const response = await todolistApi.removeTodolist(todolistId)
             if(response.data.resultCode === 0){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))

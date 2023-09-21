@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from "react";
-import { Grid, Paper, Typography} from "@material-ui/core";
+import {Grid, Paper, Typography} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "../Todolist/Todolist";
 import {useDispatch, useSelector} from "react-redux";
@@ -7,13 +7,14 @@ import {AppRootState} from "../../app/store";
 import {
     changeTodolistFilter,
     createTodolistAsync,
-    fetchTodolistAsync, FilterValuesType,
+    fetchTodolistAsync,
+    FilterValuesType,
     removeTodolistAsync,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
 import {makeStyles} from "@material-ui/core/styles";
-import { useNavigate } from "react-router-dom";
-import { theme } from "../../styles/general";
+import {useNavigate} from "react-router-dom";
+import {theme} from "../../styles/general";
 
 const useStyles = makeStyles({
     linearProgressContainer: {

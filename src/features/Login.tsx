@@ -7,13 +7,14 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppRootState } from "../app/store";
 import {useNavigate} from "react-router-dom";
+import {useAppDispatch} from "../hooks/useAppDispatch";
 
 
 export const Login = React.memo(() => {
-    console.log('render login')
+    // console.log('render login')
     const navigate = useNavigate();
     const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
-    const dispatch = useDispatch<any>()
+    const dispatch = useAppDispatch()
 
     const formik = useFormik({
       initialValues: {
