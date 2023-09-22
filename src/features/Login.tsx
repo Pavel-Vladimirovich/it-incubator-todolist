@@ -1,20 +1,24 @@
-import React, {useEffect} from "react";
+import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, TextField, Typography } from "@material-ui/core";
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import {Button,Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, TextField, Typography} from "@material-ui/core";
-import { loginAsync } from "../app/auth_reducer";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import * as Yup from 'yup';
+import { loginAsync } from "../app/auth_reducer";
 import { AppRootState } from "../app/store";
-import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from "../hooks/useAppDispatch";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 
 
 export const Login = React.memo(() => {
-    // console.log('render login')
-    const navigate = useNavigate();
-    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
     const dispatch = useAppDispatch()
+    
+    const navigate = useNavigate();
+    
+    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
+
+    useEffect(()=>{
+        isLoggedIn && navigate('/')
+    }, [isLoggedIn, navigate])
 
     const formik = useFormik({
       initialValues: {
@@ -27,14 +31,14 @@ export const Login = React.memo(() => {
         password: Yup.string().required('Required'),
         rememberMe: Yup.boolean()
       }),
-      onSubmit: values => {
-        dispatch(loginAsync(values))
+      onSubmit: async values => {
+        const action = await dispatch(loginAsync(values))
+        if(loginAsync.fulfilled.match(action))
+        console.log(action.meta.requestStatus)
+        
       },
     });
 
-    useEffect(()=>{
-        isLoggedIn && navigate('/')
-    }, [isLoggedIn, navigate])
 
     return (
         <>

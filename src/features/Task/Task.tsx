@@ -16,10 +16,11 @@ type TaskPropsType = {
 }
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
-    // console.log('render task')
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
+
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(false);
+    
     const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id])
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {

@@ -23,9 +23,10 @@ const useStyles = makeStyles({
 });
 
 export const ErrorPage = () => {
-  const classes = useStyles();
-  const error = useRouteError();
-  const navigate = useNavigate();
+	const navigate = useNavigate();
+	const error = useRouteError();
+	
+	const classes = useStyles();
 
   if (isRouteErrorResponse(error)) {
     return (

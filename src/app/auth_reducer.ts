@@ -1,12 +1,12 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {authAPI, AuthDataType, LoginDataType} from "../api/todolist-api";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
+import { authAPI, AuthDataType, LoginDataType } from "../api/todolist-api";
+import { ResultCode } from "../enums/ResultCode";
 import {
     handleServerAppError,
-    handleServerNetworkError,
+    handleServerNetworkError
 } from "../utils/error-utils";
-import {setAppStatusRequest, StatusRequest} from "./app_reducer";
-import {AppRootDispatch} from "./store";
-import {AxiosError} from "axios";
+import { setAppStatusRequest, StatusRequest } from "./app_reducer";
 
 
 const initialState: InitialStateType = {
@@ -22,7 +22,7 @@ export const loginAsync = createAsyncThunk(
         dispatch(setAppStatusRequest({status: StatusRequest.loading}));
         try {
             const response = await authAPI.login(data);
-            if (response.data.resultCode === 0) {
+            if (response.data.resultCode === ResultCode.Ok) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
                 return;
             } else {
@@ -44,7 +44,7 @@ export const logoutAsync = createAsyncThunk(
       dispatch(setAppStatusRequest({status: StatusRequest.loading}));
     try{
       const response = await authAPI.logout()
-      if (response.data.resultCode === 0) {
+      if (response.data.resultCode === ResultCode.Ok) {
         dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
         return;
     } else {
@@ -88,6 +88,3 @@ export const {currentAuthData, isLoginIn} = slice.actions;
 // types
 type InitialStateType = AuthDataType & { isLoggedIn: boolean };
 
-// type ActionType =
-// | ReturnType<typeof login>
-// | ReturnType<typeof currentAuthData>

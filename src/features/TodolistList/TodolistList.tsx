@@ -1,9 +1,13 @@
-import React, {useCallback, useEffect} from "react";
-import {Grid, Paper, Typography} from "@material-ui/core";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {Todolist} from "../Todolist/Todolist";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../../app/store";
+import { Grid, Paper, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { AppRootState } from "../../app/store";
+import { AddItemForm } from "../../components/AddItemForm/AddItemForm";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { theme } from "../../styles/general";
+import { Todolist } from "../Todolist/Todolist";
 import {
     changeTodolistFilter,
     createTodolistAsync,
@@ -12,9 +16,6 @@ import {
     removeTodolistAsync,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
-import {makeStyles} from "@material-ui/core/styles";
-import {useNavigate} from "react-router-dom";
-import {theme} from "../../styles/general";
 
 const useStyles = makeStyles({
     linearProgressContainer: {
@@ -35,14 +36,14 @@ const useStyles = makeStyles({
 })
 
 export const TodolistList = () => {
-    const classes = useStyles()
-    const navigate = useNavigate();
-    const dispatch = useDispatch<any>()
-    const todolists = useSelector<AppRootState, Array<TodolistDomainType>>((state => state.todolists));
-    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
+    const dispatch = useAppDispatch();
 
-    //const statusRequest = useSelector<AppStateType, StatusRequest>((state => state.app.status))
-    // const status = useSelector<AppStateType, StatusRequest>((state) => state.app.status)
+    const navigate = useNavigate();
+
+    const todolists = useSelector<AppRootState, Array<TodolistDomainType>>((state => state.todolists));
+    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn);
+
+    const classes = useStyles();
 
     useEffect(()=>{
         if(!isLoggedIn){
@@ -64,9 +65,6 @@ export const TodolistList = () => {
         (todolistId: string, filterValue: FilterValuesType) => {
             dispatch(changeTodolistFilter({id: todolistId, filter: filterValue}))
         }, [dispatch])
-
-
-    
 
     return(
         <Grid container spacing={3}>

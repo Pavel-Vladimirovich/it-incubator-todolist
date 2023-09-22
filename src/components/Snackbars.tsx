@@ -1,10 +1,11 @@
-import React from "react";
 import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert, {AlertProps} from "@material-ui/lab/Alert";
-import {makeStyles, Theme} from "@material-ui/core/styles";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../app/store";
-import {setAppError, setAppStatusRequest, StatusRequest} from "../app/app_reducer";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import React from "react";
+import { useSelector } from "react-redux";
+import { setAppError, setAppStatusRequest, StatusRequest } from "../app/app_reducer";
+import { AppRootState } from "../app/store";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -20,11 +21,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const CustomizedSnackbars = React.memo(()=>{
-  const classes = useStyles();
+  
+  const dispatch = useAppDispatch();
+  
   const error  = useSelector<AppRootState, string | null>((state) => state.app.error);
   const statusRequest = useSelector<AppRootState, StatusRequest>((state)=>state.app.status)
-  const dispatch = useDispatch();
-
+  
+  const classes = useStyles();
+  
   const isError = error !== null
   const isStatus = statusRequest === StatusRequest.succeeded
  

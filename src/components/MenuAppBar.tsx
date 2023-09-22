@@ -1,20 +1,20 @@
-import React from "react";
+import { AppBar, IconButton, LinearProgress, Menu, MenuItem } from "@material-ui/core";
+import Fab from "@material-ui/core/Fab";
+import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import {AppBar,IconButton, LinearProgress, Menu, MenuItem,} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import { makeStyles } from "@material-ui/core/styles";
 import Zoom from "@material-ui/core/Zoom";
-import Fab from "@material-ui/core/Fab";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { AccountCircle } from "@material-ui/icons";
-import { StatusRequest } from "../app/app_reducer";
-import { AppRootState } from "../app/store";
-import { logoutAsync } from "../app/auth_reducer";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import MenuIcon from "@material-ui/icons/Menu";
+import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { StatusRequest } from "../app/app_reducer";
+import { logoutAsync } from "../app/auth_reducer";
+import { AppRootState } from "../app/store";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 
 interface Props {
   children: React.ReactElement;
@@ -74,14 +74,18 @@ function ScrollTop(props: Props) {
 }
 
 export default function MenuAppBar() {
-  const classes = useStyles();
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
+  
   const statusRequest = useSelector<AppRootState>((store) => store.app.status);
   const isLoggedIn = useSelector<AppRootState, boolean>(
     (state) => state.authData.isLoggedIn
-  );
+    );
   const login = useSelector<AppRootState, string>(state => state.authData.login)
+    
+  const classes = useStyles();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {

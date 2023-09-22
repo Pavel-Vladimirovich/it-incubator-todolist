@@ -1,13 +1,13 @@
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError, HttpStatusCode } from "axios";
+import { todolistApi, TodolistType } from "../../api/todolist-api";
 import {
     setAppError,
     setAppStatusRequest,
-    StatusRequest,
-    } from "../../app/app_reducer";
-import {todolistApi, TodolistType} from "../../api/todolist-api";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {AppRootDispatch} from "../../app/store";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
+    StatusRequest
+} from "../../app/app_reducer";
+import { ResultCode } from "../../enums/ResultCode";
+import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
 
 
 export enum FilterValuesType {
@@ -22,7 +22,7 @@ export const fetchTodolistAsync = createAsyncThunk(
         try{
             dispatch(setAppStatusRequest({status: StatusRequest.loading}))
             const response = await todolistApi.getTodolist()
-            if(response.status === 200){
+            if(response.status === HttpStatusCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 return {todolists: response.data}
             }
@@ -44,7 +44,7 @@ export const updateTodolistTitleAsync = createAsyncThunk(
         dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.loading}))
         try{
             const response = await  todolistApi.updateTodolistTitle(arg.todolistId, arg.title)
-            if(response.data.resultCode === 0){
+            if(response.data.resultCode === ResultCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.succeeded}))
                 return{...arg}
@@ -65,9 +65,9 @@ export const createTodolistAsync = createAsyncThunk(
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try{
             const response = await todolistApi.createTodolist(title)
-            if(response.data.resultCode === 0){
-               return response.data.data.item
+            if(response.data.resultCode === ResultCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
+                return response.data.data.item
             }else{
                 handleServerAppError(response.data, dispatch)
             }
@@ -85,7 +85,7 @@ export const removeTodolistAsync = createAsyncThunk(
         dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
         try{
             const response = await todolistApi.removeTodolist(todolistId)
-            if(response.data.resultCode === 0){
+            if(response.data.resultCode === ResultCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 return {todolistId}
             }else{

@@ -1,10 +1,12 @@
-import {AppRootDispatch, AppRootState} from "../../app/store";
-import {createTodolistAsync, fetchTodolistAsync, removeTodolistAsync} from "../Todolist/todolist-reducer";
-import {TaskPriority, TaskStatus, TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {setAppError, setAppStatusRequest, StatusRequest} from "../../app/app_reducer";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AxiosError} from "axios";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError, HttpStatusCode } from "axios";
+import { TaskPriority, TaskStatus, TaskType, todolistApi, UpdateTaskModelType } from "../../api/todolist-api";
+import { setAppError, setAppStatusRequest, StatusRequest } from "../../app/app_reducer";
+import { AppRootState } from "../../app/store";
+import { ResultCode } from "../../enums/ResultCode";
+import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+import { createTodolistAsync, fetchTodolistAsync, removeTodolistAsync } from "../Todolist/todolist-reducer";
+
 
 
 const initialState: TasksStateType = {}
@@ -15,7 +17,7 @@ export const fetchTasksAsync = createAsyncThunk(
          dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try{
             const response = await todolistApi.getTasks(todolistId)
-            if (response.status === 200) {
+            if (response.status === HttpStatusCode.Ok) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 return {todolistId, tasks: response.data.items}
             } else {
@@ -35,7 +37,7 @@ export const createTaskAsync = createAsyncThunk(
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try {
             const response = await todolistApi.createTask(arg.todolistId, arg.title)
-            if (response.data.resultCode === 0) {
+            if (response.data.resultCode === ResultCode.Ok) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 return {task: response.data.data.item}
             } else {
@@ -55,7 +57,7 @@ export const removeTaskAsync = createAsyncThunk(
         dispatch(setStatusTask({...arg, status: TaskStatus.InProgress}));
         try {
             const response = await todolistApi.removeTask(arg.todolistId, arg.taskId);
-            if (response.data.resultCode === 0) {
+            if (response.data.resultCode === ResultCode.Ok) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
                 return {todolistId: arg.todolistId, taskId: arg.taskId};
             } else {
@@ -102,7 +104,7 @@ export const updateTaskAsync = createAsyncThunk<any, // выяснить воп�
         dispatch(setStatusTask({...arg, status: TaskStatus.InProgress}));
         try {
             const response = await todolistApi.updateTask(arg.todolistId, arg.taskId, modelApi);
-            if (response.data.resultCode === 0) {
+            if (response.data.resultCode === ResultCode.Ok) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
                 dispatch(setStatusTask({...arg, status: TaskStatus.Completed}));
                  return {...arg};

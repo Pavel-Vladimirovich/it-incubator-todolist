@@ -1,12 +1,10 @@
-import {applyMiddleware, combineReducers, legacy_createStore as createStore} from "redux";
-import thunk from "redux-thunk";
-import logger from 'redux-logger';
-import {appReducer} from "./app_reducer";
-import {todolistReducer} from "../features/Todolist/todolist-reducer";
-import {tasksReducer} from "../features/Task/tasks-reducer";
-import {authReducer} from "./auth_reducer";
 import { configureStore } from "@reduxjs/toolkit";
-import {useDispatch} from "react-redux";
+import { combineReducers } from "redux";
+import thunk from "redux-thunk";
+import { tasksReducer } from "../features/Task/tasks-reducer";
+import { todolistReducer } from "../features/Todolist/todolist-reducer";
+import { appReducer } from "./app_reducer";
+import { authReducer } from "./auth_reducer";
 
 
 const rootReducer = combineReducers({
