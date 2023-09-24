@@ -3,9 +3,10 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import React from "react";
 import { useSelector } from "react-redux";
-import { setAppError, setAppStatusRequest, StatusRequest } from "../app/app_reducer";
+import { setAppError, setAppStatusRequest } from "../app/app_reducer";
 import { AppRootState } from "../app/store";
 import { useAppDispatch } from "../hooks/useAppDispatch";
+import {StatusRequest} from "../enums/statusRequest";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

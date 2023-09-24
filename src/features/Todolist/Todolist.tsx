@@ -9,14 +9,15 @@ import BallotIcon from "@material-ui/icons/Ballot";
 import IconButton from "@material-ui/core/IconButton";
 import {Task} from "../Task/Task";
 import {AppRootState} from "../../app/store";
-import {StatusRequest} from "../../app/app_reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
-import {FilterValuesType, updateTodolistTitleAsync} from "./todolist-reducer";
+import {updateTodolistTitleAsync} from "./todolist-reducer";
 import {createTaskAsync, fetchTasksAsync,} from "../Task/tasks-reducer";
 import {EditableTitleTodolist} from "../../components/EditableTitleTodolist";
 import {makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {StatusRequest} from "../../enums/statusRequest";
+import {FilterValues} from "../../enums/filterValues";
 
 const useStyles = makeStyles({
     container: {
@@ -41,8 +42,8 @@ const useStyles = makeStyles({
 type TodolistPropsType = {
     todolistId: string;
     title: string;
-    changeFilter: (todolistId: string, filterValue: FilterValuesType) => void;
-    filter: FilterValuesType;
+    changeFilter: (todolistId: string, filterValue: FilterValues) => void;
+    filter: FilterValues;
     entityStatus: StatusRequest;
     removeTodolist: (todolistId: string) => void
 };
@@ -68,14 +69,14 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
         dispatch(createTaskAsync({todolistId, title: title.trim()}))
     }, [dispatch, todolistId]);
 
-    const onAllClickHandler = useCallback(() => changeFilter(todolistId, FilterValuesType.all), [changeFilter, todolistId]);
-    const onActiveClickHandler = useCallback(() => changeFilter(todolistId, FilterValuesType.active), [changeFilter, todolistId]);
-    const onCompletedClickHandler = useCallback(() => changeFilter(todolistId, FilterValuesType.completed), [changeFilter, todolistId]);
+    const onAllClickHandler = useCallback(() => changeFilter(todolistId, FilterValues.all), [changeFilter, todolistId]);
+    const onActiveClickHandler = useCallback(() => changeFilter(todolistId, FilterValues.active), [changeFilter, todolistId]);
+    const onCompletedClickHandler = useCallback(() => changeFilter(todolistId, FilterValues.completed), [changeFilter, todolistId]);
 
-    if (filter === FilterValuesType.completed) {
+    if (filter === FilterValues.completed) {
         tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatus.Completed);
     }
-    if (filter === FilterValuesType.active) {
+    if (filter === FilterValues.active) {
         tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatus.New);
     }
 
@@ -106,7 +107,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
             </div>
                 <ButtonGroup variant="text" fullWidth>
                     <Button
-                        color={filter === FilterValuesType.all ? "secondary" : "default"}
+                        color={filter === FilterValues.all ? "secondary" : "default"}
                         startIcon={<ReceiptIcon/>}
                         onClick={onAllClickHandler}>
                         <Typography noWrap>
@@ -114,7 +115,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
                         </Typography>
                     </Button>
                     <Button
-                        color={filter === FilterValuesType.active ? "secondary" : "default"}
+                        color={filter === FilterValues.active ? "secondary" : "default"}
                         startIcon={<BallotIcon/>}
                         onClick={onActiveClickHandler}>
                         <Typography noWrap>
@@ -122,7 +123,7 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
                         </Typography>
                     </Button>
                     <Button
-                        color={filter === FilterValuesType.completed ? "secondary" : "default"}
+                        color={filter === FilterValues.completed ? "secondary" : "default"}
                         startIcon={<AssignmentTurnedInIcon/>}
                         onClick={onCompletedClickHandler}>
                         <Typography noWrap>

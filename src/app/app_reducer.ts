@@ -3,14 +3,8 @@ import {handleServerAppError, handleServerNetworkError,} from "../utils/error-ut
 import {currentAuthData, isLoginIn} from "./auth_reducer";
 import {authAPI} from "../api/todolist-api";
 import {AxiosError} from "axios";
-import { ResultCode } from "../enums/ResultCode";
-
-export enum StatusRequest {
-    idle = "idle",
-    loading = "loading",
-    succeeded = "succeeded",
-    failed = " failed",
-}
+import { ResponseCode } from "../enums/ResponseCode";
+import {StatusRequest} from "../enums/statusRequest";
 
 const initialState = {
     error: null as string | null,
@@ -23,7 +17,7 @@ export const appInitializationAsync = createAsyncThunk(
     async (_, {rejectWithValue, dispatch}) => {
         try {
             const response = await authAPI.getAuthData();
-            if (response.data.resultCode === ResultCode.Ok) {
+            if (response.data.resultCode === ResponseCode.Ok) {
                 dispatch(isLoginIn({isLoggedIn: true}));
                 dispatch(currentAuthData(response.data.data));
             } else {
@@ -33,7 +27,8 @@ export const appInitializationAsync = createAsyncThunk(
         } catch (err) {
             let error = err as AxiosError;
             handleServerNetworkError(error, dispatch);
-            return rejectWithValue(error);
+            return {isAuthorized: true};
+            // return rejectWithValue(error);
         }
     }
 );

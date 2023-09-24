@@ -12,10 +12,10 @@ import {
     changeTodolistFilter,
     createTodolistAsync,
     fetchTodolistAsync,
-    FilterValuesType,
     removeTodolistAsync,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
+import {FilterValues} from "../../enums/filterValues";
 
 const useStyles = makeStyles({
     linearProgressContainer: {
@@ -62,7 +62,7 @@ export const TodolistList = () => {
         }, [dispatch])
 
     const changeTodolistFilterHandler = useCallback(
-        (todolistId: string, filterValue: FilterValuesType) => {
+        (todolistId: string, filterValue: FilterValues) => {
             dispatch(changeTodolistFilter({id: todolistId, filter: filterValue}))
         }, [dispatch])
 

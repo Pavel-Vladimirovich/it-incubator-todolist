@@ -4,17 +4,12 @@ import { todolistApi, TodolistType } from "../../api/todolist-api";
 import {
     setAppError,
     setAppStatusRequest,
-    StatusRequest
 } from "../../app/app_reducer";
-import { ResultCode } from "../../enums/ResultCode";
+import { ResponseCode } from "../../enums/ResponseCode";
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+import {FilterValues} from "../../enums/filterValues";
+import {StatusRequest} from "../../enums/statusRequest";
 
-
-export enum FilterValuesType {
-    all = "all",
-    completed = "completed",
-    active = "active",
-}
 
 export const fetchTodolistAsync = createAsyncThunk(
     'todolist/fetch',
@@ -44,7 +39,7 @@ export const updateTodolistTitleAsync = createAsyncThunk(
         dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.loading}))
         try{
             const response = await  todolistApi.updateTodolistTitle(arg.todolistId, arg.title)
-            if(response.data.resultCode === ResultCode.Ok){
+            if(response.data.resultCode === ResponseCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.succeeded}))
                 return{...arg}
@@ -65,7 +60,7 @@ export const createTodolistAsync = createAsyncThunk(
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try{
             const response = await todolistApi.createTodolist(title)
-            if(response.data.resultCode === ResultCode.Ok){
+            if(response.data.resultCode === ResponseCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 return response.data.data.item
             }else{
@@ -85,7 +80,7 @@ export const removeTodolistAsync = createAsyncThunk(
         dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
         try{
             const response = await todolistApi.removeTodolist(todolistId)
-            if(response.data.resultCode === ResultCode.Ok){
+            if(response.data.resultCode === ResponseCode.Ok){
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
                 return {todolistId}
             }else{
@@ -106,7 +101,7 @@ const slice = createSlice({
     name: 'todolist',
     initialState,
     reducers:{
-        changeTodolistFilter: (state, action: PayloadAction<{id: string, filter: FilterValuesType}>) => {
+        changeTodolistFilter: (state, action: PayloadAction<{id: string, filter: FilterValues}>) => {
             const todolist = state.find(item => item.id === action.payload.id)
             if(todolist) todolist.filter = action.payload.filter
         },
@@ -119,7 +114,7 @@ const slice = createSlice({
         builder
         .addCase(fetchTodolistAsync.fulfilled, (state, action)=>{
             if(action.payload)
-            return action.payload.todolists.map(item => ({...item, filter: FilterValuesType.all, entityStatus: StatusRequest.idle}))
+            return action.payload.todolists.map(item => ({...item, filter: FilterValues.all, entityStatus: StatusRequest.idle}))
         })
         .addCase(updateTodolistTitleAsync.fulfilled, (state, action) => {
           if(action.payload){
@@ -129,7 +124,7 @@ const slice = createSlice({
         })
         .addCase(createTodolistAsync.fulfilled, (state, action) => {
             if(action.payload)
-            state.unshift({...action.payload, filter: FilterValuesType.all, entityStatus: StatusRequest.idle})
+            state.unshift({...action.payload, filter: FilterValues.all, entityStatus: StatusRequest.idle})
 
         })
         .addCase(removeTodolistAsync.fulfilled, (state, action) => {
@@ -145,7 +140,7 @@ export const {changeTodolistFilter,setEntityStatus} = slice.actions
 
 // types
 export type TodolistDomainType = TodolistType & {
-    filter: FilterValuesType
+    filter: FilterValues
     entityStatus: StatusRequest
 }
 type TodolistStateType = Array<TodolistDomainType>

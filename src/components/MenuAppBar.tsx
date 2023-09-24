@@ -11,10 +11,10 @@ import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { StatusRequest } from "../app/app_reducer";
 import { logoutAsync } from "../app/auth_reducer";
 import { AppRootState } from "../app/store";
 import { useAppDispatch } from "../hooks/useAppDispatch";
+import {StatusRequest} from "../enums/statusRequest";
 
 interface Props {
   children: React.ReactElement;

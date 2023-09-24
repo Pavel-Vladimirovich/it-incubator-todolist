@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { authAPI, AuthDataType, LoginDataType } from "../api/todolist-api";
-import { ResultCode } from "../enums/ResultCode";
+import { ResponseCode } from "../enums/ResponseCode";
 import {
     handleServerAppError,
     handleServerNetworkError
 } from "../utils/error-utils";
-import { setAppStatusRequest, StatusRequest } from "./app_reducer";
+import { setAppStatusRequest } from "./app_reducer";
+import {StatusRequest} from "../enums/statusRequest";
 
 
 const initialState: InitialStateType = {
@@ -22,7 +23,7 @@ export const loginAsync = createAsyncThunk(
         dispatch(setAppStatusRequest({status: StatusRequest.loading}));
         try {
             const response = await authAPI.login(data);
-            if (response.data.resultCode === ResultCode.Ok) {
+            if (response.data.resultCode === ResponseCode.Ok) {
                 dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
                 return;
             } else {
@@ -44,7 +45,7 @@ export const logoutAsync = createAsyncThunk(
       dispatch(setAppStatusRequest({status: StatusRequest.loading}));
     try{
       const response = await authAPI.logout()
-      if (response.data.resultCode === ResultCode.Ok) {
+      if (response.data.resultCode === ResponseCode.Ok) {
         dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
         return;
     } else {
