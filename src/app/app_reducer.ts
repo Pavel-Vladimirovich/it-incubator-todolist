@@ -26,7 +26,7 @@ export const appInitializationAsync = createAsyncThunk(
         } catch (err) {
             let error = err as AxiosError;
             handleServerNetworkError(error, dispatch);
-            return rejectWithValue({});
+            return rejectWithValue({error});
         }
     }
 );
@@ -47,16 +47,14 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(appInitializationAsync.pending, (state, action) => { 
-                // не дописано, просто проба
+            .addCase(appInitializationAsync.pending, (state, action) => {
+                state.isInitialization = false
             })
             .addCase(appInitializationAsync.fulfilled, (state, action) => {
                 state.isInitialization = true
             })
             .addCase(appInitializationAsync.rejected, (state, action) => {
-                if (action.error.message)
-                    state.error = action.error.message 
-                    // не дописано, просто проба
+                state.isInitialization = true
             })
     },
 });

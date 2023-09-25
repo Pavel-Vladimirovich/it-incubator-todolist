@@ -49,7 +49,7 @@ const CustomizedSnackbars = React.memo(()=>{
             success
           </Alert>
         :
-          <Alert onClose={handleClose} severity={"info"}>
+          <Alert onClose={handleClose} severity={"error"}>
             {error ? error : null}
           </Alert>
         }
