@@ -23,12 +23,10 @@ export const appInitializationAsync = createAsyncThunk(
             } else {
                 handleServerAppError(response.data, dispatch);
             }
-            return {isAuthorized: true};
         } catch (err) {
             let error = err as AxiosError;
             handleServerNetworkError(error, dispatch);
-            return {isAuthorized: true};
-            // return rejectWithValue(error);
+            return rejectWithValue({});
         }
     }
 );
@@ -46,12 +44,6 @@ const slice = createSlice({
         ) => {
             state.status = action.payload.status;
         },
-        setAppInitialization: (
-            state,
-            action: PayloadAction<{ isAuthorized: boolean }>
-        ) => {
-            state.isInitialization = action.payload.isAuthorized;
-        },
     },
     extraReducers: (builder) => {
         builder
@@ -59,7 +51,7 @@ const slice = createSlice({
                 // не дописано, просто проба
             })
             .addCase(appInitializationAsync.fulfilled, (state, action) => {
-                state.isInitialization = action.payload.isAuthorized
+                state.isInitialization = true
             })
             .addCase(appInitializationAsync.rejected, (state, action) => {
                 if (action.error.message)

@@ -13,7 +13,7 @@ import {StatusRequest} from "../../enums/statusRequest";
 
 export const fetchTodolistAsync = createAsyncThunk(
     'todolist/fetch',
-    async (_, {dispatch}) => {
+    async (_, {dispatch, rejectWithValue}) => {
         try{
             dispatch(setAppStatusRequest({status: StatusRequest.loading}))
             const response = await todolistApi.getTodolist()
@@ -24,17 +24,19 @@ export const fetchTodolistAsync = createAsyncThunk(
             else{
                 dispatch(setAppError({error: "some error occurred"}))
                 dispatch(setAppStatusRequest({status: StatusRequest.failed}))
+                return rejectWithValue('some error')
             }
         }catch(err){
             const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
             handleServerNetworkError(error, dispatch)
+            return rejectWithValue('some error')
         }
     }
 )
 
 export const updateTodolistTitleAsync = createAsyncThunk(
     'todolist/updateTitle',
-    async (arg:{todolistId: string, title: string}, {dispatch}) => {
+    async (arg:{todolistId: string, title: string}, {dispatch, rejectWithValue}) => {
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.loading}))
         try{
@@ -46,17 +48,19 @@ export const updateTodolistTitleAsync = createAsyncThunk(
             }else{
                 handleServerAppError(response.data, dispatch)
                 dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.failed}))
+                return rejectWithValue('some error')
             }
         }catch (err){
             const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
             handleServerNetworkError(error, dispatch)
+            return rejectWithValue('some error')
         }
     }
 )
 
 export const createTodolistAsync = createAsyncThunk(
     'todolist/create',
-    async (title: string, {dispatch}) => {
+    async (title: string, {dispatch, rejectWithValue}) => {
         dispatch(setAppStatusRequest({status: StatusRequest.loading}))
         try{
             const response = await todolistApi.createTodolist(title)
@@ -65,10 +69,12 @@ export const createTodolistAsync = createAsyncThunk(
                 return response.data.data.item
             }else{
                 handleServerAppError(response.data, dispatch)
+                return rejectWithValue('some error')
             }
         }catch(err){
             const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
             handleServerNetworkError(error, dispatch)
+            return rejectWithValue('some error')
         }
     }
 )
@@ -86,11 +92,13 @@ export const removeTodolistAsync = createAsyncThunk(
             }else{
                 handleServerAppError(response.data, dispatch)
                 dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.failed}))
+                return rejectWithValue('some error')
             }
 
         }catch(err){
             const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
             handleServerNetworkError(error, dispatch)
+            return rejectWithValue('some error')
         }
     }
 )
@@ -113,17 +121,13 @@ const slice = createSlice({
     extraReducers: (builder)=> {
         builder
         .addCase(fetchTodolistAsync.fulfilled, (state, action)=>{
-            if(action.payload)
             return action.payload.todolists.map(item => ({...item, filter: FilterValues.all, entityStatus: StatusRequest.idle}))
         })
         .addCase(updateTodolistTitleAsync.fulfilled, (state, action) => {
-          if(action.payload){
               const todolist = state.find(item => item.id === action.payload?.todolistId)
               if(todolist) todolist.title = action.payload.title
-          }
         })
         .addCase(createTodolistAsync.fulfilled, (state, action) => {
-            if(action.payload)
             state.unshift({...action.payload, filter: FilterValues.all, entityStatus: StatusRequest.idle})
 
         })
