@@ -3,15 +3,19 @@ import {CssBaseline, Grid, ThemeProvider} from "@material-ui/core";
 import { CircularProgress } from '@material-ui/core';
 import {Outlet} from "react-router-dom";
 import {Layout} from "../components/Layout";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {AppRootState} from "./store";
 import {appInitializationAsync} from "./app_reducer";
-import { theme } from "../styles/general";
+import { theme } from "../styles/common";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 
 function App() {
-    const dispatch = useDispatch<any>()
+    const dispatch = useAppDispatch()
     const isInitialization = useSelector<AppRootState, boolean>((state) => state.app.isInitialization)
 
+    const a: any = useAppSelector()
+    console.log(a.app)
+    
     useEffect(()=>{
         dispatch(appInitializationAsync())
     }, [dispatch])
@@ -23,9 +27,7 @@ function App() {
             </Grid>
          )  
     }
-    console.log(process.env.REACT_APP_API_KEY)
-    console.log(process.env.REACT_APP_API)
-
+    
     return (
         <>
             <ThemeProvider theme={theme}>

@@ -3,7 +3,7 @@ import {AxiosError, HttpStatusCode} from "axios";
 import {TaskPriority, TaskStatus, TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api";
 import {setAppError, setAppStatusRequest} from "../../app/app_reducer";
 import {AppRootState} from "../../app/store";
-import {ResponseCode} from "../../enums/ResponseCode";
+import {ResponseCode} from "../../enums/responseCode";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createTodolistAsync, fetchTodolistAsync, removeTodolistAsync} from "../Todolist/todolist-reducer";
 import {StatusRequest} from "../../enums/statusRequest";

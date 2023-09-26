@@ -3,8 +3,8 @@ import {handleServerAppError, handleServerNetworkError,} from "../utils/error-ut
 import {currentAuthData, isLoginIn} from "./auth_reducer";
 import {authAPI} from "../api/todolist-api";
 import {AxiosError} from "axios";
-import { ResponseCode } from "../enums/ResponseCode";
 import {StatusRequest} from "../enums/statusRequest";
+import { ResponseCode } from "../enums/responseCode";
 
 const initialState = {
     error: null as string | null,

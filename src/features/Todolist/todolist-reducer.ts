@@ -5,7 +5,7 @@ import {
     setAppError,
     setAppStatusRequest,
 } from "../../app/app_reducer";
-import { ResponseCode } from "../../enums/ResponseCode";
+import { ResponseCode } from "../../enums/responseCode";
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
 import {FilterValues} from "../../enums/filterValues";
 import {StatusRequest} from "../../enums/statusRequest";

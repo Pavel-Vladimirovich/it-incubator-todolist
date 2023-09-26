@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { authAPI, AuthDataType, LoginDataType } from "../api/todolist-api";
-import { ResponseCode } from "../enums/ResponseCode";
 import {
     handleServerAppError,
     handleServerNetworkError
 } from "../utils/error-utils";
 import { setAppStatusRequest } from "./app_reducer";
 import {StatusRequest} from "../enums/statusRequest";
+import { ResponseCode } from "../enums/responseCode";
 
 
 const initialState: InitialStateType = {

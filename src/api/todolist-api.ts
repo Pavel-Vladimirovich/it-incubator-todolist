@@ -4,7 +4,7 @@ export const instance = axios.create({
     withCredentials: true,
     baseURL: process.env.REACT_APP_BASE_URL,
     headers: {
-        "API-KEY": '46bf5cab-c958-45f9-89c4-0ee6d1b7ed40'
+        "API-KEY": process.env.REACT_APP_API_KEY
     }
 });
 
@@ -51,7 +51,7 @@ export const authAPI = {
 // types
 export type ResponseType<D = {}> = {
     resultCode: number
-    messages: Array<string>,
+    messages: string[],
     data: D
 }
 
@@ -105,7 +105,7 @@ export type TaskType = {
 export type tasksResponseType = {
     totalCount: number
     error: string | null
-    items: Array<TaskType>
+    items: TaskType[]
 }
 
 export type UpdateTaskModelType = {

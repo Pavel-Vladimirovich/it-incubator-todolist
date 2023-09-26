@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AppRootState } from "../../app/store";
 import { AddItemForm } from "../../components/AddItemForm/AddItemForm";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { theme } from "../../styles/general";
+import { theme } from "../../styles/common";
 import { Todolist } from "../Todolist/Todolist";
 import {
     changeTodolistFilter,

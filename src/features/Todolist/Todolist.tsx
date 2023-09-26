@@ -51,8 +51,8 @@ type TodolistPropsType = {
 export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
     const dispatch = useAppDispatch();
     
-    let tasksForTodolist = useSelector<AppRootState, Array<TaskType>>((state => state.tasks[todolistId]));
-    
+    let tasksForTodolist = useSelector<AppRootState, TaskType[]>((state => state.tasks[todolistId]));
+   
     const classes = useStyles();
 
     useEffect(() => {
