@@ -4,7 +4,7 @@ import thunk from "redux-thunk";
 import { tasksReducer } from "../features/Task/tasks-reducer";
 import { todolistReducer } from "../features/Todolist/todolist-reducer";
 import { appReducer } from "./app_reducer";
-import { authReducer } from "./auth_reducer";
+import { authReducer } from "../features/Auth/auth_reducer";
 
 
 const rootReducer = combineReducers({

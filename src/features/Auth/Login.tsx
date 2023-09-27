@@ -1,12 +1,23 @@
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, TextField, Typography } from "@material-ui/core";
-import { useFormik } from 'formik';
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormHelperText,
+    FormLabel,
+    Grid,
+    TextField,
+    Typography
+} from "@material-ui/core";
+import {useFormik} from 'formik';
+import React, {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
-import { loginAsync } from "../app/auth_reducer";
-import { AppRootState } from "../app/store";
-import { useAppDispatch } from "../hooks/useAppDispatch";
+import {loginAsync} from "./auth_reducer";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {selectIsLoggedIn} from "./selectors";
 
 
 export const Login = React.memo(() => {
@@ -14,7 +25,7 @@ export const Login = React.memo(() => {
     
     const navigate = useNavigate();
     
-    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
     useEffect(()=>{
         isLoggedIn && navigate('/')
@@ -33,9 +44,7 @@ export const Login = React.memo(() => {
       }),
       onSubmit: async values => {
         const action = await dispatch(loginAsync(values))
-        if(loginAsync.fulfilled.match(action))
-        console.log(action.meta.requestStatus)
-        
+          // !!! Досмотреть видос Димыча рефакторинг санок, про валидацию input
       },
     });
 

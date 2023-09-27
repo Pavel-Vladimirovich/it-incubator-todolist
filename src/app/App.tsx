@@ -1,21 +1,17 @@
 import React, {useEffect} from "react";
-import {CssBaseline, Grid, ThemeProvider} from "@material-ui/core";
-import { CircularProgress } from '@material-ui/core';
+import {CircularProgress, CssBaseline, Grid, ThemeProvider} from "@material-ui/core";
 import {Outlet} from "react-router-dom";
 import {Layout} from "../components/Layout";
 import {useSelector} from "react-redux";
-import {AppRootState} from "./store";
 import {appInitializationAsync} from "./app_reducer";
-import { theme } from "../styles/common";
-import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
+import {theme} from "../styles/common";
+import {useAppDispatch} from "../hooks/useAppDispatch";
+import {selectIsInitialized} from "./selectors";
 
 function App() {
     const dispatch = useAppDispatch()
-    const isInitialization = useSelector<AppRootState, boolean>((state) => state.app.isInitialization)
+    const isInitialization = useSelector(selectIsInitialized)
 
-    const a: any = useAppSelector()
-    console.log(a.app)
-    
     useEffect(()=>{
         dispatch(appInitializationAsync())
     }, [dispatch])

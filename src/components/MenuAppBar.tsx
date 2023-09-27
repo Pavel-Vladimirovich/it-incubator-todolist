@@ -11,7 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { logoutAsync } from "../app/auth_reducer";
+import { logoutAsync } from "../features/Auth/auth_reducer";
 import { AppRootState } from "../app/store";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import {StatusRequest} from "../enums/statusRequest";

@@ -1,21 +1,21 @@
-import { Grid, Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import React, { useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { AppRootState } from "../../app/store";
-import { AddItemForm } from "../../components/AddItemForm/AddItemForm";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { theme } from "../../styles/common";
-import { Todolist } from "../Todolist/Todolist";
+import {Grid, Paper, Typography} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import React, {useCallback, useEffect} from "react";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+import {theme} from "../../styles/common";
+import {Todolist} from "../Todolist/Todolist";
 import {
     changeTodolistFilter,
     createTodolistAsync,
     fetchTodolistAsync,
-    removeTodolistAsync,
-    TodolistDomainType
+    removeTodolistAsync
 } from "../Todolist/todolist-reducer";
 import {FilterValues} from "../../enums/filterValues";
+import {authSelectors} from "../Auth";
+import {selectTodolists} from "./selectors";
 
 const useStyles = makeStyles({
     linearProgressContainer: {
@@ -40,8 +40,8 @@ export const TodolistList = () => {
 
     const navigate = useNavigate();
 
-    const todolists = useSelector<AppRootState, Array<TodolistDomainType>>((state => state.todolists));
-    const isLoggedIn = useSelector<AppRootState, boolean>(state => state.authData.isLoggedIn);
+    const todolists = useSelector(selectTodolists);
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
 
     const classes = useStyles();
 

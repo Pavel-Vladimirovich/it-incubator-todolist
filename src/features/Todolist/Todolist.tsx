@@ -8,7 +8,6 @@ import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import IconButton from "@material-ui/core/IconButton";
 import {Task} from "../Task/Task";
-import {AppRootState} from "../../app/store";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {updateTodolistTitleAsync} from "./todolist-reducer";
@@ -18,6 +17,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {StatusRequest} from "../../enums/statusRequest";
 import {FilterValues} from "../../enums/filterValues";
+import {selectorsTodolist} from "./index";
+import {AppRootState} from "../../app/store";
 
 const useStyles = makeStyles({
     container: {
@@ -50,8 +51,8 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo(({todolistId, title, changeFilter, filter, entityStatus, removeTodolist}: TodolistPropsType) => {
     const dispatch = useAppDispatch();
-    
-    let tasksForTodolist = useSelector<AppRootState, TaskType[]>((state => state.tasks[todolistId]));
+
+    let tasksForTodolist = useSelector(selectorsTodolist.tasksForTodolist(todolistId));
    
     const classes = useStyles();
 
@@ -62,10 +63,10 @@ export const Todolist = React.memo(({todolistId, title, changeFilter, filter, en
     const removeTodolistHandler = () => {
         removeTodolist(todolistId)
     };
-    const updateTitleTodolistHandler = (title: string) => {
+    const updateTitleTodolistHandler = (title: string) => { // !!!??? разобраться почему тут эта функция а не в родительской
       dispatch(updateTodolistTitleAsync({todolistId, title}))
     };
-    const createTasksHandler = useCallback((title: string) => {
+    const createTasksHandler = useCallback((title: string) => { // !!!???
         dispatch(createTaskAsync({todolistId, title: title.trim()}))
     }, [dispatch, todolistId]);
 

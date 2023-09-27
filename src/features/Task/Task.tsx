@@ -21,7 +21,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(false);
     
-    const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id])
+    const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id, dispatch])
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         dispatch(updateTaskAsync({todolistId, taskId:task.id, domainModel:{status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}}))
