@@ -3,10 +3,12 @@ import style from "./Task.module.scss";
 import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {useDispatch} from "react-redux";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {removeTaskAsync, updateTaskAsync} from "./tasks-reducer";
-import { EditableTextTask } from "../../components/EditableTextTask";
+import {EditableTextTask} from "../../components/EditableTextTask";
+import {useAppDispatch} from "../../hooks/useAppDispatch";
+
+
 type TaskPropsType = {
     keyForLabel: string
     task: TaskType
@@ -14,14 +16,15 @@ type TaskPropsType = {
 }
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
-    // console.log('render task')
-    const dispatch = useDispatch<any>()
+    const dispatch = useAppDispatch();
+
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, setEditMode] = useState<boolean>(false);
-    const removeTask = () => {dispatch(removeTaskAsync(todolistId, task.id))}
+    
+    const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id, dispatch])
 
     const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateTaskAsync(todolistId, task.id, {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}))
+        dispatch(updateTaskAsync({todolistId, taskId:task.id, domainModel:{status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}}))
     }, [dispatch, todolistId, task.id])
 
     const activateEditMode = useCallback(() => {
@@ -31,7 +34,7 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
 
     const deactivateEditMode = useCallback(() => {
         setEditMode(false)
-        dispatch(updateTaskAsync(todolistId, task.id, {title: newTitle}))
+        dispatch(updateTaskAsync({todolistId, taskId: task.id, domainModel: {title: newTitle}}))
     }, [dispatch, todolistId, task.id, newTitle]);
 
     return (
@@ -70,7 +73,9 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
                     <IconButton
                         onClick={removeTask}
                         size="small"
-                        color="secondary">
+                        color="secondary"
+                        disabled={task.status === TaskStatus.InProgress} 
+                        >    
                         <DeleteIcon/>
                     </IconButton>
                 </Tooltip>

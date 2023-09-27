@@ -1,8 +1,8 @@
 import React from "react";
-import { isRouteErrorResponse, useRouteError, useNavigate } from "react-router-dom";
-import { Button, makeStyles, Typography } from "@material-ui/core";
+import {isRouteErrorResponse, useRouteError} from "react-router-dom";
+import {makeStyles, Typography} from "@material-ui/core";
 import errorImg from "../assets/images/error.jpg";
-import { theme } from "../styles/general";
+import {theme} from "../styles/common";
 
 const useStyles = makeStyles({
   container: {
@@ -23,9 +23,9 @@ const useStyles = makeStyles({
 });
 
 export const ErrorPage = () => {
-  const classes = useStyles();
-  const error = useRouteError();
-  const navigate = useNavigate();
+	const error = useRouteError();
+	
+	const classes = useStyles();
 
   if (isRouteErrorResponse(error)) {
     return (
@@ -41,9 +41,6 @@ export const ErrorPage = () => {
 				<i>{error.data.message}</i>
 			</Typography>
 			)}
-			<Button color="default" variant="outlined" className={classes.btn} onClick={()=>{navigate("/")}}>
-				return home
-			</Button>
 		</div>
       </div>
     );
@@ -57,9 +54,6 @@ export const ErrorPage = () => {
 			<Typography>
 				<i>{error.message}</i>
 			</Typography>
-			<Button color="default" variant="outlined" className={classes.btn} onClick={()=>{navigate("/")}}>
-				return home
-			</Button>
 		</div>
       </div>
     );
