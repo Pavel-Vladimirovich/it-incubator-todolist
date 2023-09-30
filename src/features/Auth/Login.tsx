@@ -44,6 +44,7 @@ export const Login = React.memo(() => {
       }),
       onSubmit: async values => {
         const action = await dispatch(loginAsync(values))
+        console.log(action)
           // !!! Досмотреть видос Димыча рефакторинг санок, про валидацию input
       },
     });

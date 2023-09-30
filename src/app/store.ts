@@ -5,6 +5,7 @@ import { tasksReducer } from "../features/Task/tasks-reducer";
 import { todolistReducer } from "../features/Todolist/todolist-reducer";
 import { appReducer } from "./app_reducer";
 import { authReducer } from "../features/Auth/auth_reducer";
+// import logger from "redux-logger";
 
 
 const rootReducer = combineReducers({

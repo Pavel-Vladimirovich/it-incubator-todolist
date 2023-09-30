@@ -1,20 +1,19 @@
-import { AppBar, IconButton, LinearProgress, Menu, MenuItem } from "@material-ui/core";
+import {AppBar, IconButton, LinearProgress, Menu, MenuItem} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Zoom from "@material-ui/core/Zoom";
-import { AccountCircle } from "@material-ui/icons";
+import {AccountCircle} from "@material-ui/icons";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
-import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { logoutAsync } from "../features/Auth/auth_reducer";
-import { AppRootState } from "../app/store";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import {StatusRequest} from "../enums/statusRequest";
+import {useSelector} from "react-redux";
+import {logoutAsync} from "../features/Auth/auth_reducer";
+import {AppRootState} from "../app/store";
+import {useAppDispatch} from "../hooks/useAppDispatch";
+import {enums} from "../enums";
 
 interface Props {
   children: React.ReactElement;
@@ -144,12 +143,11 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={logoutHandler}>Logout</MenuItem>
-                <MenuItem><NavLink to="/clock">clock</NavLink></MenuItem>
               </Menu>
             </div>
           )}
         </Toolbar>
-        {statusRequest === StatusRequest.loading && (
+        {statusRequest === enums.StatusRequest.loading && (
             <LinearProgress
               color={"primary"}
               className={classes.linearProgress}

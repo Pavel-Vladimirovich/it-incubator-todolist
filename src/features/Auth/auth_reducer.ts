@@ -6,8 +6,7 @@ import {
     handleServerNetworkError
 } from "../../utils/error-utils";
 import { setAppStatusRequest } from "../../app/app_reducer";
-import {StatusRequest} from "../../enums/statusRequest";
-import { ResponseCode } from "../../enums/responseCode";
+import {enums} from "../../enums";
 
 
 const initialState: InitialStateType = {
@@ -20,15 +19,15 @@ const initialState: InitialStateType = {
 export const loginAsync = createAsyncThunk(
     "auth/login",
     async (data: LoginDataType, {dispatch, rejectWithValue}) => {
-        dispatch(setAppStatusRequest({status: StatusRequest.loading}));
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
         try {
             const response = await authAPI.login(data);
-            if (response.data.resultCode === ResponseCode.Ok) {
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
+            if (response.data.resultCode === enums.ResponseCode.Ok) {
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
                 return;
             } else {
                 handleServerAppError(response.data, dispatch);
-                dispatch(setAppStatusRequest({status: StatusRequest.failed}));
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}));
                 return rejectWithValue({});
             }
         } catch (err) {
@@ -42,15 +41,15 @@ export const loginAsync = createAsyncThunk(
 export const logoutAsync = createAsyncThunk(
   'auth/logout', 
   async (_, {dispatch, rejectWithValue}) => {
-      dispatch(setAppStatusRequest({status: StatusRequest.loading}));
+      dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
     try{
       const response = await authAPI.logout()
-      if (response.data.resultCode === ResponseCode.Ok) {
-        dispatch(setAppStatusRequest({status: StatusRequest.succeeded}));
+      if (response.data.resultCode === enums.ResponseCode.Ok) {
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
         return;
     } else {
         handleServerAppError(response.data, dispatch);
-        dispatch(setAppStatusRequest({status: StatusRequest.failed}));
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}));
         return rejectWithValue({});
     }
 }catch(err) {

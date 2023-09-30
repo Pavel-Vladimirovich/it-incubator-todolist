@@ -73,15 +73,14 @@ export type TodolistType = {
     order: number
     title: string
 }
-
+// перенести в папку enum
 export enum TaskStatus {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
-
 }
-
+// перенести в папку enum
 export enum TaskPriority {
     Low = 0,
     Middle = 1,

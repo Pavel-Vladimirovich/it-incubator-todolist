@@ -9,7 +9,6 @@ import {
     updateTask
 } from "./tasks-reducer";
 
-import {StatusRequest} from "../../app/app_reducer";
 import {TaskPriority, TaskStatus, TaskType} from "../../api/todolist-api";
 import {
     createTodolist,
@@ -18,6 +17,7 @@ import {
     setTodolist,
     TodolistDomainType
 } from "../Todolist/todolist-reducer";
+import {enums} from "../../enums";
 
 const todolistId1 = v1();
 const todolistId2 = v1();
@@ -106,8 +106,8 @@ test('property with todolistId should be correctly deleted', () => {
 
 test('tasks should be correctly set', () => {
     const action: Array<TodolistDomainType> = [
-        {id: todolistId1, title: "What to learn", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: ''},
-        {id: todolistId2, title: "What to buy", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: ''}
+        {id: todolistId1, title: "What to learn", filter: FilterValuesType.all, entityStatus: enums.StatusRequest.idle, order: 0, addedDate: ''},
+        {id: todolistId2, title: "What to buy", filter: FilterValuesType.all, entityStatus: enums.StatusRequest.idle, order: 0, addedDate: ''}
     ]
     const endState = tasksReducer({}, setTodolist({todolists: action}))
     const keys = Object.keys(endState);

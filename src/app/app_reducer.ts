@@ -3,12 +3,13 @@ import {handleServerAppError, handleServerNetworkError,} from "../utils/error-ut
 import {currentAuthData, isLoginIn} from "../features/Auth/auth_reducer";
 import {authAPI} from "../api/todolist-api";
 import {AxiosError} from "axios";
-import {StatusRequest} from "../enums/statusRequest";
-import { ResponseCode } from "../enums/responseCode";
+import {enums} from "../enums";
+
+
 
 const initialState = {
     error: null as string | null,
-    status: StatusRequest.idle as StatusRequest,
+    status: enums.StatusRequest.idle as enums.StatusRequest,
     isInitialization: false as boolean,
 };
 
@@ -17,7 +18,7 @@ export const appInitializationAsync = createAsyncThunk(
     async (_, {rejectWithValue, dispatch}) => {
         try {
             const response = await authAPI.getAuthData();
-            if (response.data.resultCode === ResponseCode.Ok) {
+            if (response.data.resultCode === enums.ResponseCode.Ok) {
                 dispatch(isLoginIn({isLoggedIn: true}));
                 dispatch(currentAuthData(response.data.data));
             } else {
@@ -40,7 +41,7 @@ const slice = createSlice({
         },
         setAppStatusRequest: (
             state,
-            action: PayloadAction<{ status: StatusRequest }>
+            action: PayloadAction<{ status: enums.StatusRequest }>
         ) => {
             state.status = action.payload.status;
         },

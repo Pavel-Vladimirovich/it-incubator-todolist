@@ -1,119 +1,23 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AxiosError, HttpStatusCode } from "axios";
-import { todolistApi, TodolistType } from "../../api/todolist-api";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {TodolistType} from "../../api/todolist-api";
+import {enums} from "../../enums";
 import {
-    setAppError,
-    setAppStatusRequest,
-} from "../../app/app_reducer";
-import { ResponseCode } from "../../enums/responseCode";
-import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
-import {FilterValues} from "../../enums/filterValues";
-import {StatusRequest} from "../../enums/statusRequest";
+    createTodolistAsync,
+    fetchTodolistAsync,
+    removeTodolistAsync,
+    updateTodolistTitleAsync
+} from "./todolist-actions";
 
 
-export const fetchTodolistAsync = createAsyncThunk(
-    'todolist/fetch',
-    async (_, {dispatch, rejectWithValue}) => {
-        try{
-            dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-            const response = await todolistApi.getTodolist()
-            if(response.status === HttpStatusCode.Ok){
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                return {todolists: response.data}
-            }
-            else{
-                dispatch(setAppError({error: "some error occurred"}))
-                dispatch(setAppStatusRequest({status: StatusRequest.failed}))
-                return rejectWithValue('some error')
-            }
-        }catch(err){
-            const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
-            handleServerNetworkError(error, dispatch)
-            return rejectWithValue('some error')
-        }
-    }
-)
-
-export const updateTodolistTitleAsync = createAsyncThunk(
-    'todolist/updateTitle',
-    async (arg:{todolistId: string, title: string}, {dispatch, rejectWithValue}) => {
-        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-        dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.loading}))
-        try{
-            const response = await  todolistApi.updateTodolistTitle(arg.todolistId, arg.title)
-            if(response.data.resultCode === ResponseCode.Ok){
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.succeeded}))
-                return{...arg}
-            }else{
-                handleServerAppError(response.data, dispatch)
-                dispatch(setEntityStatus({id: arg.todolistId, entityStatus: StatusRequest.failed}))
-                return rejectWithValue('some error')
-            }
-        }catch (err){
-            const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
-            handleServerNetworkError(error, dispatch)
-            return rejectWithValue('some error')
-        }
-    }
-)
-
-export const createTodolistAsync = createAsyncThunk(
-    'todolist/create',
-    async (title: string, {dispatch, rejectWithValue}) => {
-        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-        try{
-            const response = await todolistApi.createTodolist(title)
-            if(response.data.resultCode === ResponseCode.Ok){
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                return response.data.data.item
-            }else{
-                handleServerAppError(response.data, dispatch)
-                return rejectWithValue('some error')
-            }
-        }catch(err){
-            const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
-            handleServerNetworkError(error, dispatch)
-            return rejectWithValue('some error')
-        }
-    }
-)
-
-export const removeTodolistAsync = createAsyncThunk(
-    'todolist/remove',
-    async (todolistId: string, {dispatch, rejectWithValue}) => {
-        dispatch(setAppStatusRequest({status: StatusRequest.loading}))
-        dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.loading}))
-        try{
-            const response = await todolistApi.removeTodolist(todolistId)
-            if(response.data.resultCode === ResponseCode.Ok){
-                dispatch(setAppStatusRequest({status: StatusRequest.succeeded}))
-                return {todolistId}
-            }else{
-                handleServerAppError(response.data, dispatch)
-                dispatch(setEntityStatus({id: todolistId, entityStatus: StatusRequest.failed}))
-                return rejectWithValue('some error')
-            }
-
-        }catch(err){
-            const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
-            handleServerNetworkError(error, dispatch)
-            return rejectWithValue('some error')
-        }
-    }
-)
-
-const initialState: TodolistStateType = []
-
-const slice = createSlice({
+export const slice = createSlice({
     name: 'todolist',
-    initialState,
+    initialState: [] as TodolistDomainType[],
     reducers:{
-        changeTodolistFilter: (state, action: PayloadAction<{id: string, filter: FilterValues}>) => {
-            const todolist = state.find(item => item.id === action.payload.id)
-            if(todolist) todolist.filter = action.payload.filter
+        changeTodolistFilter: (state, action: PayloadAction<{todolistId: string, filterValue: enums.FilterValues}>) => {
+            const todolist = state.find(item => item.id === action.payload.todolistId)
+            if(todolist) todolist.filter = action.payload.filterValue
         },
-        setEntityStatus: (state, action: PayloadAction<{id: string, entityStatus: StatusRequest}>) => {
+        setEntityStatus: (state, action: PayloadAction<{id: string, entityStatus: enums.StatusRequest}>) => {
             const todolist = state.find(item => item.id === action.payload.id)
             if(todolist) todolist.entityStatus = action.payload.entityStatus
         },
@@ -121,14 +25,14 @@ const slice = createSlice({
     extraReducers: (builder)=> {
         builder
         .addCase(fetchTodolistAsync.fulfilled, (state, action)=>{
-            return action.payload.todolists.map(item => ({...item, filter: FilterValues.all, entityStatus: StatusRequest.idle}))
+            return action.payload.todolists.map(item => ({...item, filter: enums.FilterValues.all, entityStatus: enums.StatusRequest.idle}))
         })
         .addCase(updateTodolistTitleAsync.fulfilled, (state, action) => {
               const todolist = state.find(item => item.id === action.payload?.todolistId)
               if(todolist) todolist.title = action.payload.title
         })
         .addCase(createTodolistAsync.fulfilled, (state, action) => {
-            state.unshift({...action.payload, filter: FilterValues.all, entityStatus: StatusRequest.idle})
+            state.unshift({...action.payload, filter: enums.FilterValues.all, entityStatus: enums.StatusRequest.idle})
 
         })
         .addCase(removeTodolistAsync.fulfilled, (state, action) => {
@@ -144,7 +48,6 @@ export const {changeTodolistFilter,setEntityStatus} = slice.actions
 
 // types
 export type TodolistDomainType = TodolistType & {
-    filter: FilterValues
-    entityStatus: StatusRequest
+    filter: enums.FilterValues
+    entityStatus: enums.StatusRequest
 }
-type TodolistStateType = Array<TodolistDomainType>

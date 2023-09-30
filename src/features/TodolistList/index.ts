@@ -1,5 +1,5 @@
-import * as todolistListSelectors from './selectors'
+import * as selectorsTodolistList from './selectors'
 
 export {
-    todolistListSelectors
+    selectorsTodolistList
 }

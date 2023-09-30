@@ -9,7 +9,6 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Login} from "./features/Auth/Login";
 import {TodolistList} from "./features/TodolistList/TodolistList";
 import {ErrorPage} from "./features/ErrorPage";
-import { Clock } from "./components/Clock";
 
 const router = createBrowserRouter([
     {
@@ -24,10 +23,6 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <Login/>,
-            },
-            {
-                path: "/clock",
-                element: <Clock/>,
             },
         ]
     },

@@ -10,15 +10,15 @@ import {
     todolistReducer,
 } from './todolist-reducer';
 import {v1} from 'uuid';
-import { StatusRequest } from '../../app/app_reducer';
+import {enums} from "../../enums";
 
 
 const todolistId1 = v1();
 const todolistId2 = v1();
 const todolistId3 = v1();
 const startState: Array<TodolistDomainType> = [
-    {id: todolistId1, title: "What to learn", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: ''},
-    {id: todolistId2, title: "What to buy", filter: FilterValuesType.all, entityStatus: StatusRequest.idle, order: 0, addedDate: ''}
+    {id: todolistId1, title: "What to learn", filter: FilterValuesType.all, entityStatus: enums.StatusRequest.idle, order: 0, addedDate: ''},
+    {id: todolistId2, title: "What to buy", filter: FilterValuesType.all, entityStatus: enums.StatusRequest.idle, order: 0, addedDate: ''}
 ]
 
 test('todolist should be correctly added', () => {
@@ -45,16 +45,16 @@ test('title of todolist should be correctly changed', () => {
 });
 
 test('filter of todolist should be correctly changed', () => {
-    const endState = todolistReducer(startState, changeTodolistFilter({id:todolistId2, filter: FilterValuesType.completed}));
+    const endState = todolistReducer(startState, changeTodolistFilter({todolistId:todolistId2, filterValue: FilterValuesType.completed}));
 
     expect(endState[0].filter).toBe("all");
     expect(endState[1].filter).toBe(FilterValuesType.completed);
 });
 test('entityStatus should be correctly changed', () => {
-    const endState = todolistReducer(startState, setEntityStatus({id: todolistId1, entityStatus: StatusRequest.loading}));
+    const endState = todolistReducer(startState, setEntityStatus({id: todolistId1, entityStatus: enums.StatusRequest.loading}));
 
-    expect(endState[0].entityStatus).toBe(StatusRequest.loading);
-    expect(endState[1].entityStatus).toBe(StatusRequest.idle);
+    expect(endState[0].entityStatus).toBe(enums.StatusRequest.loading);
+    expect(endState[1].entityStatus).toBe(enums.StatusRequest.idle);
 });
 
 test('todolist should be correctly set', () => {

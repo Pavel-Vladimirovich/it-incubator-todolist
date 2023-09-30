@@ -4,10 +4,9 @@ import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
-import {removeTaskAsync, updateTaskAsync} from "./tasks-reducer";
 import {EditableTextTask} from "../../components/EditableTextTask";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
-
+import {useDispatchedActions} from "../../hooks/useAppDispatch";
+import {actionsTask} from "./index";
 
 type TaskPropsType = {
     keyForLabel: string
@@ -16,26 +15,27 @@ type TaskPropsType = {
 }
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
-    const dispatch = useAppDispatch();
+
+    const {updateTaskAsync, removeTaskAsync} = useDispatchedActions(actionsTask)
 
     const [newTitle, setNewTitle] = useState<string>("");
-    const [editMode, setEditMode] = useState<boolean>(false);
+    const [editMode, toggleEditMode] = useState<boolean>(false);
     
-    const removeTask = useCallback(() => dispatch(removeTaskAsync({todolistId, taskId: task.id})), [todolistId, task.id, dispatch])
+    const removeTask = () => (removeTaskAsync({todolistId, taskId: task.id}))
 
-    const onChangeTaskStatus = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateTaskAsync({todolistId, taskId:task.id, domainModel:{status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}}))
-    }, [dispatch, todolistId, task.id])
+    const onChangeTaskStatus = ((event: ChangeEvent<HTMLInputElement>) => {
+        updateTaskAsync({todolistId, taskId:task.id, domainModel:{status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}})
+    })
 
     const activateEditMode = useCallback(() => {
-        setEditMode(true)
+        toggleEditMode(true)
         setNewTitle(task.title);
     }, [task.title]);
 
     const deactivateEditMode = useCallback(() => {
-        setEditMode(false)
-        dispatch(updateTaskAsync({todolistId, taskId: task.id, domainModel: {title: newTitle}}))
-    }, [dispatch, todolistId, task.id, newTitle]);
+        toggleEditMode(false)
+        updateTaskAsync({todolistId, taskId: task.id, domainModel: {title: newTitle}})
+    }, [updateTaskAsync, todolistId, task.id, newTitle]);
 
     return (
         <li key={task.id} className={`${style.task}`}>
