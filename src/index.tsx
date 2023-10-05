@@ -6,8 +6,8 @@ import App from "./app/App";
 import {Provider} from "react-redux";
 import {store} from "./app/store";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {Login} from "./features/Auth/Login";
-import {TodolistList} from "./features/TodolistList/TodolistList";
+import {Login} from "./features/Auth";
+import {TodolistList} from "./features/TodolistList";
 import {ErrorPage} from "./features/ErrorPage";
 
 const router = createBrowserRouter([

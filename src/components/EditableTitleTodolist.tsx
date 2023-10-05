@@ -1,40 +1,67 @@
 import {TextField, Tooltip} from "@material-ui/core";
 import React, {ChangeEvent, useState} from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import {enums} from "../enums";
 
 const useStyles = makeStyles({
-    TextField: {
+    textField: {
         width: "100%"
+    },
+    messageError: {
+        textTransform: 'lowercase',
+        color: 'red',
+        fontSize: '0.9rem'
+    },
+    firstLetter: {
+        textTransform: 'uppercase'
     }
 })
 
 type PropsType = {
     title: string;
-    onClisk: (title: string) => void;
+    onClick: (title: string) => Promise<any>;
+    entityStatus: enums.StatusRequest;
 };
-export const EditableTitleTodolist = React.memo(({title, onClisk}: PropsType) => {
-    const classes = useStyles();
+export const EditableTitleTodolist = React.memo(({title, onClick, entityStatus}: PropsType) => {
 
-	const [newTitle, setNewTitle] = useState<string>('');
-	const [toggleEditMode, setToggleEditMode] = useState<boolean>(false)
+    const [newTitle, setNewTitle] = useState<string>('')
+    const [toggleEditMode, setToggleEditMode] = useState<boolean>(false)
+    const [messageError, setMessageError] = useState<string>('')
+
+    const classes = useStyles()
+
+    const styleTitle = {
+        color: entityStatus === enums.StatusRequest.loading ? 'gray' : '',
+        cursor: 'pointer'
+    }
+    const firstLetter = messageError.charAt(0);
 
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
-    };
-	const activateEditMode = () => {
-		setToggleEditMode(true)
-		setNewTitle(title)
-	}
-	const deactivateEditMode = () => {
-		setToggleEditMode(false)
-		onClisk(newTitle)
-	}
+    }
+
+    const activateEditMode = () => {
+        setToggleEditMode(true)
+        setNewTitle(title)
+    }
+
+    const deactivateEditMode = async () => {
+        try {
+            await onClick(newTitle.replace(/\s+/g, ' ').trim())
+            setToggleEditMode(false)
+            setMessageError('')
+        } catch (error: any) {
+            setMessageError(error.message)
+            console.log(error.message)
+            //'the field title must be a maximum length of \'100\' symbols.'
+        }
+    }
 
     return (
         <>
             {toggleEditMode ? (
                 <TextField
-                    className={classes.TextField}
+                    className={classes.textField}
                     id="standard-multiline-flexible"
                     multiline
                     value={newTitle}
@@ -44,9 +71,14 @@ export const EditableTitleTodolist = React.memo(({title, onClisk}: PropsType) =>
                 />
             ) : (
                 <Tooltip title="Edit" placement={"top"}>
-                    <span style={{cursor: "pointer"}} onDoubleClick={activateEditMode}>{title}</span>
+                    <span style={styleTitle} onDoubleClick={activateEditMode}>{title}</span>
                 </Tooltip>
             )}
+            {messageError &&
+                <span className={classes.messageError}>
+                    <span className={classes.firstLetter}>{firstLetter}</span>
+                    {messageError.slice(1)}
+                </span>}
         </>
     );
 });

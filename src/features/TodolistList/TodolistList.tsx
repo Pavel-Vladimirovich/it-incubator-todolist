@@ -2,11 +2,11 @@ import {Grid, Paper, Typography} from "@material-ui/core";
 import React, {useCallback, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {AddItemForm} from "../../components";
 import {useDispatchedActions} from "../../hooks/useAppDispatch";
-import {Todolist} from "../Todolist/Todolist";
+import {Todolist} from "../Todolist";
 import {authSelectors} from "../Auth";
-import {selectTodolists} from "./selectors";
+import {todolistListSelectors} from "./";
 import {todolistActions} from "../Todolist";
 import {useStyles} from "./styles";
 
@@ -16,8 +16,8 @@ export const TodolistList = () => {
 
     const navigate = useNavigate();
 
-    const todolists = useSelector(selectTodolists);
-    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn);
+    const todolists = useSelector(todolistListSelectors.selectTodolists);
+    const isLoggedIn = useSelector(authSelectors.isLoggedIn);
 
     const classes = useStyles();
 

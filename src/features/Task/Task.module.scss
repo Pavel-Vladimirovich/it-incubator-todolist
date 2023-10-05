@@ -7,19 +7,19 @@
   display: flex;
   align-items: flex-start;
   list-style: none;
-  padding: 38px 15px;
+  padding: 15px;
   font-size: .9rem;
-  border-radius: .3rem;
-  border: #bebebe .3px solid;
-  background: #f8f8f8;
+  //border-radius: .3rem;
+  border-bottom: #bebebe .3px solid;
+  //background: #f8f8f8;
   user-select: none;
   word-break: break-word;
-  box-shadow: 0.1px 0.1px 0.1px rgba(0, 0, 0, 0.062),
-  0.3px 0.3px 0.3px rgba(0, 0, 0, 0.089),
-  0.6px 0.6px 0.5px rgba(0, 0, 0, 0.11),
-  1.1px 1.1px 0.9px rgba(0, 0, 0, 0.131),
-  2.1px 2.1px 1.7px rgba(0, 0, 0, 0.158),
-  5px 5px 4px rgba(0, 0, 0, 0.22);
+  //box-shadow: 0.1px 0.1px 0.1px rgba(0, 0, 0, 0.062),
+  //0.3px 0.3px 0.3px rgba(0, 0, 0, 0.089),
+  //0.6px 0.6px 0.5px rgba(0, 0, 0, 0.11),
+  //1.1px 1.1px 0.9px rgba(0, 0, 0, 0.131),
+  //2.1px 2.1px 1.7px rgba(0, 0, 0, 0.158),
+  //5px 5px 4px rgba(0, 0, 0, 0.22);
   width: 100%;
 
   & label {

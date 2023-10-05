@@ -4,33 +4,44 @@ import {Checkbox, IconButton, Tooltip} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
-import {EditableTextTask} from "../../components/EditableTextTask";
+import {EditableTextTask} from "../../components/";
 import {useDispatchedActions} from "../../hooks/useAppDispatch";
-import {actionsTask} from "./index";
+import {taskActions} from "./index";
+import {enums} from "../../enums";
 
 type TaskPropsType = {
     keyForLabel: string
+    
     task: TaskType
     todolistId: string
 }
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
 
-    const {updateTaskAsync, removeTaskAsync} = useDispatchedActions(actionsTask)
+    const {updateTaskAsync, removeTaskAsync} = useDispatchedActions(taskActions)
 
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, toggleEditMode] = useState<boolean>(false);
-    
+
     const removeTask = () => (removeTaskAsync({todolistId, taskId: task.id}))
 
-    const onChangeTaskStatus = ((event: ChangeEvent<HTMLInputElement>) => {
-        updateTaskAsync({todolistId, taskId:task.id, domainModel:{status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}})
-    })
+    const onChangeTaskStatus = useCallback(((event: ChangeEvent<HTMLInputElement>) => {
+        updateTaskAsync({
+            todolistId,
+            taskId: task.id,
+            domainModel: {status: event.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New}
+        })
+    }),[updateTaskAsync, todolistId, task.id])
 
-    const activateEditMode = useCallback(() => {
-        toggleEditMode(true)
-        setNewTitle(task.title);
-    }, [task.title]);
+    const activateEditMode = useCallback(() => { //!!!!!!!!!!!!!!!!!!! переписать
+        if(!(task.status === enums.TaskStatus.InProgress))
+            toggleEditMode(true)
+            setNewTitle(task.title)
+        if(task.status === enums.TaskStatus.Draft)
+            console.log(task.title)
+            console.error(newTitle)
+            // setNewTitle(task.title)
+    }, [task.title, newTitle,task.status ]);
 
     const deactivateEditMode = useCallback(() => {
         toggleEditMode(false)
@@ -74,8 +85,8 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
                         onClick={removeTask}
                         size="small"
                         color="secondary"
-                        disabled={task.status === TaskStatus.InProgress} 
-                        >    
+                        disabled={task.status === TaskStatus.InProgress}
+                    >
                         <DeleteIcon/>
                     </IconButton>
                 </Tooltip>

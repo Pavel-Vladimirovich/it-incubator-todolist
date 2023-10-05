@@ -1,9 +1,138 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {TaskStatus, TaskType} from "../../api/todolist-api";
-import {createTaskAsync, fetchTasksAsync, removeTaskAsync, updateTaskAsync} from "./tasks-actions";
-import {todolistActions} from '../Todolist'
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit"
+import {TaskPriority, TaskStatus, TaskType, todolistApi, UpdateTaskModelType} from "../../api/todolist-api"
+import {todolistAsyncActions} from '../Todolist/todolist-reducer'
+import {setAppError, setAppStatusRequest} from "../../app/app_reducer"
+import {enums} from "../../enums"
+import {AxiosError, HttpStatusCode} from "axios"
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils"
+import {AppRootState} from "../../app/store"
 
-const slice = createSlice({
+export const fetchTasksAsync = createAsyncThunk(
+    'tasks/fetch',
+    async (todolistId: string, {dispatch, rejectWithValue}) => {
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}))
+        try{
+            const response = await todolistApi.getTasks(todolistId)
+            if (response.status === HttpStatusCode.Ok) {
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}))
+                return {todolistId, tasks: response.data.items}
+            } else {
+                dispatch(setAppError({error: response.data.error}))
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}))
+                return rejectWithValue('some error')
+            }
+        }
+        catch(err) {
+            const error = err as AxiosError; // необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue('some error')
+        }
+    })
+
+export const createTaskAsync = createAsyncThunk(
+    'tasks',
+    async (arg: { todolistId: string, title: string }, {dispatch, rejectWithValue}) => {
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}))
+        try {
+            const response = await todolistApi.createTask(arg.todolistId, arg.title)
+            if (response.data.resultCode === enums.ResponseCode.Ok) {
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}))
+                return {task: response.data.data.item}
+            } else {
+                handleServerAppError(response.data, dispatch)
+                return rejectWithValue('some error')
+            }
+
+        } catch (err) {
+            const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue('some error')
+        }
+    })
+
+export const removeTaskAsync = createAsyncThunk(
+    'tasks/removeTask',
+    async (arg: { todolistId: string, taskId: string }, {dispatch,rejectWithValue}) => {
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
+        dispatch(setStatusTask({...arg, status: TaskStatus.InProgress}));
+        try {
+            const response = await todolistApi.removeTask(arg.todolistId, arg.taskId);
+            if (response.data.resultCode === enums.ResponseCode.Ok) {
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
+                return arg;
+            } else {
+                handleServerAppError(response.data, dispatch);
+                return rejectWithValue('some error')
+            }
+        } catch (err) {
+            const error = err as AxiosError; // необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch);
+            return rejectWithValue('some error')
+        }
+
+    })
+
+type domainTaskModelType = { // необходимо для отправки на сервер
+    title?: string
+    description?: string
+    status?: TaskStatus
+    priority?: TaskPriority
+    startDate?: string
+    deadline?: string
+}
+
+export const updateTaskAsync = createAsyncThunk(
+    'task/update',
+    async (arg:{ todolistId: string, taskId: string, domainModel: domainTaskModelType } , {dispatch, rejectWithValue ,getState}) => {
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
+        dispatch(setStatusTask({todolistId: arg.todolistId, taskId: arg.taskId, status: TaskStatus.InProgress}));
+
+        const state = getState() as AppRootState
+        const task = state.tasks[arg.todolistId].find(ts => ts.id === arg.taskId);
+
+        if (!task) {
+            return rejectWithValue('some error')
+        }
+
+        const modelApi: UpdateTaskModelType = {
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+            ...arg.domainModel
+        };
+
+        try {
+            const response = await todolistApi.updateTask(arg.todolistId, arg.taskId, modelApi);
+            if (response.data.resultCode === enums.ResponseCode.Ok) {
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
+                dispatch(setStatusTask({todolistId: arg.todolistId, taskId: arg.taskId, status: TaskStatus.Completed}));
+                return arg;
+            }else{
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}));
+                dispatch(setStatusTask({todolistId: arg.todolistId, taskId: arg.taskId, status: TaskStatus.Draft}))
+                handleServerAppError(response.data, dispatch)
+                return rejectWithValue('some error')
+            }
+        } catch (err) {
+            dispatch(setStatusTask({todolistId: arg.todolistId, taskId: arg.taskId, status: TaskStatus.Draft}))
+            let error = err as AxiosError;// необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch);
+            return rejectWithValue('some error')
+        }
+    }
+)
+
+export const taskAsyncActions = {
+    fetchTasksAsync,
+    createTaskAsync,
+    removeTaskAsync,
+    updateTaskAsync
+}
+
+export const slice = createSlice({
     name: 'tasks',
     initialState: {} as TasksStateType,
     reducers: {
@@ -17,15 +146,15 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(todolistActions.fetchTodolistAsync.fulfilled, (state, action) => {
+            .addCase(todolistAsyncActions.fetchTodolistAsync.fulfilled, (state, action) => {
                 action.payload.todolists.forEach(tl => {
                     state[tl.id] = []
                 })
             })
-            .addCase(todolistActions.createTodolistAsync.fulfilled, (state, action) => {
+            .addCase(todolistAsyncActions.createTodolistAsync.fulfilled, (state, action) => {
                 state[action.payload.id] = []
             })
-            .addCase(todolistActions.removeTodolistAsync.fulfilled, (state, action) => {
+            .addCase(todolistAsyncActions.removeTodolistAsync.fulfilled, (state, action) => {
                 delete state[action.payload.todolistId]
             })
             .addCase(fetchTasksAsync.fulfilled, (state, action) => {
@@ -49,7 +178,7 @@ const slice = createSlice({
 })
 
 export const tasksReducer = slice.reducer
-export const { setStatusTask} = slice.actions
+const {setStatusTask} = slice.actions
 
 
 // types

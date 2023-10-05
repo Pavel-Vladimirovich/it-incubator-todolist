@@ -16,7 +16,7 @@ const initialState: InitialStateType = {
     isLoggedIn: false,
 };
 
-export const loginAsync = createAsyncThunk(
+const loginAsync = createAsyncThunk(
     "auth/login",
     async (data: LoginDataType, {dispatch, rejectWithValue}) => {
         dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
@@ -38,7 +38,7 @@ export const loginAsync = createAsyncThunk(
     }
 );
 
-export const logoutAsync = createAsyncThunk(
+const logoutAsync = createAsyncThunk(
   'auth/logout', 
   async (_, {dispatch, rejectWithValue}) => {
       dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
@@ -57,6 +57,11 @@ export const logoutAsync = createAsyncThunk(
     handleServerNetworkError(error, dispatch);
     return rejectWithValue(error); // для обработки ошибок в auth_reducer / но может и не понадобится 
 }});
+
+export const authAsyncActions = {
+    loginAsync,
+    logoutAsync
+}
 
 const slice = createSlice({
     name: "auth",

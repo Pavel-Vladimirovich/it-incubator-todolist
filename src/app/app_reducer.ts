@@ -6,14 +6,12 @@ import {AxiosError} from "axios";
 import {enums} from "../enums";
 
 
-
 const initialState = {
     error: null as string | null,
     status: enums.StatusRequest.idle as enums.StatusRequest,
     isInitialization: false as boolean,
 };
-
-export const appInitializationAsync = createAsyncThunk(
+const appInitializationAsync = createAsyncThunk(
     "app/initialization",
     async (_, {rejectWithValue, dispatch}) => {
         try {
@@ -32,7 +30,11 @@ export const appInitializationAsync = createAsyncThunk(
     }
 );
 
-const slice = createSlice({
+export const appAsyncActions = {
+    appInitializationAsync,
+}
+
+export const slice = createSlice({
     name: "app",
     initialState,
     reducers: {

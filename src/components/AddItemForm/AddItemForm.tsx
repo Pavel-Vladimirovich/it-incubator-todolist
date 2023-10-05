@@ -12,8 +12,8 @@ const CURRENT_TARGET_VALUE = "CURRENT_TARGET_VALUE";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void;
-  textMessage: string;
-  labelMessage: string;
+  textMessage?: string;
+  labelMessage?: string;
 };
 
 type ActionType = {
@@ -110,7 +110,7 @@ export const AddItemForm = React.memo(
         // handleClick();
         return;
       }
-      addItem(state.title.trim());
+      addItem(state.title.replace(/\s+/g, ' ').trim());
       dispatch({ type: REMOVE_TEXT_ERROR });
       dispatch({ type: REMOVE_ERROR });
       dispatch({ type: CURRENT_TARGET_VALUE });
@@ -151,7 +151,7 @@ export const AddItemForm = React.memo(
           <Alert
             onClose={handleClose}
             severity={!!state.error ? "error" : "success"}>
-            {!!state.error ? TEXT_ERROR_MESSAGE : textMessage}
+            {/*<span>{!!state.error ? TEXT_ERROR_MESSAGE : textMessage}</span>*/}
           </Alert>
         </Snackbar>
       </form>

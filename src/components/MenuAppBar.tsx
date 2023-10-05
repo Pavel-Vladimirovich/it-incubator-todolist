@@ -3,21 +3,18 @@ import Fab from "@material-ui/core/Fab";
 import {makeStyles} from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import Zoom from "@material-ui/core/Zoom";
 import {AccountCircle} from "@material-ui/icons";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import {useSelector} from "react-redux";
-import {logoutAsync} from "../features/Auth/auth_reducer";
-import {AppRootState} from "../app/store";
-import {useAppDispatch} from "../hooks/useAppDispatch";
+import {authActions, authSelectors} from "../features/Auth";
+import {useDispatchedActions} from "../hooks/useAppDispatch";
 import {enums} from "../enums";
+import {ScrollTop} from "./ScrollTop";
+import {appSelectors} from "../app";
 
-interface Props {
-  children: React.ReactElement;
-}
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -30,60 +27,23 @@ const useStyles = makeStyles((theme) => ({
   linearProgress: {
     height: "3px",
   },
-  scrollTopButton: {
-    position: "fixed",
-    zIndex: 9999,
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   toolbar: theme.mixins.toolbar
 }));
 
-function ScrollTop(props: Props) {
-  const { children } = props;
-  const classes = useStyles();
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 100,
-  });
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const anchor = (
-      (event.target as HTMLDivElement).ownerDocument || document
-    ).querySelector("#back-to-top-anchor");
-
-    if (anchor) {
-      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
-
-  return (
-    <Zoom in={trigger}>
-      <div
-        onClick={handleClick}
-        role="presentation"
-        className={classes.scrollTopButton}
-      >
-        {children}
-      </div>
-    </Zoom>
-  );
-}
-
 export default function MenuAppBar() {
-  const dispatch = useAppDispatch();
-  
-  const statusRequest = useSelector<AppRootState>((store) => store.app.status);
-  const isLoggedIn = useSelector<AppRootState, boolean>(
-    (state) => state.authData.isLoggedIn
-    );
-  const login = useSelector<AppRootState, string>(state => state.authData.login)
+
+  const {logoutAsync} = useDispatchedActions(authActions)
+
+  const statusRequest = useSelector(appSelectors.status)
+  const isLoggedIn = useSelector(authSelectors.isLoggedIn)
+  const login = useSelector(authSelectors.login)
     
   const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const open = Boolean(anchorEl);
 
@@ -92,12 +52,12 @@ export default function MenuAppBar() {
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(null)
   };
 
   const logoutHandler = () => {
-    dispatch(logoutAsync());
-    setAnchorEl(null);
+    logoutAsync()
+    setAnchorEl(null)
   };
 
   return (
@@ -138,8 +98,7 @@ export default function MenuAppBar() {
                 transformOrigin={{
                   vertical: "top",
                   horizontal: "right",
-                }}
-                open={open}
+                }}                open={open}
                 onClose={handleClose}
               >
                 <MenuItem onClick={logoutHandler}>Logout</MenuItem>

@@ -1,29 +1,28 @@
 import React, {useEffect} from "react";
 import {CircularProgress, CssBaseline, Grid, ThemeProvider} from "@material-ui/core";
 import {Outlet} from "react-router-dom";
-import {Layout} from "../components/Layout";
+import {Layout} from "../components";
 import {useSelector} from "react-redux";
-import {appInitializationAsync} from "./app_reducer";
+import {appActions, appSelectors} from "./";
 import {theme} from "../styles/common";
-import {useAppDispatch} from "../hooks/useAppDispatch";
-import {selectIsInitialized} from "./selectors";
+import {useDispatchedActions} from "../hooks/useAppDispatch";
 
 function App() {
-    const dispatch = useAppDispatch()
-    const isInitialization = useSelector(selectIsInitialized)
+    const isInitialization = useSelector(appSelectors.isInitialization)
+    const {appInitializationAsync} = useDispatchedActions(appActions)
 
-    useEffect(()=>{
-        dispatch(appInitializationAsync())
-    }, [dispatch])
+    useEffect(() => {
+        appInitializationAsync()
+    }, [appInitializationAsync])
 
-    if(!isInitialization){
-         return(
+    if (!isInitialization) {
+        return (
             <Grid container justifyContent="center" alignItems="center" style={{height: "100vh"}}>
-                <CircularProgress color="primary" />
+                <CircularProgress color="primary"/>
             </Grid>
-         )  
+        )
     }
-    
+
     return (
         <>
             <ThemeProvider theme={theme}>

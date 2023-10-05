@@ -15,17 +15,16 @@ import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
-import {loginAsync} from "./auth_reducer";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {selectIsLoggedIn} from "./selectors";
+import {authActions, authSelectors} from "./";
+import {useDispatchedActions} from "../../hooks/useAppDispatch";
 
 
 export const Login = React.memo(() => {
-    const dispatch = useAppDispatch()
-    
+    const {loginAsync} = useDispatchedActions(authActions)
+
     const navigate = useNavigate();
     
-    const isLoggedIn = useSelector(selectIsLoggedIn)
+    const isLoggedIn = useSelector(authSelectors.isLoggedIn)
 
     useEffect(()=>{
         isLoggedIn && navigate('/')
@@ -43,7 +42,7 @@ export const Login = React.memo(() => {
         rememberMe: Yup.boolean()
       }),
       onSubmit: async values => {
-        const action = await dispatch(loginAsync(values))
+        const action = await loginAsync(values)
         console.log(action)
           // !!! Досмотреть видос Димыча рефакторинг санок, про валидацию input
       },

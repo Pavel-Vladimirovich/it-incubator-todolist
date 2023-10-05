@@ -7,13 +7,11 @@ import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import BallotIcon from "@material-ui/icons/Ballot";
 import IconButton from "@material-ui/core/IconButton";
-import {Task} from "../Task/Task";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {Task, taskActions} from "../Task";
+import {AddItemForm, EditableTitleTodolist} from "../../components";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
-import {EditableTitleTodolist} from "../../components/EditableTitleTodolist";
-import {useDispatchedActions} from "../../hooks/useAppDispatch";
+import {useAppDispatch, useDispatchedActions} from "../../hooks/useAppDispatch";
 import {enums} from "../../enums";
-import {actionsTask} from "../Task";
 import {todolistActions, todolistSelectors} from "./index";
 import {useStyles} from "./styles";
 
@@ -26,9 +24,8 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: TodolistPropsType) => {
 
-    const {updateTodolistTitleAsync, removeTodolistAsync, changeTodolistFilter} = useDispatchedActions(todolistActions)
-
-    const {fetchTasksAsync, createTaskAsync} = useDispatchedActions(actionsTask)
+    const {removeTodolistAsync, changeTodolistFilter} = useDispatchedActions(todolistActions)
+    const {fetchTasksAsync, createTaskAsync} = useDispatchedActions(taskActions)
 
     let tasksForTodolist = useSelector(todolistSelectors.tasksForTodolist(todolistId));
 
@@ -38,31 +35,49 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
         fetchTasksAsync(todolistId)
     }, [fetchTasksAsync, todolistId])
 
-    const removeTodolistHandler = () => {
+    const removeTodolistHandler = useCallback(() => {
         removeTodolistAsync(todolistId)
-    };
-    const updateTitleTodolistHandler = (title: string) => {
-        updateTodolistTitleAsync({todolistId, title})
-    };
-    const createTasksHandler = useCallback((title: string) => { // !!!???
-        createTaskAsync({todolistId, title: title.trim()})
-    }, [createTaskAsync, todolistId]);
+    }, [removeTodolistAsync, todolistId])
 
-    const onAllClickHandler = useCallback(() => changeTodolistFilter({
+    const dispatch = useAppDispatch()
+
+    const updateTitleTodolistHandler = useCallback(async (title: string) => {
+        const thunk = todolistActions.updateTodolistTitleAsync({todolistId, title})
+        const resultAction = await dispatch(thunk)
+        if (todolistActions.updateTodolistTitleAsync.rejected.match(resultAction) && resultAction.payload?.errors.length) {
+            // прокидываем текст ошибки дальше, в EditableTitleTodolist
+            throw new Error(resultAction.payload.errors[0])
+        }
+    }, [todolistId, dispatch])
+
+    const createTasksHandler = useCallback((title: string) => {
+        createTaskAsync({todolistId, title})
+    }, [createTaskAsync, todolistId])
+
+    const onClickFilterButtonHandler = useCallback((filterValues: enums.FilterValues) => changeTodolistFilter({
         todolistId,
-        filterValue: enums.FilterValues.all
-    }), [changeTodolistFilter, todolistId]);
-    const onActiveClickHandler = useCallback(() => changeTodolistFilter({
-        todolistId,
-        filterValue: enums.FilterValues.active
-    }), [changeTodolistFilter,todolistId]);
-    const onCompletedClickHandler = useCallback(() => changeTodolistFilter({
-        todolistId,
-        filterValue: enums.FilterValues.completed
-    }), [changeTodolistFilter,todolistId]);
+        filterValue: filterValues
+    }), [changeTodolistFilter, todolistId])
+
+    const renderFilterButton = (filterValues: enums.FilterValues,
+                                startIcon: React.ReactNode,
+                                text: string) => {
+        return (
+            <Button
+                color={filter === filterValues ? "secondary" : "default"}
+                startIcon={startIcon}
+                onClick={() => {
+                    onClickFilterButtonHandler(filterValues)
+                }}>
+                <Typography noWrap>
+                    {text}
+                </Typography>
+            </Button>
+        )
+    }
 
     if (filter === enums.FilterValues.completed) {
-        tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatus.Completed);
+        tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatus.Completed)
     }
     if (filter === enums.FilterValues.active) {
         tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatus.New);
@@ -74,7 +89,8 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
                 <Typography variant="h3" color="primary" gutterBottom className={classes.title}>
                     <EditableTitleTodolist
                         title={title}
-                        onClisk={updateTitleTodolistHandler}
+                        entityStatus={entityStatus}
+                        onClick={updateTitleTodolistHandler}
                         key={todolistId}/>
                 </Typography>
                 <Tooltip title="Delete To Do List"
@@ -90,34 +106,12 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
             <div>
                 <AddItemForm
                     addItem={createTasksHandler}
-                    textMessage="Task created successfully!"
                     labelMessage="Add a new task..."/>
             </div>
             <ButtonGroup variant="text" fullWidth>
-                <Button
-                    color={filter === enums.FilterValues.all ? "secondary" : "default"}
-                    startIcon={<ReceiptIcon/>}
-                    onClick={onAllClickHandler}>
-                    <Typography noWrap>
-                        All
-                    </Typography>
-                </Button>
-                <Button
-                    color={filter === enums.FilterValues.active ? "secondary" : "default"}
-                    startIcon={<BallotIcon/>}
-                    onClick={onActiveClickHandler}>
-                    <Typography noWrap>
-                        Active
-                    </Typography>
-                </Button>
-                <Button
-                    color={filter === enums.FilterValues.completed ? "secondary" : "default"}
-                    startIcon={<AssignmentTurnedInIcon/>}
-                    onClick={onCompletedClickHandler}>
-                    <Typography noWrap>
-                        Completed
-                    </Typography>
-                </Button>
+                {renderFilterButton(enums.FilterValues.all, <ReceiptIcon/>, 'all')}
+                {renderFilterButton(enums.FilterValues.active, <BallotIcon/>, 'active')}
+                {renderFilterButton(enums.FilterValues.completed, <AssignmentTurnedInIcon/>, 'completed')}
             </ButtonGroup>
             <ul>
                 {tasksForTodolist.map((task: TaskType) => {
