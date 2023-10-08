@@ -24,6 +24,8 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: TodolistPropsType) => {
 
+    const dispatch = useAppDispatch()
+
     const {removeTodolistAsync, changeTodolistFilter} = useDispatchedActions(todolistActions)
     const {fetchTasksAsync, createTaskAsync} = useDispatchedActions(taskActions)
 
@@ -39,20 +41,27 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
         removeTodolistAsync(todolistId)
     }, [removeTodolistAsync, todolistId])
 
-    const dispatch = useAppDispatch()
+
 
     const updateTitleTodolistHandler = useCallback(async (title: string) => {
-        const thunk = todolistActions.updateTodolistTitleAsync({todolistId, title})
-        const resultAction = await dispatch(thunk)
-        if (todolistActions.updateTodolistTitleAsync.rejected.match(resultAction) && resultAction.payload?.errors.length) {
+        // валидация при редактировании title todolist
+        const resultAction = await dispatch(todolistActions.updateTodolistTitleAsync({todolistId, title}))
+        if (todolistActions.updateTodolistTitleAsync.rejected.match(resultAction)
+            && resultAction.payload?.errors.length) {
             // прокидываем текст ошибки дальше, в EditableTitleTodolist
             throw new Error(resultAction.payload.errors[0])
         }
     }, [todolistId, dispatch])
 
-    const createTasksHandler = useCallback((title: string) => {
+    const createTasksHandler = useCallback(async (title: string) => {
+        // валидация при создании task, не зануляет input
+        const resultAction = await dispatch(taskActions.createTaskAsync({todolistId, title}))
+        if(taskActions.createTaskAsync.rejected.match(resultAction) && resultAction.payload?.errors.length){
+            // прокидываем текст ошибки дальше, в EditableTitleTodolist
+            throw new Error(resultAction.payload.errors[0])
+        }
         createTaskAsync({todolistId, title})
-    }, [createTaskAsync, todolistId])
+    }, [createTaskAsync, todolistId, dispatch])
 
     const onClickFilterButtonHandler = useCallback((filterValues: enums.FilterValues) => changeTodolistFilter({
         todolistId,

@@ -28,23 +28,27 @@ const fetchTodolistAsync = createAsyncThunk(
     }
 )
 
-const createTodolistAsync = createAsyncThunk(
+const createTodolistAsync = createAsyncThunk<
+    TodolistType, // то что возвращает
+    {title: string}, // то что принимает
+    {rejectValue: {errors: string[]}} // тип возвращаемой ошибки
+    >(
     'todolist/create',
-    async (title: string, {dispatch, rejectWithValue}) => {
+    async (arg, {dispatch, rejectWithValue}) => {
         dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}))
         try{
-            const response = await todolistApi.createTodolist(title)
+            const response = await todolistApi.createTodolist(arg.title)
             if(response.data.resultCode === enums.ResponseCode.Ok){
                 dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}))
                 return response.data.data.item
             }else{
                 handleServerAppError(response.data, dispatch)
-                return rejectWithValue('some error')
+                return rejectWithValue({errors: response.data.messages})
             }
         }catch(err){
             const error = err as AxiosError // необходимо типизировать т.к. ругается на тип unknown
             handleServerNetworkError(error, dispatch)
-            return rejectWithValue('some error')
+            return rejectWithValue({errors: [error.message]})
         }
     }
 )
@@ -65,8 +69,8 @@ const updateTodolistTitleAsync = createAsyncThunk<
                 dispatch(setEntityStatus({id: arg.todolistId, entityStatus: enums.StatusRequest.succeeded}))
                 return{...arg}
             }else{
-                // console.log(response.data)
-                handleServerAppError(response.data, dispatch)
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}))
+                // handleServerAppError(response.data, dispatch)
                 dispatch(setEntityStatus({id: arg.todolistId, entityStatus: enums.StatusRequest.failed}))
                 return rejectWithValue({errors: response.data.messages})
             }

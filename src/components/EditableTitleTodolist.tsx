@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     messageError: {
         textTransform: 'lowercase',
         color: 'red',
-        fontSize: '0.9rem'
+        fontSize: '0.8rem'
     },
     firstLetter: {
         textTransform: 'uppercase'
@@ -26,7 +26,7 @@ export const EditableTitleTodolist = React.memo(({title, onClick, entityStatus}:
 
     const [newTitle, setNewTitle] = useState<string>('')
     const [toggleEditMode, setToggleEditMode] = useState<boolean>(false)
-    const [messageError, setMessageError] = useState<string>('')
+    const [messageError, setMessageError] = useState<string | null>(null)
 
     const classes = useStyles()
 
@@ -34,7 +34,7 @@ export const EditableTitleTodolist = React.memo(({title, onClick, entityStatus}:
         color: entityStatus === enums.StatusRequest.loading ? 'gray' : '',
         cursor: 'pointer'
     }
-    const firstLetter = messageError.charAt(0);
+    const firstLetter = messageError && messageError.charAt(0);
 
     const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setNewTitle(event.currentTarget.value);
@@ -49,11 +49,9 @@ export const EditableTitleTodolist = React.memo(({title, onClick, entityStatus}:
         try {
             await onClick(newTitle.replace(/\s+/g, ' ').trim())
             setToggleEditMode(false)
-            setMessageError('')
+            setMessageError(null)
         } catch (error: any) {
             setMessageError(error.message)
-            console.log(error.message)
-            //'the field title must be a maximum length of \'100\' symbols.'
         }
     }
 

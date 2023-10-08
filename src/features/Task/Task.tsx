@@ -5,9 +5,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {TaskStatus, TaskType} from "../../api/todolist-api";
 import {EditableTextTask} from "../../components/";
-import {useDispatchedActions} from "../../hooks/useAppDispatch";
+import {useAppDispatch, useDispatchedActions} from "../../hooks/useAppDispatch";
 import {taskActions} from "./index";
-import {enums} from "../../enums";
 
 type TaskPropsType = {
     keyForLabel: string
@@ -17,13 +16,16 @@ type TaskPropsType = {
 }
 
 export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) => {
-
+    const dispatch = useAppDispatch()
     const {updateTaskAsync, removeTaskAsync} = useDispatchedActions(taskActions)
 
     const [newTitle, setNewTitle] = useState<string>("");
     const [editMode, toggleEditMode] = useState<boolean>(false);
+    const [messageError, setMessageError] = useState<string | null>(null)
 
-    const removeTask = () => (removeTaskAsync({todolistId, taskId: task.id}))
+    const removeTask = useCallback(() => {
+        removeTaskAsync({todolistId, taskId: task.id})
+    }, [removeTaskAsync, todolistId, task.id])
 
     const onChangeTaskStatus = useCallback(((event: ChangeEvent<HTMLInputElement>) => {
         updateTaskAsync({
@@ -33,20 +35,21 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
         })
     }),[updateTaskAsync, todolistId, task.id])
 
-    const activateEditMode = useCallback(() => { //!!!!!!!!!!!!!!!!!!! переписать
-        if(!(task.status === enums.TaskStatus.InProgress))
-            toggleEditMode(true)
-            setNewTitle(task.title)
-        if(task.status === enums.TaskStatus.Draft)
-            console.log(task.title)
-            console.error(newTitle)
-            // setNewTitle(task.title)
-    }, [task.title, newTitle,task.status ]);
+    const activateEditMode = useCallback(() => {
+        toggleEditMode(true)
+        setNewTitle(task.title)
+    }, [task.title]);
 
-    const deactivateEditMode = useCallback(() => {
-        toggleEditMode(false)
-        updateTaskAsync({todolistId, taskId: task.id, domainModel: {title: newTitle}})
-    }, [updateTaskAsync, todolistId, task.id, newTitle]);
+    const deactivateEditMode = useCallback(async () => {
+        // валидация при редактировании task
+        const resultAction = await dispatch(taskActions.updateTaskAsync({todolistId, taskId: task.id, domainModel: {title: newTitle}}))
+        if(taskActions.updateTaskAsync.rejected.match(resultAction) && resultAction.payload?.errors.length){
+            setMessageError(resultAction.payload?.errors[0])
+        }else {
+            setMessageError(null)
+            toggleEditMode(false)
+        }
+    }, [todolistId, task.id, newTitle, dispatch]);
 
     return (
         <li key={task.id} className={`${style.task}`}>
@@ -59,18 +62,22 @@ export const Task = React.memo(({task, todolistId, keyForLabel}: TaskPropsType) 
                     onChange={onChangeTaskStatus}
                 />
             </Tooltip>
-            <label
-                htmlFor={keyForLabel}
-                className={`${task.status === TaskStatus.Completed && style.task_completed}`}>
-                <EditableTextTask
-                    title={task.title}
-                    newTitle={newTitle}
-                    setNewTitle={setNewTitle}
-                    toggleEditMode={editMode}
-                    activateEditMode={activateEditMode}
-                    deactivateEditMode={deactivateEditMode}
-                />
-            </label>
+            <div className={style.task_body}>
+                <label
+                    htmlFor={keyForLabel}
+                    className={`${task.status === TaskStatus.Completed && style.task_completed}`}>
+                    <EditableTextTask
+                        title={task.title}
+                        newTitle={newTitle}
+                        setNewTitle={setNewTitle}
+                        toggleEditMode={editMode}
+                        activateEditMode={activateEditMode}
+                        deactivateEditMode={deactivateEditMode}
+                    />
+
+                </label>
+                {messageError && <span className={style.error_message}>{messageError}</span>}
+            </div>
             <div className={style.button_container}>
                 <Tooltip title="Edit">
                     <IconButton

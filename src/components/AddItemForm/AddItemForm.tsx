@@ -3,7 +3,7 @@ import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
-const TEXT_ERROR_MESSAGE = "Field can't be empty";
+
 const REMOVE_TEXT_ERROR = "REMOVE-TEXT-ERROR";
 const ERROR_FIELD_IS_EMPTY = "ERROR-FIELD-IS-EMPTY";
 const ERROR = "ERROR";
@@ -23,7 +23,7 @@ type ActionType = {
 
 type StateType = {
   error: boolean;
-  errorMessage: string;
+  errorMessage: string | undefined;
   title: string;
 };
 
@@ -46,25 +46,27 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     case REMOVE_TEXT_ERROR:
       return {
         ...state,
-        errorMessage: (state.errorMessage = ""),
+        errorMessage:  "",
       };
     case ERROR_FIELD_IS_EMPTY:
       return {
         ...state,
-        errorMessage: (state.errorMessage = TEXT_ERROR_MESSAGE),
+        errorMessage: action.titleText,
       };
-    case CURRENT_TARGET_VALUE:
-      if (action.titleText) {
+    case CURRENT_TARGET_VALUE:{
+      if(action.titleText){
         return {
           ...state,
-          title: (state.title = action.titleText),
+          title: action.titleText,
         };
-      } else {
+      }else {
         return {
           ...state,
-          title: (state.title = ""),
-        };
+          title: ''
+        }
       }
+
+    }
     default:
       throw new Error("Bad action type");
   }
@@ -103,17 +105,23 @@ export const AddItemForm = React.memo(
       }
     };
     
-    const addTasksHandler = () => {
+    const addTasksHandler = async () => {
       if (state.title.trim() === "") {
         dispatch({ type: ERROR_FIELD_IS_EMPTY });
         dispatch({ type: ERROR });
         // handleClick();
-        return;
+        // return;
       }
-      addItem(state.title.replace(/\s+/g, ' ').trim());
-      dispatch({ type: REMOVE_TEXT_ERROR });
-      dispatch({ type: REMOVE_ERROR });
-      dispatch({ type: CURRENT_TARGET_VALUE });
+      try {
+        await addItem(state.title.replace(/\s+/g, ' ').trim());
+        dispatch({ type: REMOVE_TEXT_ERROR });
+        dispatch({ type: REMOVE_ERROR });
+        dispatch({ type: CURRENT_TARGET_VALUE, titleText: '' });
+      }catch (error: any){
+        dispatch({type: ERROR})
+        error && dispatch({ type: ERROR_FIELD_IS_EMPTY, titleText: error.message })
+      }
+
       // handleClick();
     };
     return (
