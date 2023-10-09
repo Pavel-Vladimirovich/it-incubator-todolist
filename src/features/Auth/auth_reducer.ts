@@ -1,11 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
-import { authAPI, AuthDataType, LoginDataType } from "../../api/todolist-api";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AxiosError} from "axios";
+import {authAPI, AuthDataType, LoginDataType} from "../../api/todolist-api";
 import {
     handleServerAppError,
     handleServerNetworkError
 } from "../../utils/error-utils";
-import { setAppStatusRequest } from "../../app/app_reducer";
+import {setAppStatusRequest} from "../../app/app_reducer";
 import {enums} from "../../enums";
 
 
@@ -24,7 +24,6 @@ const loginAsync = createAsyncThunk(
             const response = await authAPI.login(data);
             if (response.data.resultCode === enums.ResponseCode.Ok) {
                 dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
-                return;
             } else {
                 handleServerAppError(response.data, dispatch);
                 dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}));
@@ -39,24 +38,27 @@ const loginAsync = createAsyncThunk(
 );
 
 const logoutAsync = createAsyncThunk(
-  'auth/logout', 
-  async (_, {dispatch, rejectWithValue}) => {
-      dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
-    try{
-      const response = await authAPI.logout()
-      if (response.data.resultCode === enums.ResponseCode.Ok) {
-        dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
-        return;
-    } else {
-        handleServerAppError(response.data, dispatch);
-        dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}));
-        return rejectWithValue({});
-    }
-}catch(err) {
-    let error = err as AxiosError; // необходимо типизировать т.к. ругается на тип unknown
-    handleServerNetworkError(error, dispatch);
-    return rejectWithValue(error); // для обработки ошибок в auth_reducer / но может и не понадобится 
-}});
+    'auth/logout',
+    async (_, {dispatch, rejectWithValue}) => {
+        dispatch(setAppStatusRequest({status: enums.StatusRequest.loading}));
+        try {
+            const response = await authAPI.logout()
+            if (response.data.resultCode === enums.ResponseCode.Ok) {
+                console.log(response)
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}));
+            } else {
+                console.log(response)
+                handleServerAppError(response.data, dispatch);
+                dispatch(setAppStatusRequest({status: enums.StatusRequest.failed}));
+                return rejectWithValue({});
+            }
+        } catch (err) {
+            console.log(err)
+            let error = err as AxiosError; // необходимо типизировать т.к. ругается на тип unknown
+            handleServerNetworkError(error, dispatch);
+            return rejectWithValue(error); // для обработки ошибок в auth_reducer / но может и не понадобится
+        }
+    });
 
 export const authAsyncActions = {
     loginAsync,
@@ -78,12 +80,12 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(loginAsync.fulfilled, (state, action) => {
-           state.isLoggedIn = true;
-        })
-        .addCase(logoutAsync.fulfilled, (state, action) => {
-            state.isLoggedIn = false;
-        })
+            .addCase(loginAsync.fulfilled, (state, action) => {
+                state.isLoggedIn = true;
+            })
+            .addCase(logoutAsync.fulfilled, (state, action) => {
+                state.isLoggedIn = false;
+            })
     },
 });
 
