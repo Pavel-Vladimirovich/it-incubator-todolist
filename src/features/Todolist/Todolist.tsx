@@ -27,7 +27,7 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
     const dispatch = useAppDispatch()
 
     const {removeTodolistAsync, changeTodolistFilter} = useDispatchedActions(todolistActions)
-    const {fetchTasksAsync, createTaskAsync} = useDispatchedActions(taskActions)
+    const {fetchTasksAsync} = useDispatchedActions(taskActions)
 
     let tasksForTodolist = useSelector(todolistSelectors.tasksForTodolist(todolistId));
 
@@ -54,14 +54,13 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
     }, [todolistId, dispatch])
 
     const createTasksHandler = useCallback(async (title: string) => {
-        // валидация при создании task, не зануляет input
+        // валидация при создании task, не зануляет input при ошибке длинны названия task'и
         const resultAction = await dispatch(taskActions.createTaskAsync({todolistId, title}))
         if(taskActions.createTaskAsync.rejected.match(resultAction) && resultAction.payload?.errors.length){
             // прокидываем текст ошибки дальше, в EditableTitleTodolist
             throw new Error(resultAction.payload.errors[0])
         }
-        createTaskAsync({todolistId, title})
-    }, [createTaskAsync, todolistId, dispatch])
+    }, [todolistId, dispatch])
 
     const onClickFilterButtonHandler = useCallback((filterValues: enums.FilterValues) => changeTodolistFilter({
         todolistId,
@@ -115,7 +114,7 @@ export const Todolist = React.memo(({todolistId, title, filter, entityStatus}: T
             <div>
                 <AddItemForm
                     addItem={createTasksHandler}
-                    labelMessage="Add a new task..."/>
+                    labelMessage="Add a new task..." textMessage={"wer"}/>
             </div>
             <ButtonGroup variant="text" fullWidth>
                 {renderFilterButton(enums.FilterValues.all, <ReceiptIcon/>, 'all')}
