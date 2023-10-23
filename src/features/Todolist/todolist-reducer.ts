@@ -39,6 +39,7 @@ const createTodolistAsync = createAsyncThunk<
         try{
             const response = await todolistApi.createTodolist(arg.title)
             if(response.data.resultCode === enums.ResponseCode.Ok){
+                console.log(response)
                 dispatch(setAppStatusRequest({status: enums.StatusRequest.succeeded}))
                 return response.data.data.item
             }else{
