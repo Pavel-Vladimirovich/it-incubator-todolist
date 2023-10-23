@@ -66,5 +66,10 @@
     "@types/redux-logger": "^3.0.9",
     "sass": "^1.59.2",
     "typescript-plugin-css-modules": "^5.0.1"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-leaflet|@react-leaflet|d3-*|axios))"
+    ]
   }
 }
