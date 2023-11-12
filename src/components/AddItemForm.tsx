@@ -3,7 +3,7 @@ import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
-
+const TEXT_ERROR_MESSAGE = "Field can't be empty";
 const REMOVE_TEXT_ERROR = "REMOVE-TEXT-ERROR";
 const ERROR_FIELD_IS_EMPTY = "ERROR-FIELD-IS-EMPTY";
 const ERROR = "ERROR";
@@ -12,8 +12,8 @@ const CURRENT_TARGET_VALUE = "CURRENT_TARGET_VALUE";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void;
-  textMessage?: string;
-  labelMessage?: string;
+  textMessage: string;
+  labelMessage: string;
 };
 
 type ActionType = {
@@ -23,7 +23,7 @@ type ActionType = {
 
 type StateType = {
   error: boolean;
-  errorMessage: string | undefined;
+  errorMessage: string;
   title: string;
 };
 
@@ -46,27 +46,25 @@ const reducer = (state: StateType, action: ActionType): StateType => {
     case REMOVE_TEXT_ERROR:
       return {
         ...state,
-        errorMessage:  "",
+        errorMessage: (state.errorMessage = ""),
       };
     case ERROR_FIELD_IS_EMPTY:
       return {
         ...state,
-        errorMessage: action.titleText,
+        errorMessage: (state.errorMessage = TEXT_ERROR_MESSAGE),
       };
-    case CURRENT_TARGET_VALUE:{
-      if(action.titleText){
+    case CURRENT_TARGET_VALUE:
+      if (action.titleText) {
         return {
           ...state,
-          title: action.titleText,
+          title: (state.title = action.titleText),
         };
-      }else {
+      } else {
         return {
           ...state,
-          title: ''
-        }
+          title: (state.title = ""),
+        };
       }
-
-    }
     default:
       throw new Error("Bad action type");
   }
@@ -81,6 +79,10 @@ export const AddItemForm = React.memo(
       title: "",
     });
     const [open, setOpen] = useState(false);
+
+    // const handleClick = () => {
+    //   setOpen(true);
+    // };
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
       if (reason === "clickaway") {
@@ -105,23 +107,17 @@ export const AddItemForm = React.memo(
       }
     };
     
-    const addTasksHandler = async () => {
+    const addTasksHandler = () => {
       if (state.title.trim() === "") {
         dispatch({ type: ERROR_FIELD_IS_EMPTY });
         dispatch({ type: ERROR });
         // handleClick();
-        // return;
+        return;
       }
-      try {
-        await addItem(state.title.replace(/\s+/g, ' ').trim());
-        dispatch({ type: REMOVE_TEXT_ERROR });
-        dispatch({ type: REMOVE_ERROR });
-        dispatch({ type: CURRENT_TARGET_VALUE, titleText: '' });
-      }catch (error: any){
-        dispatch({type: ERROR})
-        error && dispatch({ type: ERROR_FIELD_IS_EMPTY, titleText: error.message })
-      }
-
+      addItem(state.title.trim());
+      dispatch({ type: REMOVE_TEXT_ERROR });
+      dispatch({ type: REMOVE_ERROR });
+      dispatch({ type: CURRENT_TARGET_VALUE });
       // handleClick();
     };
     return (
@@ -159,7 +155,7 @@ export const AddItemForm = React.memo(
           <Alert
             onClose={handleClose}
             severity={!!state.error ? "error" : "success"}>
-            {/*<span>{!!state.error ? TEXT_ERROR_MESSAGE : textMessage}</span>*/}
+            {!!state.error ? TEXT_ERROR_MESSAGE : textMessage}
           </Alert>
         </Snackbar>
       </form>

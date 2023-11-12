@@ -1,56 +1,17 @@
-/* @import-normalize; */
-/* bring in normalize.css styles */
-
-/* rest of app styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 html {
   font-size: 16px;
 }
 
 body {
-  margin: 0;
   font-size: 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #e0e0e0;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
   margin: 0;
   padding: 0;
-}
-
-input[type="text"] {
-  font-family: inherit;
-  /* 1 */
-  font-size: inherit;
-  /* 1 */
-  line-height: inherit;
-  /* 1 */
-  margin: 0;
-  /* 2 */
-}
-
-ul {
-  padding-left: 0;
-  margin: 0;
 }
